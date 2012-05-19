@@ -1,4 +1,11 @@
+# Codeblocks project files
+**.cbp
+**.depend
+**.layout
+
 # Compiled Object files
+bin/**
+obj/**
 **.slo
 **.lo
 **.o
