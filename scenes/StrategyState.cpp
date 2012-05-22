@@ -76,6 +76,7 @@ void StrategyState::draw()
 {
   glClear(GL_DEPTH_BUFFER_BIT);
   glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
+  //glScalef(5.0f, 5.0f, 1.0f);
   glScalef(global::viewport.x, global::viewport.y, 1.0f);
 
   glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
