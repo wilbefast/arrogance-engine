@@ -6,14 +6,14 @@
 #define WINDOW_DEFAULT_FLAGS \
   SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN
 #define WINDOW_DEFAULT_W 640    // size used by Desktop version
-#define WINDOW_DEFAULT_H 360
+#define WINDOW_DEFAULT_H 480
 #define MAX_FPS 30
-#define APP_NAME "Black Dog"
+#define APP_NAME "Arrogance"
 
 namespace global
 {
-    extern iRect viewport;
-    extern V2f scale;
+    extern uV2 viewport;
+    extern fV2 scale;
 };
 
 

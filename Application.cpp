@@ -9,6 +9,8 @@
 #include "resources/file.hpp"              // needed for ASSET_PATH macro
 #include "resources/AudioManager.hpp"      // resource subsystem (singleton)
 #include "resources/GraphicsManager.hpp"   // resource subsystem (singleton)
+#include "resources/MeshManager.hpp"   // resource subsystem (singleton)
+
 
 /// CONSTRUCTOR & DESTRUCTOR (public)
 
@@ -47,8 +49,9 @@ int Application::startup()
     // Start up resource subsystems
     ASSERT(GraphicsManager::getInstance()->startup()
       == EXIT_SUCCESS, "Starting Graphics Manager");
-    // Start the Audio Manager
     ASSERT(AudioManager::getInstance()->startup()
+      == EXIT_SUCCESS, "Starting Audio Manager");
+    ASSERT(MeshManager::getInstance()->startup()
       == EXIT_SUCCESS, "Starting Audio Manager");
 
     // Load the initial scene
@@ -131,9 +134,11 @@ int Application::startSDL()
   ASSERT_SDL(window, "Opening SDL application window");
 
   // Since the window size can be overriden, check what it is actually
-  SDL_GetWindowSize(window, &global::viewport.w, &global::viewport.h);
-  global::scale = V2f(global::viewport.w / (float)WINDOW_DEFAULT_W,
-                        global::viewport.h / (float)WINDOW_DEFAULT_H);
+  int size_x, size_y;
+  SDL_GetWindowSize(window, &size_x, &size_y);
+  global::viewport = uV2(size_x, size_y);
+  global::scale = fV2(size_x / (float)WINDOW_DEFAULT_W,
+                    size_y / (float)WINDOW_DEFAULT_H);
 
   // Create the OpenGL context for the window we just opened
   context = SDL_GL_CreateContext(window);
@@ -151,29 +156,34 @@ int Application::startSDL()
 
 int Application::startGL()
 {
-    glClearColor(0, 0, 0, 255);     // Black background by default
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // Black background by default
+  glClearColor(0, 0, 0, 255);
+  glEnable(GL_TEXTURE_2D);
 
-    glViewport(0, 0, global::viewport.w, global::viewport.h);
-    glMatrixMode(GL_PROJECTION);
-    glOrtho(0, global::viewport.w, global::viewport.h, 0, -1, 1);
-            //NB - I'm using a macro to change this to "glOrthof" for GLES1.1
-    glMatrixMode(GL_MODELVIEW);
+  // Blending
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // Anti-aliasing
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+  // Viewport and world container
+  glViewport(0, 0, global::viewport.x, global::viewport.y);
+  glMatrixMode(GL_PROJECTION);
+  glOrtho(0, global::viewport.x, global::viewport.y, 0, -10, 10);
+          //NB - I'm using a macro to change this to "glOrthof" for GLES1.1
+  glMatrixMode(GL_MODELVIEW);
 
-    // Always start with a clean slate ;)
-    glLoadIdentity();
+  // Always start with a clean slate ;)
+  glLoadIdentity();
 
-    // No problems, return success code!
-    return EXIT_SUCCESS;
+  // No problems, return success code!
+  return EXIT_SUCCESS;
 }
 
 void Application::draw()
 {
-    // Clear the entire screen
+    // Clear the entire screen, reset everything back to normal
     glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
 
     // Draw any objects required by the current scene
     scene->draw();
@@ -200,7 +210,7 @@ void Application::wait()
 int Application::treatEvents()
 {
     // local variables
-    static V2i cursor(0,0);
+    static iV2 cursor(0,0);
     static bool clicking(false);
 
     // static to avoid reallocating it ever time we run the function
@@ -234,7 +244,7 @@ int Application::treatEvents()
             // touch events
             case SDL_FINGERDOWN:
                 cursor = normaliseTouch(event.tfinger.touchId,
-                                         V2i(event.tfinger.x, event.tfinger.y));
+                                         iV2(event.tfinger.x, event.tfinger.y));
                 clicking = true;
                 break;
 
@@ -244,7 +254,7 @@ int Application::treatEvents()
 
             case SDL_FINGERMOTION:
                 cursor = normaliseTouch(event.tfinger.touchId,
-                                        V2i(event.tfinger.x, event.tfinger.y));
+                                        iV2(event.tfinger.x, event.tfinger.y));
                 break;
             #endif  // USE_TOUCH
 
@@ -262,7 +272,7 @@ int Application::treatEvents()
                 break;
 
             case SDL_MOUSEMOTION:
-                cursor = V2f(event.motion.x, event.motion.y) / global::scale;
+                cursor = fV2(event.motion.x, event.motion.y) / global::scale;
                 break;
             #endif  // USE_MOUSE
 
@@ -306,13 +316,13 @@ int Application::setScene(Scene* new_scene)
 
 /// CLASS NAMESPACE FUNCTIONS
 
-V2i Application::normaliseTouch(SDL_TouchID device_id, V2i touch)
+iV2 Application::normaliseTouch(SDL_TouchID device_id, iV2 touch)
 {
     // There's only 1 touch device: memorise itss resolution upon initial call
-    static V2i device_resolution = V2i(SDL_GetTouch(device_id)->xres,
+    static iV2 device_resolution = iV2(SDL_GetTouch(device_id)->xres,
                                        SDL_GetTouch(device_id)->yres);
 
-   static V2i default_window_size = V2i(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H);
+   static iV2 default_window_size = iV2(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H);
 
     // Normalise the touch position
     return touch * default_window_size / device_resolution;

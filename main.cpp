@@ -4,7 +4,7 @@
 #include "assert.hpp"
 #include "StrategyApplication.hpp"
 
-#include "math/Rect.hpp"
+#include "resources/MeshManager.hpp"
 
 using namespace std;
 

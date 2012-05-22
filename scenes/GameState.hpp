@@ -39,8 +39,8 @@ public:
     void deleteThing(ThingIter* i);
     Thing* getHero();
     // Overrides SceneState
-    int startup();
-    int shutdown();
+    virtual int startup();
+    virtual int shutdown();
     virtual int update();
     virtual void draw();
 };

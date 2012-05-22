@@ -92,18 +92,18 @@ SceneState* Scene::getState()
 
 /// FUNCTIONS
 
-int Scene::splitRect(fRect src, fRect result[], V2u n_divisions,
+int Scene::splitRect(fRect src, fRect result[], uV2 n_divisions,
                          double scale)
 {
     // Compute the split rectangle size
-    fRect split = src / V2f(n_divisions);
+    fRect split = src / fV2(n_divisions);
 
     // Create each of the rectangles
-    for(V2u i(0,0); i.y < n_divisions.y; i.y++)
+    for(uV2 i(0,0); i.y < n_divisions.y; i.y++)
         for(i.x = 0; i.x < n_divisions.x; i.x++)
         {
             // Create and scale
-            fRect new_rect = fRect(split + V2f(i)*split.getSize());
+            fRect new_rect = fRect(split + fV2(i)*split.getSize());
             new_rect.stretch_centered(scale);
             // Add to the resulting unroled matrix
             result[i.x + (i.y)*n_divisions.x] = new_rect;
@@ -111,7 +111,7 @@ int Scene::splitRect(fRect src, fRect result[], V2u n_divisions,
     return EXIT_SUCCESS;
 }
 
-fRect Scene::squashRect(fRect src, V2f amount)
+fRect Scene::squashRect(fRect src, fV2 amount)
 {
     // Squash horizontally
     if(amount.x > 0)

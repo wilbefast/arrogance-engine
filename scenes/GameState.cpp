@@ -91,21 +91,21 @@ Thing* GameState::getHero()
 
 int GameState::startup()
 {
-    // Set the position of the mouse to the centre of the screen
-    input.last_touch = global::viewport.getSize()/2;
+  // Set the position of the mouse to the centre of the screen
+  input.last_touch = global::viewport/ (unsigned int)2;
 
-    // All clear!
-    return EXIT_SUCCESS;
+  // All clear!
+  return EXIT_SUCCESS;
 }
 
 int GameState::shutdown()
 {
-    // Destroy all game objects
-    for(ThingIter i = things.begin(); i!= things.end(); i++)
-        delete (*i);
+  // Destroy all game objects
+  for(ThingIter i = things.begin(); i!= things.end(); i++)
+      delete (*i);
 
-    // All clear!
-    return EXIT_SUCCESS;
+  // All clear!
+  return EXIT_SUCCESS;
 }
 
 int GameState::update()

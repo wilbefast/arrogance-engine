@@ -12,8 +12,8 @@ class MovementElement : public ThingElement
 
     /// ATTRIBUTES
     private:
-    V2f speed;
-    V2f previous_position;
+    fV2 speed;
+    fV2 previous_position;
     float speed_scalar; // scalars stored on speed change for quick access
     float angle;
     float speed_max;
@@ -28,21 +28,21 @@ class MovementElement : public ThingElement
                     float init_speed_min = DEFAULT_SPEED_MIN);
     ~MovementElement();
     // main methods
-    void springTowards(V2f target_position, float spring_constant);
-    void add_springTowards(V2f target_position, float spring_constant);
-    void moveTowards(V2f target_position, float speed);
-    void add_moveTowards(V2f target_position, float speed);
+    void springTowards(fV2 target_position, float spring_constant);
+    void add_springTowards(fV2 target_position, float spring_constant);
+    void moveTowards(fV2 target_position, float speed);
+    void add_moveTowards(fV2 target_position, float speed);
     void add_speedScalar(float speed);
-    void bounce(V2i collision_side);
+    void bounce(iV2 collision_side);
     int update(GameState* context);
     // modification
     void setSpeed_scalar(float new_speed_scalar);
-    void setSpeed(V2f new_speed);
-    void addSpeed(V2f force);
+    void setSpeed(fV2 new_speed);
+    void addSpeed(fV2 force);
     void setSpeedMax(float _max_speed);
     // query
-    V2f getSpeed() const;
-    V2f getPrevPos() const;
+    fV2 getSpeed() const;
+    fV2 getPrevPos() const;
     float getSpeed_scalar() const;
     float getAngle() const;
 

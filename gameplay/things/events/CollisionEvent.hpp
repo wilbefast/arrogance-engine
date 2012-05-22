@@ -13,15 +13,15 @@ class CollisionEvent : public ThingEvent
     /// ATTRIBUTES
     private:
     Thing* other;
-    V2i collision_side;
+    iV2 collision_side;
 
     /// METHODS
     public:
     // constructors, destructor
-    CollisionEvent(Thing* other, V2i side);
+    CollisionEvent(Thing* other, iV2 side);
     // accessors
     Thing* getOther();
-    V2i getSide() const;
+    iV2 getSide() const;
 };
 
 #endif // COLLISIONEVENT_HPP_INCLUDED

@@ -6,7 +6,7 @@
 void BoundaryEvent::generate(Thing* t, fRect* boundary)
 {
     // Save the side upon which the event occured
-    V2i side;
+    iV2 side;
 
     // Generate out of bounds event for the Thing
     if(t->isOutside(boundary, &side))
@@ -24,7 +24,7 @@ void BoundaryEvent::generate(Thing* t, fRect* boundary)
 
 // constructors, destructors
 
-BoundaryEvent::BoundaryEvent(const char* init_name, V2i init_side) :
+BoundaryEvent::BoundaryEvent(const char* init_name, iV2 init_side) :
 ThingEvent(init_name),
 boundary_side(init_side)
 {
@@ -32,7 +32,7 @@ boundary_side(init_side)
 
 // accessors
 
-V2i BoundaryEvent::getSide() const
+iV2 BoundaryEvent::getSide() const
 {
     return boundary_side;
 }

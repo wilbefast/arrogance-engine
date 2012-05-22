@@ -2,6 +2,6 @@
 
 using namespace std;
 
-iRect global::viewport;
+uV2 global::viewport;
 
-V2f global::scale;
+fV2 global::scale;

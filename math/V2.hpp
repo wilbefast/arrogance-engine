@@ -10,65 +10,65 @@
 template <typename T>
 class V2
 {
-    /// ATTRIBUTES
-    public:
-        T x, y;
+  /* ATTRIBUTES */
+public:
+      T x, y;
 
-    /// METHODS
-    public:
-        // Constructors
-        V2();
-        V2(T x, T y);
+  /* METHODS */
+public:
+  // Constructors
+  V2();
+  V2(T x, T y);
 
-        template <typename U>
-        explicit V2(const V2<U>& source);
+  template <typename U>
+  explicit V2(const V2<U>& source);
 
-        // Cast operator: Conversion from one Vector type to another ;D
-        template <typename U>
-        operator V2<U>() const;
+  // Cast operator: Conversion from one Vector type to another ;D
+  template <typename U>
+  operator V2<U>() const;
 
-        // Conversion to a boolean
-        operator bool() const;
+  // Conversion to a boolean
+  operator bool() const;
 
-        // Arithmetic operators
-        template <typename U>
-        V2& operator= (const V2<U>& source);
-        // vector addition
-        V2& operator+=(V2 const& other);
-        V2 operator+(V2 const& other) const;
-        V2& operator-=(V2 const& other);
-        V2 operator-(V2 const& other) const;
-        V2 operator-() const;   // unary minus or "additive inverse"
-        // scaling
-        V2& operator*=(T k);
-        V2 operator*(T k) const;
-        V2& operator/=(T k);
-        V2 operator/(T k) const;
-        // element-wise multiplication, division
-        V2& operator*=(V2 const& other);
-        V2 operator*(V2 const& other) const;
-        V2& operator/=(V2 const& other);
-        V2 operator/(V2 const& other) const;
+  // Arithmetic operators
+  template <typename U>
+  V2& operator= (const V2<U>& source);
+  // vector addition
+  V2& operator+=(V2 const& other);
+  V2 operator+(V2 const& other) const;
+  V2& operator-=(V2 const& other);
+  V2 operator-(V2 const& other) const;
+  V2 operator-() const;   // unary minus or "additive inverse"
+  // scaling
+  V2& operator*=(T k);
+  V2 operator*(T k) const;
+  V2& operator/=(T k);
+  V2 operator/(T k) const;
+  // element-wise multiplication, division
+  V2& operator*=(V2 const& other);
+  V2 operator*(V2 const& other) const;
+  V2& operator/=(V2 const& other);
+  V2 operator/(V2 const& other) const;
 
-        // accessors
-        V2 abs() const;
-        V2<int> sign() const;
-        float getAngle() const;
-        float getNorm() const;
-        float getNorm2() const;
-        void setMagnitude(float new_magnitude);
+  // accessors
+  V2 abs() const;
+  V2<int> sign() const;
+  float getAngle() const;
+  float getNorm() const;
+  float getNorm2() const;
+  void setMagnitude(float new_magnitude);
 
-        // outstream operator
-        void print(std::ostream& stream) const;
+  // outstream operator
+  void print(std::ostream& stream) const;
 };
 
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, V2<T> const& v);
 
-typedef V2<int> V2i;
-typedef V2<unsigned int> V2u;
-typedef V2<float> V2f;
-typedef V2<double> V2d;
+typedef V2<int> iV2;
+typedef V2<unsigned int> uV2;
+typedef V2<float> fV2;
+typedef V2<double> dV2;
 
 // NB - "Inline" files are implementations that are included rather than
 // compiled. They are especially useful for templates.

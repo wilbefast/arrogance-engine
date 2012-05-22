@@ -5,7 +5,7 @@
 
 // Constructors, destructors
 
-AnimatedElement::AnimatedElement(Thing* init_owner, V2f size, V2f offset) :
+AnimatedElement::AnimatedElement(Thing* init_owner, fV2 size, fV2 offset) :
 GraphicElement(init_owner, size, offset),
 frame_current(0),
 frame_speed(0)

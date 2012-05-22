@@ -3,6 +3,9 @@
 **.depend
 **.layout
 
+# Backup files
+**~
+
 # Compiled Object files
 bin/**
 obj/**

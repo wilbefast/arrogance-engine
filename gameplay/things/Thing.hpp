@@ -27,7 +27,7 @@ private:
     bool dead;
 protected:
     // main attributes
-    V2f position;
+    fV2 position;
     ColliderElement* body;
     // asynchronous messages
     EventList events;
@@ -35,8 +35,8 @@ protected:
     /// METHODS
 public:
     // constructors, destructors
-    Thing(V2f init_position, const char* type_name);
-    Thing(V2f init_position, str_id init_type);
+    Thing(fV2 init_position, const char* type_name);
+    Thing(fV2 init_position, str_id init_type);
     Thing(Thing const& source);
     virtual ~Thing();
     // main methods
@@ -46,12 +46,12 @@ public:
     // accessors
     bool isDead() const;
     str_id getType() const;
-    V2f getPosition() const;
-    void move(V2f translation);
-    void moveTo(V2f new_position);
-    bool isColliding(Thing* other, V2i* side = NULL);
-    bool isOutside(fRect* bounds, V2i* side = NULL);
-    bool isLeaving(fRect* bounds, V2i* side = NULL);
+    fV2 getPosition() const;
+    void move(fV2 translation);
+    void moveTo(fV2 new_position);
+    bool isColliding(Thing* other, iV2* side = NULL);
+    bool isOutside(fRect* bounds, iV2* side = NULL);
+    bool isLeaving(fRect* bounds, iV2* side = NULL);
     // overridden
     virtual void die();
     virtual void draw();

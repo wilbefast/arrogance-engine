@@ -19,9 +19,9 @@ class Scene
 
     /// FUNCTIONS
     public:
-    static int splitRect(fRect src, fRect result[], V2u n_divisions,
+    static int splitRect(fRect src, fRect result[], uV2 n_divisions,
                           double scale = 1.0);
-    static fRect squashRect(fRect src, V2f amount);
+    static fRect squashRect(fRect src, fV2 amount);
 
     /// ATTRIBUTES
     protected:

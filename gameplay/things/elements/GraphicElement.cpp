@@ -2,7 +2,7 @@
 
 // Constructors, destructors
 
-GraphicElement::GraphicElement(Thing* init_owner, V2f size, V2f _offset) :
+GraphicElement::GraphicElement(Thing* init_owner, fV2 size, fV2 _offset) :
 ThingElement(init_owner),
 sprite(NULL),
 destination(size),
@@ -61,7 +61,7 @@ void GraphicElement::draw()
 void GraphicElement::centreFrame()
 {
     // Use the full frame size
-    V2f frame_size = sprite->getFrame().getSize();
+    fV2 frame_size = sprite->getFrame().getSize();
 
     // Centre it
     offset = -frame_size/2.0f;

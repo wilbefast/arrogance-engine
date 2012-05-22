@@ -288,8 +288,8 @@ bool Rect<T>::contains(const V2<T>& position) const
 template <typename T>
 bool Rect<T>::doesInter(Rect<T> const& other) const
 {
-    V2d v1 = (other.getPosition()+other.getSize()) - this->getPosition();
-    V2d v2 = (this->getPosition()+this->getSize()) - other.getPosition();
+    dV2 v1 = (other.getPosition()+other.getSize()) - this->getPosition();
+    dV2 v2 = (this->getPosition()+this->getSize()) - other.getPosition();
     return(v1.x > 0 && v2.x > 0 && v1.y > 0 && v2.y > 0);
 }
 

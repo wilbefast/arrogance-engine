@@ -1,7 +1,7 @@
 #ifndef ASSERT_HPP_INCLUDED
 #define ASSERT_HPP_INCLUDED
 
-#include "SDL.h"        //needed for SDL_GetError()
+#include "SDL.h"   //needed for SDL_GetError()
 #include "log.hpp" //needed for LOG
 
 #define ASSERT_AUX_RTN(assertion, what, why, rtn)   \

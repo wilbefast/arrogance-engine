@@ -10,13 +10,13 @@ class GraphicElement : public ThingElement
     protected:
     Graphic* sprite;
     fRect destination;
-    V2f offset;
+    fV2 offset;
     float angle;
 
     /// METHODS
     public:
     // contructors, destructors
-    GraphicElement(Thing* init_owner, V2f size, V2f _offset = V2f(0.0f, 0.0f));
+    GraphicElement(Thing* init_owner, fV2 size, fV2 _offset = fV2(0.0f, 0.0f));
     ~GraphicElement();
     // accessors
     void setAngle(float new_angle);

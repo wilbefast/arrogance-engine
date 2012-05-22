@@ -5,7 +5,7 @@
 void CollisionEvent::generate(Thing* a, Thing* b)
 {
     // Save the side upon which the event occured
-    V2i side;
+    iV2 side;
 
     // Check for collisions
     if(!a->isDead() && !b->isDead() && a->isColliding(b, &side))
@@ -20,7 +20,7 @@ void CollisionEvent::generate(Thing* a, Thing* b)
 
 // constructors, destructor
 
-CollisionEvent::CollisionEvent(Thing* init_other, V2i init_side) :
+CollisionEvent::CollisionEvent(Thing* init_other, iV2 init_side) :
 ThingEvent("collision"),
 other(init_other),
 collision_side(init_side)
@@ -33,7 +33,7 @@ Thing* CollisionEvent::getOther()
     return other;
 }
 
-V2i CollisionEvent::getSide() const
+iV2 CollisionEvent::getSide() const
 {
     return collision_side;
 }

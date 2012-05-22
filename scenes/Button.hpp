@@ -36,8 +36,8 @@ class Button
     void draw();
     // accessors
     str_id getTag() const;
-    bool contains(V2f position) const;
-    bool press(V2f position, bool clicking);
+    bool contains(fV2 position) const;
+    bool press(fV2 position, bool clicking);
 };
 
 #endif // BUTTON_HPP_INCLUDED

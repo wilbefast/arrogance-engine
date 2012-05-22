@@ -10,7 +10,7 @@ tag(numerise(name)),
 texture(init_texture),
 destination(init_destination),
 source_off(init_source),
-source_on(init_source + V2u(init_source.w,0)),
+source_on(init_source + uV2(init_source.w,0)),
 pressed(false)
 {
     correctAspect(init_source, init_destination);
@@ -22,7 +22,7 @@ tag(init_tag),
 texture(init_texture),
 destination(init_destination),
 source_off(init_source),
-source_on(init_source + V2u(init_source.w,0)),
+source_on(init_source + uV2(init_source.w,0)),
 pressed(false)
 {
     correctAspect(init_source, init_destination);
@@ -50,12 +50,12 @@ void Button::draw()
 
 /// ACCESSORS
 
-bool Button::contains(V2f position) const
+bool Button::contains(fV2 position) const
 {
     return destination.contains(position);
 }
 
-bool Button::press(V2f position, bool clicking)
+bool Button::press(fV2 position, bool clicking)
 {
     // switch off button if not touching, otherwise turn or or off based on
     // position on touch.

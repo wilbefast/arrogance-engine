@@ -15,14 +15,14 @@ class BoundaryEvent : public ThingEvent
 
     /// ATTRIBUTES
     private:
-    V2i boundary_side;
+    iV2 boundary_side;
 
     /// METHODS
     public:
     // constructor, destructors
-    BoundaryEvent(const char* init_name, V2i init_side);
+    BoundaryEvent(const char* init_name, iV2 init_side);
     // accessors
-    V2i getSide() const;
+    iV2 getSide() const;
 };
 
 #endif // BOUNDARYEVENT_HPP_INCLUDED

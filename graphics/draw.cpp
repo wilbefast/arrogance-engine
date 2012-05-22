@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-void draw::line(V2f start, V2f end, Colour c, float thickness)
+void draw::line(fV2 start, fV2 end, Colour c, float thickness)
 {
     // Specify coordinates to draw
     GLfloat points[4]  = { (GLfloat)start.x, (GLfloat)start.y,
@@ -29,7 +29,7 @@ void draw::line(V2f start, V2f end, Colour c, float thickness)
     glLoadIdentity();
 }
 
-void draw::line_loop(V2f points[], unsigned int n_pts, Colour c, float thickness)
+void draw::line_loop(fV2 points[], unsigned int n_pts, Colour c, float thickness)
 {
     // Specify coordinates to draw
     GLfloat* loop = new GLfloat[2*n_pts];
@@ -58,7 +58,7 @@ void draw::line_loop(V2f points[], unsigned int n_pts, Colour c, float thickness
 }
 
 void draw::height_line(float height[], unsigned int n_pts, float x_spacing,
-                      V2f base, unsigned int head_i, Colour c, float thickness)
+                      fV2 base, unsigned int head_i, Colour c, float thickness)
 {
   // Specify coordinates to draw
   GLfloat* vertices = new GLfloat[n_pts*2];
@@ -100,7 +100,7 @@ void draw::height_line(float height[], unsigned int n_pts, float x_spacing,
 }
 
 void draw::height_fill(float height[], unsigned int n_pts, float x_spacing,
-                      V2f base, unsigned int head_i, Colour c)
+                      fV2 base, unsigned int head_i, Colour c)
 {
   // are we drawing the roof or the floor?
   bool roof = base.y < height[head_i];
@@ -191,7 +191,7 @@ void draw::height_fill(float height[], unsigned int n_pts, float x_spacing,
   delete vertices;
 }
 
-void draw::circle(V2f position, double radius, Colour c, bool fill)
+void draw::circle(fV2 position, double radius, Colour c, bool fill)
 {
     // Specify coordinates to draw
     GLfloat polygon[2*CIRCLE_N_SEGMENTS];

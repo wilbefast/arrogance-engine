@@ -33,7 +33,7 @@ iRect Animation::getFrame(float subimage) const
         return Graphic::getFrame();
 
     // offset the appropriate number of frames
-    V2i offset(floor(subimage)*frame.w, 0);
+    iV2 offset(floor(subimage)*frame.w, 0);
     if(offset > strip.getSize())
         // out of bounds
         return frame;

@@ -10,7 +10,7 @@
 /// METHODS
 
 // Constructors, destructors
-Thing::Thing(V2f init_position, const char* type_name) :
+Thing::Thing(fV2 init_position, const char* type_name) :
 type(numerise(type_name)),
 dead(false),
 position(init_position),
@@ -18,7 +18,7 @@ events()
 {
 }
 
-Thing::Thing(V2f init_position, str_id init_type) :
+Thing::Thing(fV2 init_position, str_id init_type) :
 type(init_type),
 dead(false),
 position(init_position),
@@ -69,17 +69,17 @@ str_id Thing::getType() const
     return type;
 }
 
-V2f Thing::getPosition() const
+fV2 Thing::getPosition() const
 {
     return position;
 }
 
-void Thing::move(V2f translation)
+void Thing::move(fV2 translation)
 {
     position += translation;
 }
 
-void Thing::moveTo(V2f new_position)
+void Thing::moveTo(fV2 new_position)
 {
     position = new_position;
 }
@@ -110,7 +110,7 @@ int Thing::update(GameState* context)
         return GameState::CONTINUE;
 }
 
-bool Thing::isColliding(Thing* other, V2i* side)
+bool Thing::isColliding(Thing* other, iV2* side)
 {
     // must have a ColliderElement to collide
     if(!body || !other->body)
@@ -119,7 +119,7 @@ bool Thing::isColliding(Thing* other, V2i* side)
         return body->isColliding(other->body, side);
 }
 
-bool Thing::isOutside(fRect* bounds, V2i* side)
+bool Thing::isOutside(fRect* bounds, iV2* side)
 {
     // must have a ColliderElement to be outside boundaries
     if(!body)
@@ -128,7 +128,7 @@ bool Thing::isOutside(fRect* bounds, V2i* side)
         return body->isOutside(bounds, side);
 }
 
-bool Thing::isLeaving(fRect* bounds, V2i* side)
+bool Thing::isLeaving(fRect* bounds, iV2* side)
 {
     // must have a ColliderElement to intersect boundaries
     if(!body)

@@ -13,14 +13,14 @@ x(0), y(0)
 {
 }
 
-// Basic constructor. Ex: V2i(3,3);
+// Basic constructor. Ex: iV2(3,3);
 template <typename T>
 inline V2<T>::V2(T xx, T yy) :
 x(xx), y(yy)
 {
 }
 
-// Copy constructor. Ex: V2i v2(v1);
+// Copy constructor. Ex: iV2 v2(v1);
 template<typename T>
 template<typename U>
 inline V2<T>::V2(const V2<U>& source) :
@@ -29,7 +29,7 @@ y(static_cast<T>(source.y))
 {
 }
 
-// Static cast operator from V2<T> to V2<U>. Ex: (V2u)vt;
+// Static cast operator from V2<T> to V2<U>. Ex: (uV2)vt;
 template<typename T>
 template<typename U>
 inline V2<T>::operator V2<U>() const
@@ -119,10 +119,11 @@ inline V2<T> V2<T>::operator*(T k) const
 template <typename T>
 inline V2<T>& V2<T>::operator/=(T k)
 {
-    this->x /= k;
-    this->y /= k;
+  T inv = 1/k;
+  this->x *= inv;
+  this->y *= inv;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
@@ -154,10 +155,10 @@ inline V2<T> V2<T>::operator*(V2<T> const& other) const
 template <typename T>
 inline V2<T>& V2<T>::operator/=(V2<T> const& other)
 {
-    this->x /= other.x;
-    this->y /= other.y;
+  this->x /= other.x;
+  this->y /= other.y;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
@@ -213,7 +214,7 @@ inline void V2<T>::setMagnitude(float new_magnitude)
 template <typename T>
 inline void V2<T>::print(ostream& stream) const
 {
-    stream << "(" << x << ", " << y << ")";
+    stream << '(' << x << ',' << y << ')';
 }
 
 template <typename T>

@@ -35,7 +35,8 @@ int MainMenu::startup()
       fRect(0.0f, 0.0f, WINDOW_DEFAULT_W, WINDOW_DEFAULT_H / 3.0f);
     // set the area of texture to draw
     title_src = fRect(0, 0, 320, 150);
-    title_dest = global::viewport;
+    title_dest = fRect(global::viewport);
+
     // maintain aspect ratio
     title_dest.setRatio(title_src.getRatio());
     // centre the title image within the top area of the screen
@@ -44,17 +45,17 @@ int MainMenu::startup()
     /// 2. BUTTONS (BUTTON SIX NINTHS)
     // set the area of the screen to use (bottom two top thirds)
     fRect bottom_thirds =
-      squashRect(V2f(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H), V2f(0, top_third.h));
-    fRect top_ninths = bottom_thirds / V2f(1,3);
-    fRect mid_ninths = top_ninths + V2f(0, top_ninths.h);
-    fRect low_ninths = mid_ninths + V2f(0, mid_ninths.h);
+      squashRect(fV2(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H), fV2(0, top_third.h));
+    fRect top_ninths = bottom_thirds / fV2(1,3);
+    fRect mid_ninths = top_ninths + fV2(0, top_ninths.h);
+    fRect low_ninths = mid_ninths + fV2(0, mid_ninths.h);
     // the top and bottom buttons are smaller than the middle one
     top_ninths.stretch_centered(0.7);
     mid_ninths.stretch_centered(0.8);
     low_ninths.stretch_centered(0.7);
     // set the area of texture to draw (on top of eachother)
     fRect play_src(0, title_src.h, 160, 70);
-    fRect exit_src = play_src + V2f(0, play_src.h);
+    fRect exit_src = play_src + fV2(0, play_src.h);
     fRect options_src(0, exit_src.y + exit_src.h, 256, 70);
     // add the buttons to the scene
     buttons.push_back(new Button("play", *texture, top_ninths, play_src));

@@ -10,10 +10,10 @@ class Application
 {
     /// FUNCTIONS
 public:
-    static V2i normaliseTouch(SDL_TouchID, V2i touch);
+    static iV2 normaliseTouch(SDL_TouchID, iV2 touch);
 
     /// CONSTANTS
-    private:
+private:
     enum
     {
         CONTINUE,

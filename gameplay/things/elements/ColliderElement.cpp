@@ -4,7 +4,7 @@
 
 // constructors, destructors
 
-ColliderElement::ColliderElement(Thing* init_owner, V2f size, V2f offset) :
+ColliderElement::ColliderElement(Thing* init_owner, fV2 size, fV2 offset) :
 ThingElement(init_owner),
 hitbox(size)
 {
@@ -14,7 +14,7 @@ hitbox(size)
 
 // main methods
 
-bool ColliderElement::isColliding(ColliderElement* other, V2i* side) const
+bool ColliderElement::isColliding(ColliderElement* other, iV2* side) const
 {
     // Check for collision between the translated hitboxes
     if(getOffsetBox().doesInter(other->getOffsetBox()))
@@ -30,7 +30,7 @@ bool ColliderElement::isColliding(ColliderElement* other, V2i* side) const
         return false;
 }
 
-bool ColliderElement::isOutside(fRect* bounds, V2i* side) const
+bool ColliderElement::isOutside(fRect* bounds, iV2* side) const
 {
     // Check if the entire translated hitbox is outside the boundary
     if(!bounds->doesInter(getOffsetBox()))
@@ -46,7 +46,7 @@ bool ColliderElement::isOutside(fRect* bounds, V2i* side) const
         return false;
 }
 
-bool ColliderElement::isLeaving(fRect* bounds, V2i* side) const
+bool ColliderElement::isLeaving(fRect* bounds, iV2* side) const
 {
     fRect this_box = getOffsetBox();
 
@@ -65,7 +65,7 @@ bool ColliderElement::isLeaving(fRect* bounds, V2i* side) const
 
 }
 
-bool ColliderElement::doesContain(V2f point) const
+bool ColliderElement::doesContain(fV2 point) const
 {
     return getOffsetBox().contains(point);
 }
@@ -76,15 +76,15 @@ fRect ColliderElement::getOffsetBox() const
     return hitbox + owner->getPosition();
 }
 
-V2i ColliderElement::boundarySide(fRect* bounds) const
+iV2 ColliderElement::boundarySide(fRect* bounds) const
 {
     // local variables
     fRect this_box = getOffsetBox();
-    V2f top_left = this_box.getPosition() - bounds->getPosition();
-    V2f bottom_right = top_left + this_box.getSize() - bounds->getSize();
+    fV2 top_left = this_box.getPosition() - bounds->getPosition();
+    fV2 bottom_right = top_left + this_box.getSize() - bounds->getSize();
 
     // (0,0) by default, meaning a collision on neither side
-    V2i result(0,0);
+    iV2 result(0,0);
 
     // horizontal collision
     if(top_left.x < 0)
@@ -102,13 +102,13 @@ V2i ColliderElement::boundarySide(fRect* bounds) const
     return result;
 }
 
-V2i ColliderElement::collisionSide(ColliderElement* other) const
+iV2 ColliderElement::collisionSide(ColliderElement* other) const
 {
     // local variables
-    V2f to_target = other->owner->getPosition() - owner->getPosition();
+    fV2 to_target = other->owner->getPosition() - owner->getPosition();
 
     // (0,0) by default, meaning a collision on neither side
-    V2i result(0,0);
+    iV2 result(0,0);
     if(abs(to_target.x) - abs(to_target.y) > 0.2)
         result.x = SIGN(to_target.x);
     else if(abs(to_target.x) - abs(to_target.y) < -0.2)
