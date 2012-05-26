@@ -19,14 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MESH3D_HPP_INCLUDED
 #define MESH3D_HPP_INCLUDED
 
+#include "vertex.hpp"
+
 #include <vector>
-
-#include "../platform.hpp"  // for openGL types
-#include "../math/V3.hpp"
-
-typedef V3<GLfloat> vertex_t;
-typedef vector<vertex_t> vertex_list_t;
-typedef vertex_list_t::iterator vertex_list_it;
 
 typedef V3<GLubyte> face_t;
 typedef vector<face_t> face_list_t;

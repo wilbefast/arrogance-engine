@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICS_HPP_INCLUDED
 
 #include "../math/V2.hpp"
+#include "../math/V3.hpp"
 
 #define CIRCLE_N_SEGMENTS 12
 
@@ -42,6 +43,7 @@ namespace draw
 
     /// FUNCTIONS
     void line(fV2 start, fV2 end, Colour c = Colour(), float thickness = 1.0f);
+    void line(fV3 start, fV3 end, Colour c = Colour(), float thickness = 1.0f);
     void line_loop(fV2 points[], unsigned int n_pts, Colour c = Colour(),
                                                   float thickness = 1.0f);
     void height_line(float height[], unsigned int n_pts, float x_spacing,

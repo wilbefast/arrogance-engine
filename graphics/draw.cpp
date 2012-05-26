@@ -23,28 +23,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+void draw_line(GLfloat points[], size_t dimension, draw::Colour c, float thickness)
+{
+  // Start up
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glLineWidth(thickness);
+  glColor4f(c.r, c.g, c.b, c.a);
+  glEnable(GL_LINE_SMOOTH);
+  glScalef(global::scale.x, global::scale.y, 0.0f);
+
+  // Draw points
+  glVertexPointer(dimension, GL_FLOAT, 0, points);
+  glDrawArrays(GL_LINES, 0, 2);
+
+  // Shut down
+  glDisable(GL_LINE_SMOOTH);
+  glColor4f(1, 1, 1, 1);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glLoadIdentity();
+}
+
+void draw::line(fV3 start, fV3 end, Colour c, float thickness)
+{
+    // Specify coordinates to draw
+    GLfloat points[6]  = { (GLfloat)start.x, (GLfloat)start.y, (GLfloat)start.z,
+                            (GLfloat)end.x,  (GLfloat)end.y, (GLfloat)end.z};
+    // draw the line in 3 dimensions
+    draw_line(points, 3, c, thickness);
+}
+
 void draw::line(fV2 start, fV2 end, Colour c, float thickness)
 {
     // Specify coordinates to draw
     GLfloat points[4]  = { (GLfloat)start.x, (GLfloat)start.y,
                             (GLfloat)end.x,  (GLfloat)end.y};
-
-    // Start up
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glLineWidth(thickness);
-    glColor4f(c.r, c.g, c.b, c.a);
-    glEnable(GL_LINE_SMOOTH);
-    glScalef(global::scale.x, global::scale.y, 0.0f);
-
-    // Draw points
-    glVertexPointer(2, GL_FLOAT, 0, points);
-    glDrawArrays(GL_LINES, 0, 2);
-
-    // Shut down
-    glDisable(GL_LINE_SMOOTH);
-    glColor4f(1, 1, 1, 1);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glLoadIdentity();
+    // draw the line in 2 dimensions
+    draw_line(points, 2, c, thickness);
 }
 
 void draw::line_loop(fV2 points[], unsigned int n_pts, Colour c, float thickness)
