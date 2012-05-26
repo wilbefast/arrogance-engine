@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../graphics/Mesh3D.hpp"
 
+#include "file.hpp"
 #include "MeshManager.hpp"
 
 using namespace std;
@@ -57,8 +58,7 @@ int MeshManager::startup()
 
   // load models
   /// TODO
-  load_obj("assets/knight.obj");
-
+  ASSERT(load_obj(GET_ASSET("knight.obj")) == EXIT_SUCCESS, "Loading knight.obj");
   // All good!
   started = true;
   return EXIT_SUCCESS;
@@ -105,14 +105,14 @@ int MeshManager::load_obj(const char* filename)
 {
   // open the file
   ifstream in(filename, ios::in);
-  ASSERT(in, "'MeshManager::load_obj' opening object file");
+  ASSERT(in, "'MeshManager::load_obj' opening Wavefront object file");
 
   // read each line
   string line;
   while (getline(in, line))
   {
     // lop off the first two characters, used to determine how we read the line
-    if(line.size() < 2)
+    if(line.size() < 2 || line[0] == '#')
       continue;
     string key(line.substr(0, 2));
     istringstream s(line.substr(2));
@@ -129,140 +129,44 @@ int MeshManager::load_obj(const char* filename)
     // texture coordinates
     else if(key == "vt")
       mesh.add_texture_coordinate(vertex_t(s));
+    // material definition
+    else if(key == "mt" && line.substr(0, 6) == "mtllib")
+    {
+      string mtl_file = line.substr(7).insert(0,ASSET_PATH);
+      mtl_file = mtl_file.substr(0, mtl_file.find_first_of('\r'));
+      ASSERT(load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
+        "'MeshManager::load_obj' loading associated material file");
+    }
   }
 
   // optimise (shrink-wrap), translate and normalise the resulting mesh
   mesh.finalise();
+  in.close();
+
 
   // all clear!
   return EXIT_SUCCESS;
 }
 
 
-
-
-/*
-
+int MeshManager::load_mtl(const char* filename)
 {
-  numfaces++;
-  if( numfaces > faceuse.size() )
+  cout << '\'' << filename << '\'' << endl;
+
+  // open the file
+  ifstream in(filename, ios::in);
+  ASSERT(in, "'MeshManager::load_mtl' opening material file");
+
+  // read each line
+  string line;
+  while (getline(in, line))
   {
-    faceuse.resize( faceuse.size() * 2 );
-    facenormals.resize( faceuse.size() * 2 );
-    facevertexnormals.resize( faceuse.size() * 2 );
-    if( usetexture )
-      facevertextextcoords.resize( faceuse.size() * 2 );
+    cout << line << endl;
   }
 
-  getline( file, buffer );
+  // close the file even though the destructor does this for us - I have OCD :D
+  in.close();
 
-  istringstream bufferinput( buffer );
-
-  while( bufferinput >> part ) {
-
-    // Replace double slash so we know there is no texture vertex
-    slash = (int)part.find("//");
-    if( slash != string::npos )
-      part.replace( slash, 2, " 0 " );
-    else {
-      // With a double slash, there won't be any others
-
-      // Replace any remaining slashes with spaces
-      slash = (int)part.find("/");
-      while( slash != string::npos ) {
-        part.replace( slash, 1, " " );
-        slash = (int)part.find("/");
-      }
-    }
-
-    // Now, we can get the values
-    istringstream partinput( part );
-
-    vector< int > partdata( 3, 0 );
-
-    for( int i = 0; i < 3 && partinput >> temp; i++ )
-      partdata.at( i ) = temp;
-
-    // Deal with negative references
-    if( partdata.at( 0 ) < 0 )
-      partdata.at( 0 ) += numvertices + 1;
-
-    if( partdata.at( 0 ) > (int)numvertices )
-      // Tried to access an illegal vertex
-      return false;
-
-    x = vertices.at( partdata.at( 0 ) - 1 ).x;
-    y = vertices.at( partdata.at( 0 ) - 1 ).y;
-    z = vertices.at( partdata.at( 0 ) - 1 ).z;
-    // Check for the min and max coord to do a bounding box
-    if( x > max.x )
-      max.x = x;
-    if( y > max.y )
-      max.y = y;
-    if( z > max.z )
-      max.z = z;
-
-    if( x < min.x )
-      min.x = x;
-    if( y < min.y )
-      min.y = y;
-    if( z < min.z )
-      min.z = z;
-
-    vertexuse.at( partdata.at( 0 ) - 1 ).push_back( numfaces - 1 );
-    faceuse.at( numfaces - 1 ).push_back( partdata.at( 0 ) - 1);
-
-    // Texture coord was specified
-    if( partdata.at( 1 ) != 0 && usetexture ) {
-      // Deal with negative references
-      if( partdata.at( 1 ) < 0 )
-        partdata.at( 1 ) += numtextcoords + 1;
-
-      if( partdata.at( 1 ) > (int)numtextcoords )
-        // Illegal index
-        return false;
-
-      facevertextextcoords.at( numfaces - 1 ).push_back(
-        textcoords.at( partdata.at( 1 ) - 1 ) );
-    }
-
-    // Normal was specified
-    if( partdata.at( 2 ) != 0 ) {
-      // Deal with negative references
-      if( partdata.at( 2 ) < 0 )
-        partdata.at( 2 ) += numnormals + 1;
-
-      if( partdata.at( 2 ) > (int)numnormals )
-        // Tried to access an illegal normal
-        return false;
-
-      facevertexnormals.at( numfaces - 1 ).push_back(
-          normals.at( partdata.at( 2 ) - 1 ) );
-    }
-
-    // Currently only allow triangles
-//				if( faceuse.at( numfaces - 1 ).size() > 3 )
-//					return false;
-
-    if( faceuse.at( numfaces - 1 ).size() >= 3 ) {
-      // Calculate face normal
-      Vector v1, v2;
-      Point p1, p2, p3;
-
-      p1 = vertices.at( faceuse.at( numfaces - 1 ).at( 0 ) );
-      p2 = vertices.at( faceuse.at( numfaces - 1 ).at( 1 ) );
-      p3 = vertices.at( faceuse.at( numfaces - 1 ).at( 2 ) );
-
-      v1.x =  p1.x - p2.x;
-      v1.y =  p1.y - p2.y;
-      v1.z =  p1.z - p2.z;
-
-      v2.x =  p3.x - p2.x;
-      v2.y =  p3.y - p2.y;
-      v2.z =  p3.z - p2.z;
-
-      facenormals.at( numfaces -1 ) = v2.cross( v1 );
-    }
-  }
+  // all clear!
+  return EXIT_SUCCESS;
 }
-*/

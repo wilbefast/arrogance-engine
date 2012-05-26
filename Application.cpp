@@ -70,7 +70,7 @@ int Application::startup()
     ASSERT(AudioManager::getInstance()->startup()
       == EXIT_SUCCESS, "Starting Audio Manager");
     ASSERT(MeshManager::getInstance()->startup()
-      == EXIT_SUCCESS, "Starting Audio Manager");
+      == EXIT_SUCCESS, "Starting Mesh Manager");
 
     // Load the initial scene
     ASSERT(scene->startup() == EXIT_SUCCESS, "Loading initial Scene");

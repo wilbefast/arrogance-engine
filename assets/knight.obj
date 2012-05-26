@@ -1,6 +1,6 @@
 # Exported from Wings 3D 1.0.2
-mtllib knight2.mtl
-o cube1
+mtllib knight.mtl
+o knight
 #53 vertices, 69 faces
 v -0.13451535 -0.80908603 0.80908603
 v -0.30943872 0.96509140 0.56790837

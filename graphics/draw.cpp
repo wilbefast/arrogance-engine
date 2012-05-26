@@ -30,7 +30,7 @@ void draw_line(GLfloat points[], size_t dimension, draw::Colour c, float thickne
   glLineWidth(thickness);
   glColor4f(c.r, c.g, c.b, c.a);
   glEnable(GL_LINE_SMOOTH);
-  glScalef(global::scale.x, global::scale.y, 0.0f);
+  //glScalef(global::scale.x, global::scale.y, 0.0f);
 
   // Draw points
   glVertexPointer(dimension, GL_FLOAT, 0, points);

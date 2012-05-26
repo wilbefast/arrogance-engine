@@ -16,10 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/****/
+#include <iostream>
+#include "../platform.hpp"
+/****/
+
 #include "Joint.hpp"
 
 #include "draw.hpp"
 #include "../warn.hpp"
+
+using namespace std;
 
 /// CREATION, DESTRUCTION
 
@@ -29,14 +36,39 @@ child(NULL),
 sibling(NULL),
 position(_position)
 {
-  father->addChild(this);
+  if(father)
+    father->addChild(this);
+}
+
+Joint::~Joint()
+{
 }
 
 /// DRAW
 
+void Joint::print()
+{
+  cout << "Joint @" << this << endl
+       << "position " << position << endl
+       << "\tfather @" << father << endl
+       << "\tsibling @" << sibling << endl;
+}
+
 void Joint::draw()
 {
+  // draw self
   draw::line(father->position, position);
+
+  // draw children
+  if(!child)
+    return;
+  Joint* current_child = child;
+  do
+  {
+    current_child->draw();
+    current_child = current_child->sibling;
+  }
+  while(current_child);
 }
 
 /// MODIFY ARMATURE
@@ -94,4 +126,22 @@ Joint* Joint::removeChild(Joint* remove)
 
 void Joint::setPosition(vertex_t new_position)
 {
+  translate(new_position - position);
+}
+
+void Joint::translate(vertex_t amount)
+{
+  // move self
+  position += amount;
+
+  // move children
+  if(!child)
+    return;
+  Joint* current_child = child;
+  do
+  {
+    current_child->translate(amount);
+    current_child = current_child->sibling;
+  }
+  while(current_child);
 }

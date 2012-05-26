@@ -23,6 +23,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../resources/MeshManager.hpp"
 
+
+
+#include "../graphics/Joint.hpp"
+Joint joint1(NULL, vertex_t(0.0, 0.0, 0.0));
+Joint joint2(&joint1, vertex_t(0.5, 0.5, 0.0));
+Joint joint3(&joint1, vertex_t(0.3, 0.8, 0.0));
+Joint joint4(&joint3, vertex_t(0.9, 0.5, 0.0));
+
+
 /// CREATION, DESTRUCTION
 
 StrategyState::StrategyState() :
@@ -85,7 +94,6 @@ int StrategyState::update()
   if(result != CONTINUE)
     return result;
 
-
   // All clear
   return EXIT_SUCCESS;
 }
@@ -94,7 +102,6 @@ void StrategyState::draw()
 {
   glClear(GL_DEPTH_BUFFER_BIT);
   glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
-  //glScalef(5.0f, 5.0f, 1.0f);
   glScalef(global::viewport.x, global::viewport.y, 1.0f);
 
   glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);

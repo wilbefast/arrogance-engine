@@ -33,14 +33,18 @@ private:
   /// METHODS
 public:
   // creation, destruction
-  Joint();
   Joint(Joint* _father, vertex_t position);
+  ~Joint();
   // draw
+  void print();
   void draw();
   // modify armature
   Joint* addChild(Joint* new_child);
   Joint* removeChild(Joint* new_child);
-  void setPosition(vertex_t _position);
+  void setPosition(vertex_t new_position);
+  void translate(vertex_t amount);
+
+
 };
 
 #endif // JOINT_HPP_INCLUDED
