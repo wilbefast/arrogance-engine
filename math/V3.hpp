@@ -75,6 +75,7 @@ public:
   V3 operator--(int);
 
   // Array-style access
+  T* front();
   T& operator[](size_t i);
   const T& operator[](size_t i) const;
 

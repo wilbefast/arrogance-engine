@@ -246,6 +246,12 @@ inline V3<T> V3<T>::operator--(int)
 /* ARRAY-STYLE ACCESS */
 
 template <typename T>
+inline T* V3<T>::front()
+{
+  return &x;
+}
+
+template <typename T>
 inline T& V3<T>::operator[](size_t i)
 {
   switch(i)

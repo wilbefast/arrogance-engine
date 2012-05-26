@@ -55,7 +55,8 @@ int StrategyState::startup()
   // Lighting on
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
-  glEnable(GL_LIGHT1);
+  // Materials on
+  glEnable(GL_COLOR_MATERIAL);
 
   // all clear
   return EXIT_SUCCESS;
@@ -72,7 +73,8 @@ int StrategyState::shutdown()
   // Lighting off
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);
-  glDisable(GL_LIGHT1);
+  // Materials off
+  glDisable(GL_COLOR_MATERIAL);
 
   // all clear
   return EXIT_SUCCESS;
@@ -82,21 +84,31 @@ int StrategyState::shutdown()
 
 int StrategyState::update()
 {
-  int result;
-
   // Update camera angle and position
   uV2 const& p = input.cursor_position;
   camera_angle.x = CAMERA_MAX_ANGLE*p.x/global::viewport.x*2 - CAMERA_MAX_ANGLE;
 	camera_angle.y = CAMERA_MAX_ANGLE*p.y/global::viewport.y*2 - CAMERA_MAX_ANGLE;
 
   // Update dynamic game objects
-  result = GameState::update();
+  int result = GameState::update();
   if(result != CONTINUE)
     return result;
 
   // All clear
   return EXIT_SUCCESS;
 }
+
+
+  GLfloat redDiffuseMaterial[] = {1.0, 0.0, 0.0};
+  GLfloat whiteSpecularMaterial[] = {0.0, 0.0, 1.0};
+  GLfloat greenEmissiveMaterial[] = {0.0, 1.0, 0.0};
+
+  GLfloat whiteSpecularLight[] = {1.0, 1.0, 1.0};
+  GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
+  GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
+  GLfloat shininess[] = {128};
+  GLfloat blankMaterial[] = {0.0, 0.0, 0.0};
+
 
 void StrategyState::draw()
 {
@@ -109,6 +121,27 @@ void StrategyState::draw()
 	glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
 	glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
 	glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
+
+
+  glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
+
+
+  /** SPECULAR **/
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+  //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, blankMaterial);
+  //glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, blankMaterial);
+
+  /** DIFFUSE **/
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blankMaterial);
+  //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, redDiffuseMaterial);
+
+  /** EMISSIVE **/
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, greenEmissiveMaterial);
+  //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blankMaterial);
+
 
   MeshManager::getInstance()->mesh.draw();
 

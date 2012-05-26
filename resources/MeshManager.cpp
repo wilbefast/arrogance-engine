@@ -132,10 +132,17 @@ int MeshManager::load_obj(const char* filename)
     // material definition
     else if(key == "mt" && line.substr(0, 6) == "mtllib")
     {
+      // parse the material filename
       string mtl_file = line.substr(7).insert(0,ASSET_PATH);
       mtl_file = mtl_file.substr(0, mtl_file.find_first_of('\r'));
-      ASSERT(load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
+
+      // read material information into a temporary Material object
+      Material new_material;
+      ASSERT(load_mtl(mtl_file.c_str(), new_material) == EXIT_SUCCESS,
         "'MeshManager::load_obj' loading associated material file");
+
+      // attach the material to the mesh object
+      mesh.set_material(new_material);
     }
   }
 
@@ -149,10 +156,8 @@ int MeshManager::load_obj(const char* filename)
 }
 
 
-int MeshManager::load_mtl(const char* filename)
+int MeshManager::load_mtl(const char* filename, Material& destination)
 {
-  cout << '\'' << filename << '\'' << endl;
-
   // open the file
   ifstream in(filename, ios::in);
   ASSERT(in, "'MeshManager::load_mtl' opening material file");
@@ -161,7 +166,27 @@ int MeshManager::load_mtl(const char* filename)
   string line;
   while (getline(in, line))
   {
-    cout << line << endl;
+    // lop off the first two characters, used to determine how we read the line
+    if(line.size() < 2 || line[0] == '#')
+      continue;
+    string key(line.substr(0, 2));
+    istringstream s(line.substr(2));
+
+    // ambient
+    if(key == "Ka")
+      destination.ambient = colour_t(s);
+    // diffuse
+    else if(key == "Kd")
+      destination.diffuse = colour_t(s);
+    // specular
+    else if(key == "Ks")
+      destination.specular = colour_t(s);
+    // emission
+    else if(key == "Ke")
+      destination.emission = colour_t(s);
+    // shininess
+    else if(key == "Ns")
+      s >> destination.shininess;
   }
 
   // close the file even though the destructor does this for us - I have OCD :D

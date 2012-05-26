@@ -31,6 +31,7 @@ typedef V3<GLfloat> normal_t;
 typedef vector<normal_t> normal_list_t;
 typedef vertex_list_t::iterator normal_list_it;
 
+#include "Material.hpp"
 
 class Mesh3D
 {
@@ -43,6 +44,8 @@ private:
   vertex_list_t texture_coordinates;
   // max and minimum coordinates
   vertex_t min, max;
+  // material
+  Material material;
 
   /* METHODS */
 public:
@@ -54,6 +57,7 @@ public:
   void add_face(face_t new_face);
   void add_normal(normal_t new_normal);
   void add_texture_coordinate(vertex_t new_texture_coordinate);
+  void set_material(Material new_material);
   // finished building
   void finalise();
   // draw

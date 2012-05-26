@@ -46,7 +46,7 @@ public:
   int shutdown();
   // load external resources
   int load_obj(const char* filename);
-  int load_mtl(const char* filename);
+  int load_mtl(const char* filename, Material& destination);
 };
 
 #endif // MESHMANAGER_HPP_INCLUDED

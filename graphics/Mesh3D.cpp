@@ -70,6 +70,11 @@ void Mesh3D::add_texture_coordinate(vertex_t new_texture_coordinate)
   texture_coordinates.push_back(new_texture_coordinate);
 }
 
+void Mesh3D::set_material(Material new_material)
+{
+  material = new_material;
+}
+
 /* FINISHED BUILDING */
 
 void Mesh3D::finalise()
@@ -98,6 +103,13 @@ void Mesh3D::finalise()
 
 void Mesh3D::draw()
 {
+  // Materials
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, material.emission.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material.shininess));
+
   // Vertices
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, &vertices.front());
