@@ -119,6 +119,13 @@ void Mesh3D::draw()
   // Normals
   glEnableClientState(GL_NORMAL_ARRAY);
   glNormalPointer(GL_FLOAT, 0, &normals.front());
+  // Texture
+  if(texture)
+  {
+    glBindTexture(GL_TEXTURE_2D, texture->getHandle());
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, &texture_coordinates.front());
+  }
 
   // Draw the triangles using the specified normals
   glDrawElements(GL_TRIANGLES, 3*faces.size(), GL_UNSIGNED_BYTE, &faces.front());
@@ -127,5 +134,10 @@ void Mesh3D::draw()
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_INDEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
+  if(texture)
+  {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
   glLoadIdentity();
 }

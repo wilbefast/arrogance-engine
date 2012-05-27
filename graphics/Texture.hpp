@@ -25,21 +25,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Texture
 {
-    /// ATTRIBUTES
-    public:
-    GLuint handle;
-    private:
-    iRect area; // size of the texture
+  /// ATTRIBUTES
+private:
+  GLuint handle;
+  iRect area; // size of the texture
 
-    /// METHODS
-    public:
-    iRect getArea();
-    int load(const char* filename);
-    int unload();
-    void draw(const fRect* source_pointer,
-              const fRect* destination_pointer,
-              float angle = 0.0);
-
+  /// METHODS
+public:
+  iRect getArea() const;
+  GLuint getHandle() const;
+  int load(const char* filename);
+  int unload();
+  void draw(const fRect* source_pointer,
+            const fRect* destination_pointer,
+            float angle = 0.0);
 };
 
 #endif // TEXTURE_HPP_INCLUDED

@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MESH3D_HPP_INCLUDED
 
 #include "vertex.hpp"
+#include "Material.hpp"
+#include "Texture.hpp"
 
 #include <vector>
 
@@ -31,7 +33,6 @@ typedef V3<GLfloat> normal_t;
 typedef vector<normal_t> normal_list_t;
 typedef vertex_list_t::iterator normal_list_it;
 
-#include "Material.hpp"
 
 class Mesh3D
 {
@@ -46,6 +47,8 @@ private:
   vertex_t min, max;
   // material
   Material material;
+  // texture
+  Texture* texture;
 
   /* METHODS */
 public:

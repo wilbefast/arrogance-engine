@@ -28,9 +28,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ISPWR2(n) !(n & (n-1))
 
-iRect Texture::getArea()
+iRect Texture::getArea() const
 {
-    return area;
+  return area;
+}
+
+GLuint Texture::getHandle() const
+{
+  return handle;
 }
 
 int Texture::load(const char* filepath)
