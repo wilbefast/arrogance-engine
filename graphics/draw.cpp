@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-void draw_line(GLfloat points[], size_t dimension, draw::Colour c, float thickness)
+void draw_line(GLfloat points[], size_t dimension, Colour c, float thickness)
 {
   // Start up
   glEnableClientState(GL_VERTEX_ARRAY);

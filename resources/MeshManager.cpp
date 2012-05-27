@@ -174,16 +174,16 @@ int MeshManager::load_mtl(const char* filename, Material& destination)
 
     // ambient
     if(key == "Ka")
-      destination.ambient = colour_t(s);
+      destination.ambient = Colour(s);
     // diffuse
     else if(key == "Kd")
-      destination.diffuse = colour_t(s);
+      destination.diffuse = Colour(s);
     // specular
     else if(key == "Ks")
-      destination.specular = colour_t(s);
+      destination.specular = Colour(s);
     // emission
     else if(key == "Ke")
-      destination.emission = colour_t(s);
+      destination.emission = Colour(s);
     // shininess
     else if(key == "Ns")
       s >> destination.shininess;

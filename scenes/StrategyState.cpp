@@ -49,14 +49,14 @@ int StrategyState::startup()
 
   // Occlusion on
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glFrontFace(GL_CW);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0f);
   glClear(GL_DEPTH_BUFFER_BIT);
   // Lighting on
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
-  // Materials on
-  glEnable(GL_COLOR_MATERIAL);
 
   // all clear
   return EXIT_SUCCESS;
@@ -70,11 +70,10 @@ int StrategyState::shutdown()
 
   // Occlusion off
   glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);
   // Lighting off
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);
-  // Materials off
-  glDisable(GL_COLOR_MATERIAL);
 
   // all clear
   return EXIT_SUCCESS;
@@ -99,15 +98,10 @@ int StrategyState::update()
 }
 
 
-  GLfloat redDiffuseMaterial[] = {1.0, 0.0, 0.0};
-  GLfloat whiteSpecularMaterial[] = {0.0, 0.0, 1.0};
-  GLfloat greenEmissiveMaterial[] = {0.0, 1.0, 0.0};
 
   GLfloat whiteSpecularLight[] = {1.0, 1.0, 1.0};
-  GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
+  GLfloat blackAmbientLight[] = {0.2, 0.2, 0.2};
   GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
-  GLfloat shininess[] = {128};
-  GLfloat blankMaterial[] = {0.0, 0.0, 0.0};
 
 
 void StrategyState::draw()
@@ -122,26 +116,9 @@ void StrategyState::draw()
 	glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
 	glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
 
-
   glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
   glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
-
-
-  /** SPECULAR **/
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-  //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, blankMaterial);
-  //glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, blankMaterial);
-
-  /** DIFFUSE **/
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blankMaterial);
-  //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, redDiffuseMaterial);
-
-  /** EMISSIVE **/
-  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, greenEmissiveMaterial);
-  //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blankMaterial);
-
 
   MeshManager::getInstance()->mesh.draw();
 

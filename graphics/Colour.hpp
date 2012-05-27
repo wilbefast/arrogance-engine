@@ -16,13 +16,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Material.hpp"
 
-Material::Material(Colour a, Colour d, Colour s, Colour e, float shine) :
-ambient(a), diffuse(d), specular(s), emission(e), shininess(shine)
+#ifndef COLOUR_HPP_INCLUDED
+#define COLOUR_HPP_INCLUDED
+
+#include <istream>
+
+class Colour
 {
-  if(shine < 0)
-    shininess = 0;
-  else if(shine > 128)
-    shininess = 128;
-}
+  /// ATTRIBUTES
+public:
+  float r, g, b, a;
+
+
+  /// METHODS
+public:
+  // creation, destruction
+  Colour(int _r, int _g, int _b, int _a = 255);
+  Colour(float _r = 1, float _g = 1, float _b = 1, float _a = 1);
+  Colour(std::istream& in);
+
+  // array-style access
+  float* front();
+  float& operator[](size_t i);
+  const float& operator[](size_t i) const;
+};
+
+#endif // COLOUR_HPP_INCLUDED
