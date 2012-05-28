@@ -38,7 +38,7 @@ x(_x), y(_y), z(_z)
 {
 }
 
-// Read from stream constructor. Ex(iV3(string))
+// Read from stream constructor: iV3(stringstream)
 template <typename T>
 inline V3<T>::V3(std::istream& in)
 {

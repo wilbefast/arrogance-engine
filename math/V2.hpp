@@ -37,6 +37,7 @@ public:
   // Constructors
   V2();
   V2(T x, T y);
+  V2(std::istream& in);
 
   template <typename U>
   explicit V2(const V2<U>& source);
@@ -76,12 +77,20 @@ public:
   float getNorm2() const;
   void setMagnitude(float new_magnitude);
 
-  // outstream operator
+  // outstream
   void print(std::ostream& stream) const;
+
+  // instream
+  void read(std::istream& in);
 };
 
+  // outstream operator
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, V2<T> const& v);
+
+// instream operator
+template <typename T>
+std::istream& operator>>(std::istream& in, V2<T>& v);
 
 typedef V2<int> iV2;
 typedef V2<unsigned int> uV2;

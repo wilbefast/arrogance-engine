@@ -38,6 +38,13 @@ x(xx), y(yy)
 {
 }
 
+// Read from stream constructor: iV2(stringstream)
+template <typename T>
+inline V2<T>::V2(std::istream& in)
+{
+  read(in);
+}
+
 // Copy constructor. Ex: iV2 v2(v1);
 template<typename T>
 template<typename U>
@@ -228,7 +235,9 @@ inline void V2<T>::setMagnitude(float new_magnitude)
     (*this) *= (new_magnitude/getNorm());
 }
 
-// Outstream operator
+
+/* OUTSTREAM OPERATOR */
+
 template <typename T>
 inline void V2<T>::print(ostream& stream) const
 {
@@ -240,5 +249,20 @@ inline ostream& operator<<(std::ostream& stream, V2<T> const& v)
 {
     v.print(stream);
     return stream;
+}
+
+/* INSTREAM OPERATOR */
+
+template <typename T>
+inline void V2<T>::read(std::istream& in)
+{
+  in >> x >> y;
+}
+
+template <typename T>
+std::istream& operator>>(std::istream& in, V2<T>& v)
+{
+  v.read(in);
+  return in;
 }
 

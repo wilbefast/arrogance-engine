@@ -31,11 +31,13 @@ public:
 
   /* METHODS */
 public:
+  // creation, destruction
   Material(Colour a = Colour(0.2f, 0.2f, 0.2f, 1.0f),
           Colour d = Colour(0.8f, 0.8f, 0.8f, 1.0f),
           Colour s = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           Colour e = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           float shine = 0.0f);
+  int load_mtl(const char* filename);
 };
 
 #endif // MATERIAL_HPP_INCLUDED

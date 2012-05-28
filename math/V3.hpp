@@ -86,10 +86,10 @@ public:
   float getNorm2() const;
   void setMagnitude(float new_magnitude);
 
-  // outstream operator
+  // outstream
   void print(std::ostream& out) const;
 
-  // instream operator
+  // instream
   void read(std::istream& in);
 };
 

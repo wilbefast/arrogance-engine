@@ -23,11 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Material.hpp"
 #include "Texture.hpp"
 
+#include <sstream>
 #include <vector>
 
 typedef V3<GLubyte> face_t;
 typedef vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
+
+typedef V2<GLfloat> tex_coord_t;
+typedef vector<tex_coord_t> tex_coord_list_t;
+typedef vertex_list_t::iterator tex_coord_list_it;
 
 typedef V3<GLfloat> normal_t;
 typedef vector<normal_t> normal_list_t;
@@ -42,7 +47,7 @@ private:
   vertex_list_t vertices;
   face_list_t faces;
   normal_list_t normals;
-  vertex_list_t texture_coordinates;
+  tex_coord_list_t texture_coordinates;
   // max and minimum coordinates
   vertex_t min, max;
   // material
@@ -54,17 +59,22 @@ private:
 public:
   // creation, destruction
   Mesh3D();
+  int load_obj(const char* filename);
   ~Mesh3D();
+  // draw
+  void draw();
+
+  /* SUBROUTINES */
+private:
   // build iteratively
   void add_vertex(vertex_t new_vertex);
+  void parse_faces(std::istringstream& s);
   void add_face(face_t new_face);
   void add_normal(normal_t new_normal);
-  void add_texture_coordinate(vertex_t new_texture_coordinate);
+  void add_texture_coordinate(tex_coord_t new_texture_coordinate);
   void set_material(Material new_material);
   // finished building
   void finalise();
-  // draw
-  void draw();
 
 };
 
