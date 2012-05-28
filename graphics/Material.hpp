@@ -20,14 +20,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATERIAL_HPP_INCLUDED
 
 #include "Colour.hpp"
+#include "Texture.hpp"
 #include "../math/V3.hpp"
+
+#include <vector>
+
+typedef V2<GLfloat> tex_coord_t;
+typedef vector<tex_coord_t> tex_coord_list_t;
+typedef tex_coord_list_t::iterator tex_coord_list_it;
 
 class Material
 {
+  /* FRIENDS */
+  friend class Mesh3D;
+
   /* ATTRIBUTES */
 public:
+  // material
   Colour ambient, diffuse, specular, emission;
   float shininess;
+  // UV map
+  bool use_texture;
+  Texture texture;
+  tex_coord_list_t texture_coordinates;
 
   /* METHODS */
 public:
@@ -38,6 +53,13 @@ public:
           Colour e = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           float shine = 0.0f);
   int load_mtl(const char* filename);
+  // drawing
+  void activate();
+  void deactivate();
+
+  /* SUBROUTINES */
+private:
+  void add_texture_coordinate(tex_coord_t new_texture_coordinate);
 };
 
 #endif // MATERIAL_HPP_INCLUDED

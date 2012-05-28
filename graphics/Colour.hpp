@@ -40,6 +40,14 @@ public:
   float* front();
   float& operator[](size_t i);
   const float& operator[](size_t i) const;
+
+  // instream, outstream
+  void read(std::istream& in);
+  void write(std::ostream& stream) const;
 };
+
+// instream operator, outstream operator
+std::ostream& operator<<(std::ostream& stream, Colour const& c);
+std::istream& operator>>(std::istream& in, Colour& c);
 
 #endif // COLOUR_HPP_INCLUDED

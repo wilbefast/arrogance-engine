@@ -21,7 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "vertex.hpp"
 #include "Material.hpp"
-#include "Texture.hpp"
 
 #include <sstream>
 #include <vector>
@@ -29,10 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef V3<GLubyte> face_t;
 typedef vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
-
-typedef V2<GLfloat> tex_coord_t;
-typedef vector<tex_coord_t> tex_coord_list_t;
-typedef vertex_list_t::iterator tex_coord_list_it;
 
 typedef V3<GLfloat> normal_t;
 typedef vector<normal_t> normal_list_t;
@@ -47,13 +42,10 @@ private:
   vertex_list_t vertices;
   face_list_t faces;
   normal_list_t normals;
-  tex_coord_list_t texture_coordinates;
   // max and minimum coordinates
   vertex_t min, max;
   // material
   Material material;
-  // texture
-  Texture* texture;
 
   /* METHODS */
 public:
@@ -69,10 +61,6 @@ private:
   // build iteratively
   void add_vertex(vertex_t new_vertex);
   void parse_faces(std::istringstream& s);
-  void add_face(face_t new_face);
-  void add_normal(normal_t new_normal);
-  void add_texture_coordinate(tex_coord_t new_texture_coordinate);
-  void set_material(Material new_material);
   // finished building
   void finalise();
 

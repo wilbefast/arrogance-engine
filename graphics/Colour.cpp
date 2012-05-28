@@ -36,11 +36,7 @@ r(_r), g(_g), b(_b), a(_a)
 
 Colour::Colour(std::istream& in)
 {
-  in >> r >> g >> b;
-  if(in.peek() == '\r')
-    a = 1.0f;
-  else
-    in >> a;
+  read(in);
 }
 
 
@@ -71,4 +67,36 @@ const float& Colour::operator[](size_t i) const
     case 2: return b;
     case 3: default: return a;
   }
+}
+
+/// INSTREAM, OUTSTREAM
+void Colour::read(istream& in)
+{
+  // we assume that the stream contains 3 blocks of number-characters
+  in >> r >> g >> b;
+
+  // check if there is a fourth block of characters before attempting to read it
+  char next = in.peek();
+  if(next == '\r' || next == -1)
+    a = 1.0f;
+  else
+    in >> a;
+}
+
+void Colour::write(std::ostream& stream) const
+{
+  stream << "rgba(" << r << ',' << g << ',' << b << ',' << a << ')';
+}
+
+// instream operator, outstream operator
+ostream& operator<<(ostream& out, Colour const& c)
+{
+  c.write(out);
+  return out;
+}
+
+istream& operator>>(istream& in, Colour& c)
+{
+  c.read(in);
+  return in;
 }

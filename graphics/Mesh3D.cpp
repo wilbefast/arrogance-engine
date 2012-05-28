@@ -30,10 +30,8 @@ Mesh3D::Mesh3D() :
 vertices(),
 faces(),
 normals(),
-texture_coordinates(),
 min(),
-max(),
-texture(NULL)
+max()
 {
 }
 
@@ -61,22 +59,19 @@ int Mesh3D::load_obj(const char* filename)
       parse_faces(s);
     // vertex normal
     else if(key == "vn")
-      add_normal(normal_t(s));
+      normals.push_back(normal_t(s));
     // texture coordinates
     else if(key == "vt")
-      add_texture_coordinate(tex_coord_t(s));
+      material.add_texture_coordinate(tex_coord_t(s));
     // material definition
     else if(key == "mt" && line.substr(0, 6) == "mtllib")
     {
       // parse the material filename
-      string mtl_file = line.substr(7).insert(0,ASSET_PATH);
+      string mtl_file = line.substr(7).insert(0, ASSET_PATH);
       mtl_file = mtl_file.substr(0, mtl_file.find_first_of('\r'));
-      // read material information into a temporary Material object
-      Material new_material;
-      ASSERT(new_material.load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
-        "'MeshManager::load_obj' loading associated material file");
-      // attach the material to the mesh object
-      set_material(new_material);
+      // read the material file
+      ASSERT(material.load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
+        "'Mesh3D::load_obj' loading associated material file");
     }
   }
 
@@ -128,7 +123,7 @@ void Mesh3D::parse_faces(istringstream& s)
   // always add a first triangle
   face_t triangle(vertices[0], vertices[1], vertices[2]);
   // remember: OBJ indices start at 1 rather than 0 !
-  add_face(--triangle);
+  faces.push_back(--triangle);
 
   // add a second triangle only if the face was a quad
   if(vertices[3] == -1)
@@ -141,27 +136,7 @@ void Mesh3D::parse_faces(istringstream& s)
   //  | \|
   //  3--2
   triangle = face_t(vertices[0], vertices[2], vertices[3]);
-  add_face(--triangle);
-}
-
-void Mesh3D::add_face(face_t new_face)
-{
-  faces.push_back(new_face);
-}
-
-void Mesh3D::add_normal(normal_t new_normal)
-{
-  normals.push_back(new_normal);
-}
-
-void Mesh3D::add_texture_coordinate(tex_coord_t new_texture_coordinate)
-{
-  texture_coordinates.push_back(new_texture_coordinate);
-}
-
-void Mesh3D::set_material(Material new_material)
-{
-  material = new_material;
+  faces.push_back(--triangle);
 }
 
 /* FINISHED BUILDING */
@@ -173,7 +148,6 @@ void Mesh3D::finalise()
   vertex_list_t(vertices).swap(vertices);
   face_list_t(faces).swap(faces);
   normal_list_t(normals).swap(normals);
-  tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
 
   // maximum size of any dimension should be 1
   vertex_t size = max - min;
@@ -192,13 +166,8 @@ void Mesh3D::finalise()
 
 void Mesh3D::draw()
 {
-  // Materials
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, material.emission.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material.shininess));
-
+  // Material
+  material.activate();
   // Vertices
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, &vertices.front());
@@ -208,13 +177,6 @@ void Mesh3D::draw()
   // Normals
   glEnableClientState(GL_NORMAL_ARRAY);
   glNormalPointer(GL_FLOAT, 0, &normals.front());
-  // Texture
-  if(texture)
-  {
-    glBindTexture(GL_TEXTURE_2D, texture->getHandle());
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, &texture_coordinates.front());
-  }
 
   // Draw the triangles using the specified normals
   glDrawElements(GL_TRIANGLES, 3*faces.size(), GL_UNSIGNED_BYTE, &faces.front());
@@ -223,10 +185,6 @@ void Mesh3D::draw()
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_INDEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
-  if(texture)
-  {
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  }
+  material.deactivate();
   glLoadIdentity();
 }

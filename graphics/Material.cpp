@@ -23,11 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Material.hpp"
 
 #include "../assert.hpp"
+#include "../platform.hpp" // for activate
 
 /* CREATION, DESTRUCTION */
 
 Material::Material(Colour a, Colour d, Colour s, Colour e, float shine) :
-ambient(a), diffuse(d), specular(s), emission(e), shininess(shine)
+ambient(a), diffuse(d), specular(s), emission(e), shininess(shine),
+use_texture(false), texture(), texture_coordinates()
 {
   if(shine < 0)
     shininess = 0;
@@ -39,7 +41,7 @@ int Material::load_mtl(const char* filename)
 {
   // open the file
   ifstream in(filename, ios::in);
-  ASSERT(in, "'MeshManager::load_mtl' opening material file");
+  ASSERT(in, "'Material::load_mtl' opening material file");
 
   // read each line
   string line;
@@ -66,11 +68,65 @@ int Material::load_mtl(const char* filename)
     // shininess
     else if(key == "Ns")
       s >> shininess;
+    // transparency / alpha
+    else if (key == "d " || key == "Tr")
+      s >> ambient.a;
+
+    // texture
+    else if(key == "ma" && line.substr(0, 6) == "map_Kd")
+    {
+      // parse the texture filename
+      string tex_file = line.substr(7).insert(0, ASSET_PATH);
+      tex_file = tex_file.substr(0, tex_file.find_first_of('\r'));
+      // load the texture file
+      ASSERT(texture.load(tex_file.c_str()) == EXIT_SUCCESS,
+        "'Material::load_mtl' loading associated texture file");
+      use_texture = true;
+    }
   }
 
   // close the file even though the destructor does this for us - I have OCD :D
   in.close();
 
+  // finalise (shrink-wrap texture coordinates)
+  tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
+
   // all clear!
   return EXIT_SUCCESS;
+}
+
+
+/* DRAWING */
+
+void Material::activate()
+{
+  // material
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,emission.front());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
+  // UV map
+  if(use_texture)
+  {
+    glBindTexture(GL_TEXTURE_2D, texture.getHandle());
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, &texture_coordinates.front());
+  }
+}
+
+void Material::deactivate()
+{
+  if(use_texture)
+  {
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glBindTexture(GL_TEXTURE_2D, 0);
+  }
+}
+
+/* SUBROUTINES */
+
+void Material::add_texture_coordinate(tex_coord_t new_texture_coordinate)
+{
+  texture_coordinates.push_back(new_texture_coordinate);
 }
