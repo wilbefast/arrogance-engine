@@ -21,27 +21,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../events/ThingEvent.hpp"
 #include "../../../math/wjd_math.hpp"           // for SQR
 
-#include <iostream>
-
 using namespace std;
 
 // Constants
 
-const float MovementElement::DEFAULT_SPEED_MIN = 0.06;
+const float MovementElement::DEFAULT_SPEED_MIN = 0.06f;
 
 // Constructors, destructors
 
-MovementElement::MovementElement(Thing* init_owner, float init_speed_max,
-                                     float init_friction,
-                                     float init_speed_min) :
+MovementElement::MovementElement(Thing* init_owner) :
 ThingElement(init_owner),
-speed(fV2(0,0)),
+speed(fV2(0.0f,0.0f)),
 previous_position(owner->getPosition()),
-speed_scalar(0),
-angle(0),
-speed_max(init_speed_max),
-speed_min(init_speed_min),
-friction(init_friction)
+speed_scalar(0.0f),
+angle(0.0f)
 {
 }
 
@@ -67,18 +60,18 @@ void MovementElement::add_springTowards(fV2 target_position,
 
 void MovementElement::moveTowards(fV2 target_position, float force)
 {
-    // Move towards the target at a constant rate
-    fV2 move_vector = target_position - owner->getPosition();
-    move_vector.setMagnitude(force);
-    setSpeed(move_vector);
+  // Move towards the target at a constant rate
+  fV2 move_vector = target_position - owner->getPosition();
+  move_vector.setMagnitude(force);
+  setSpeed(move_vector);
 }
 
 void MovementElement::add_moveTowards(fV2 target_position, float force)
 {
-    // Move towards the target at a constant rate
-    fV2 move_vector = target_position - owner->getPosition();
-    move_vector.setMagnitude(force);
-    addSpeed(move_vector);
+  // Move towards the target at a constant rate
+  fV2 move_vector = target_position - owner->getPosition();
+  move_vector.setMagnitude(force);
+  addSpeed(move_vector);
 }
 
 void MovementElement::add_speedScalar(float force)
@@ -88,98 +81,112 @@ void MovementElement::add_speedScalar(float force)
 
 void MovementElement::bounce(iV2 collision_side)
 {
-    // jump back to previous position
-    owner->moveTo(previous_position);
+  // jump back to previous position
+  owner->moveTo(previous_position);
 
-    // bounce opposite to wall
-    collision_side *= -1;
+  // bounce opposite to wall
+  collision_side *= -1;
 
-    // maintain speed on axes that are not colliding
-    if(!collision_side.x) collision_side.x = 1;
-    if(!collision_side.y) collision_side.y = 1;
+  // maintain speed on axes that are not colliding
+  if(!collision_side.x) collision_side.x = 1;
+  if(!collision_side.y) collision_side.y = 1;
 
-    // let's bounce!
-    setSpeed((fV2)collision_side*speed);
+  // let's bounce!
+  setSpeed((fV2)collision_side*speed);
 }
 
 // Modification
+
+void MovementElement::setSpeed(fV2 new_speed)
+{
+  // Signal if starting to move
+  if(!speed && new_speed)
+    owner->addEvent(new ThingEvent("started_moving"));
+
+  // Set the new speed
+  speed = new_speed;
+
+  // Cache absolute speed and angle
+  speed_scalar = speed.getNorm();
+  if(speed_scalar > 1)
+    angle = speed.getAngle();
+}
 
 void MovementElement::setSpeed_scalar(float new_speed_scalar)
 {
     setSpeed(speed/(speed.getNorm())*new_speed_scalar);
 }
 
-void MovementElement::setSpeed(fV2 new_speed)
+void MovementElement::setSpeedX(float new_speed)
 {
-    // Signal if starting to move
-    if(!speed && new_speed)
-        owner->addEvent(new ThingEvent("started_moving"));
-
-    // Set the new speed
-    speed = new_speed;
-
-    // Check terminal velocity
-    speed_scalar = speed.getNorm();
-    if(speed_scalar > speed_max)
-        speed = (speed/speed_scalar)*speed_max; // normalise and remultiply
-
-    // Reset movement angle, used for quick accesses
-    if(speed_scalar > 1)
-        angle = speed.getAngle();
+  setSpeed(fV2(new_speed, speed.y));
 }
+
+void MovementElement::setSpeedY(float new_speed)
+{
+  setSpeed(fV2(speed.x, new_speed));
+}
+
+void MovementElement::addSpeedX(float force)
+{
+  setSpeed(fV2(speed.x + force, speed.y));
+}
+
+void MovementElement::addSpeedY(float force)
+{
+  setSpeed(fV2(speed.x, speed.y + force));
+}
+
 
 void MovementElement::addSpeed(fV2 force)
 {
-    setSpeed(speed + force);
-}
-
-void MovementElement::setSpeedMax(float _speed_max)
-{
-  speed_max = _speed_max;
+  setSpeed(speed + force);
 }
 
 
 // Query
 
+float MovementElement::getSpeedX() const
+{
+    return speed.x; // copy
+}
+
+
+float MovementElement::getSpeedY() const
+{
+    return speed.y; // copy
+}
+
 fV2 MovementElement::getSpeed() const
 {
-    return speed;
+  return speed; // copy
 }
 
 fV2 MovementElement::getPrevPos() const
 {
-    return previous_position;
+  return previous_position; // copy
 }
 
 float MovementElement::getSpeed_scalar() const
 {
-    return speed_scalar;
+  return speed_scalar; // copy of cached value
 }
 
 float MovementElement::getAngle() const
 {
-    return angle;
+  return angle; // copy of cached value
 }
 
 // Overrides
 
-int MovementElement::update(GameState* context)
+int MovementElement::update(GameState* context, float delta)
 {
-    // move
-    previous_position = owner->getPosition();
-    owner->move(speed);
+  // save previous position and then move
+  previous_position = owner->getPosition();
+  owner->move(speed*delta);
 
-    // slow down
-    if(friction)
-        speed /= (float)friction;
+  // overrides insert friction, etc here
 
-    // cap minimum speed, generate event if stopping
-    if(speed && (abs(speed.x) < speed_min) && (abs(speed.y) < speed_min))
-    {
-        speed.x = speed.y = 0;
-        owner->addEvent(new ThingEvent("stopped_moving"));
-    }
-
-    // no interruption
-    return SceneState::CONTINUE;
+  // no interruption
+  return SceneState::CONTINUE;
 }

@@ -59,86 +59,88 @@ template<typename T>
 template<typename U>
 inline V2<T>::operator V2<U>() const
 {
-    V2<U> result;
-    result.x = (U) x;
-    result.y = (U) y;
-    return result; // Return type is unspecified because it is fixed
+  V2<U> result;
+  result.x = (U) x;
+  result.y = (U) y;
+  return result; // Return type is unspecified because it is fixed
 }
 
-// Evalulate a vector as a bool (false if null-vector)
+// Evaluate a vector as a bool (false if null-vector)
 template<typename T>
 inline V2<T>::operator bool() const
 {
-    return (x || y);
+  return (x || y);
 }
 
-// Caste by affection from V2<U> to V2<T>. Ex: vt = vu;
+// Cast by affection from V2<U> to V2<T>. Ex: vt = vu;
 template<typename T>
 template <typename U>
 inline V2<T>& V2<T>::operator= (const V2<U> &source)
 {
-    x = (T)source.x;
-    y = (T)source.y;
-    return *this;
+  x = (T)source.x;
+  y = (T)source.y;
+  return *this;
 }
+
+/* ARITHMETIC OPERATORS */
 
 // Vector addition and subtraction
 template <typename T>
 inline V2<T>& V2<T>::operator+=(V2 const& other)
 {
-    this->x += other.x;
-    this->y += other.y;
+  this->x += other.x;
+  this->y += other.y;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V2<T> V2<T>::operator+(V2<T> const& other) const
 {
-    V2<T> copy(other);
-    copy += (*this);
-    return copy;
+  V2<T> copy(*this);
+  copy += other;
+  return copy;
 }
 
 template <typename T>
 inline V2<T>& V2<T>::operator-=(V2<T> const& other)
 {
-    this->x -= other.x;
-    this->y -= other.y;
+  this->x -= other.x;
+  this->y -= other.y;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V2<T> V2<T>::operator-(V2<T> const& other) const
 {
-    V2<T> copy(*this);
-    copy -= (other);
-    return copy;
+  V2<T> copy(*this);
+  copy -= (other);
+  return copy;
 }
 
 template <typename T>
 inline V2<T> V2<T>::operator-() const
 {
-    return V2<T>(-x, -y);
+  return V2<T>(-x, -y);
 }
 
 // Multiplication/division by scalar
 template <typename T>
 inline V2<T>& V2<T>::operator*=(T k)
 {
-    this->x *= k;
-    this->y *= k;
+  this->x *= k;
+  this->y *= k;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V2<T> V2<T>::operator*(T k) const
 {
-    V2<T> copy(*this);
-    copy *= k;
-    return copy;
+  V2<T> copy(*this);
+  copy *= k;
+  return copy;
 }
 
 template <typename T>
@@ -154,27 +156,27 @@ inline V2<T>& V2<T>::operator/=(T k)
 template <typename T>
 inline V2<T> V2<T>::operator/(T k) const
 {
-    V2<T> copy(*this);
-    copy /= k;
-    return copy;
+  V2<T> copy(*this);
+  copy /= k;
+  return copy;
 }
 
 // Element-wise multiplication, division
 template <typename T>
 inline V2<T>& V2<T>::operator*=(V2 const& other)
 {
-    this->x *= other.x;
-    this->y *= other.y;
+  this->x *= other.x;
+  this->y *= other.y;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V2<T> V2<T>::operator*(V2<T> const& other) const
 {
-    V2<T> copy(other);
-    copy *= (*this);
-    return copy;
+  V2<T> copy(*this);
+  copy *= other;
+  return copy;
 }
 
 template <typename T>
@@ -189,66 +191,168 @@ inline V2<T>& V2<T>::operator/=(V2<T> const& other)
 template <typename T>
 inline V2<T> V2<T>::operator/(V2<T> const& other) const
 {
-    V2<T> copy(*this);
-    copy /= (other);
-    return copy;
+  V2<T> copy(*this);
+  copy /= (other);
+  return copy;
 }
+
+/* INCREMENTATION AND DECREMENTATION */
+
+template <typename T>
+inline V2<T>& V2<T>::operator++()
+{
+  x++;
+  y++;
+  return(*this);
+}
+
+template <typename T>
+inline V2<T>& V2<T>::operator--()
+{
+  x--;
+  y--;
+  return(*this);
+}
+
+template <typename T>
+inline V2<T> V2<T>::operator++(int)
+{
+  V2<T> copy(*this);
+  x++;
+  y++;
+  return copy;
+}
+
+template <typename T>
+inline V2<T> V2<T>::operator--(int)
+{
+  V2<T> copy(*this);
+  x--;
+  y--;
+  return copy;
+}
+
+/* ARRAY-STYLE ACCESS */
+
+template <typename T>
+inline T* V2<T>::front()
+{
+  return &x;
+}
+
+template <typename T>
+inline T& V2<T>::operator[](size_t i)
+{
+  switch(i)
+  {
+    case 0: return x;
+    case 1: default: return y;
+  }
+}
+
+template <typename T>
+inline const T& V2<T>::operator[](size_t i) const
+{
+  switch(i)
+  {
+    case 0: return x;
+    case 1: default: return y;
+  }
+}
+
+/* ACCESSORS */
 
 // Create a vector of absolute values
 template <typename T>
 inline V2<T> V2<T>::abs() const
 {
-    return V2<T>(ABS(x), ABS(y));
+  return V2<T>(ABS(x), ABS(y));
 }
 
 // Create a "sign" vector, containing the signs of the x and y values
 template <typename T>
 inline V2<int> V2<T>::sign() const
 {
-    return V2<int>(SIGN(x), SIGN(y));
+  return V2<int>(SIGN(x), SIGN(y));
 }
 
 // Calculate the angle (degrees) corresponding to this Vector
 template <typename T>
 inline float V2<T>::getAngle() const
 {
-    return RAD2DEG(atan2(y, x));
+  return RAD2DEG(atan2(y, x));
 }
 
 // Calculate the norm (length) of the Vector
 template <typename T>
 inline float V2<T>::getNorm() const
 {
-    return sqrt(this->getNorm2());
+  return sqrt(this->getNorm2());
 }
 
 template <typename T>
 inline float V2<T>::getNorm2() const
 {
-    // This is less expensive since there is no sqrt to perform
-    return x*x + y*y;
+  // This is less expensive since there is no sqrt to perform
+  return x*x + y*y;
 }
 
 template <typename T>
-inline void V2<T>::setMagnitude(float new_magnitude)
+inline V2<T>& V2<T>::setMagnitude(float new_magnitude)
 {
-    (*this) *= (new_magnitude/getNorm());
+  return ((*this) *= (new_magnitude/getNorm()));
 }
 
+template <typename T>
+inline V2<T>& V2<T>::normalise()
+{
+  return (setMagnitude(1));
+}
+
+/* STATIC FUNCTIONS */
+
+
+// Scalar product
+template <typename T>
+float dot(V2<T>const a, V2<T>const b)
+{
+	return a.x*b.x + a.y*b.y;
+}
+
+// Vector product
+template <typename T>
+V2<T> cross(V2<T>const a, V2<T>const b)
+{
+	return V2<T>(a.x*b.y - a.y*b.x, a.y*b.x - a.y*b.x);
+}
+
+// Determinant
+template <typename T>
+T det(V2<T>const a, V2<T>const b)
+{
+	return (a.x*b.y - a.y*b.x);
+}
+
+// Linear interpolation
+template <typename T>
+V2<T> inter(V2<T>const a, V2<T>const b, T f)
+{
+  return V2<T>((b-a)*f + b);
+}
 
 /* OUTSTREAM OPERATOR */
 
 template <typename T>
 inline void V2<T>::print(ostream& stream) const
 {
-    stream << '(' << x << ',' << y << ')';
+  stream << '(' << x << ',' << y << ')';
 }
 
 template <typename T>
 inline ostream& operator<<(std::ostream& stream, V2<T> const& v)
 {
-    v.print(stream);
-    return stream;
+  v.print(stream);
+  return stream;
 }
 
 /* INSTREAM OPERATOR */

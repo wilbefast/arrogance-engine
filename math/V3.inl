@@ -60,91 +60,93 @@ template<typename T>
 template<typename U>
 inline V3<T>::operator V3<U>() const
 {
-    V3<U> result;
-    result.x = (U) x;
-    result.y = (U) y;
-    result.z = (U) z;
-    return result; // Return type is unspecified because it is fixed
+  V3<U> result;
+  result.x = (U) x;
+  result.y = (U) y;
+  result.z = (U) z;
+  return result; // Return type is unspecified because it is fixed
 }
 
-// Evalulate a vector as a bool (false if null-vector)
+// Evaluate a vector as a bool (false if null-vector)
 template<typename T>
 inline V3<T>::operator bool() const
 {
-    return (x || y || z);
+  return (x || y || z);
 }
 
-// Caste by affection from V3<U> to V3<T>. Ex: vt = vu;
+/* ARITHMETIC OPERATORS */
+
+// Cast by affection from V3<U> to V3<T>. Ex: vt = vu;
 template<typename T>
 template <typename U>
 inline V3<T>& V3<T>::operator= (const V3<U> &source)
 {
-    x = (T)source.x;
-    y = (T)source.y;
-    z = (T)source.z;
-    return *this;
+  x = (T)source.x;
+  y = (T)source.y;
+  z = (T)source.z;
+  return *this;
 }
 
 // Vector addition and subtraction
 template <typename T>
 inline V3<T>& V3<T>::operator+=(V3 const& other)
 {
-    this->x += other.x;
-    this->y += other.y;
-    this->z += other.z;
+  this->x += other.x;
+  this->y += other.y;
+  this->z += other.z;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V3<T> V3<T>::operator+(V3<T> const& other) const
 {
-    V3<T> copy(other);
-    copy += (*this);
-    return copy;
+  V3<T> copy(*this);
+  copy += other;
+  return copy;
 }
 
 template <typename T>
 inline V3<T>& V3<T>::operator-=(V3<T> const& other)
 {
-    this->x -= other.x;
-    this->y -= other.y;
-    this->z -= other.z;
+  this->x -= other.x;
+  this->y -= other.y;
+  this->z -= other.z;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V3<T> V3<T>::operator-(V3<T> const& other) const
 {
-    V3<T> copy(*this);
-    copy -= (other);
-    return copy;
+  V3<T> copy(*this);
+  copy -= (other);
+  return copy;
 }
 
 template <typename T>
 inline V3<T> V3<T>::operator-() const
 {
-    return V3<T>(-x, -y, -z);
+  return V3<T>(-x, -y, -z);
 }
 
 // Multiplication/division by scalar
 template <typename T>
 inline V3<T>& V3<T>::operator*=(T k)
 {
-    this->x *= k;
-    this->y *= k;
-    this->z *= k;
+  this->x *= k;
+  this->y *= k;
+  this->z *= k;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V3<T> V3<T>::operator*(T k) const
 {
-    V3<T> copy(*this);
-    copy *= k;
-    return copy;
+  V3<T> copy(*this);
+  copy *= k;
+  return copy;
 }
 
 template <typename T>
@@ -161,28 +163,28 @@ inline V3<T>& V3<T>::operator/=(T k)
 template <typename T>
 inline V3<T> V3<T>::operator/(T k) const
 {
-    V3<T> copy(*this);
-    copy /= k;
-    return copy;
+  V3<T> copy(*this);
+  copy /= k;
+  return copy;
 }
 
 // Element-wise multiplication, division
 template <typename T>
 inline V3<T>& V3<T>::operator*=(V3 const& other)
 {
-    this->x *= other.x;
-    this->y *= other.y;
-    this->z *= other.z;
+  this->x *= other.x;
+  this->y *= other.y;
+  this->z *= other.z;
 
-    return (*this);
+  return (*this);
 }
 
 template <typename T>
 inline V3<T> V3<T>::operator*(V3<T> const& other) const
 {
-    V3<T> copy(other);
-    copy *= (*this);
-    return copy;
+  V3<T> copy(*this);
+  copy *= other;
+  return copy;
 }
 
 template <typename T>
@@ -281,34 +283,63 @@ inline const T& V3<T>::operator[](size_t i) const
 template <typename T>
 inline V3<T> V3<T>::abs() const
 {
-    return V3<T>(ABS(x), ABS(y), ABS(z));
+  return V3<T>(ABS(x), ABS(y), ABS(z));
 }
 
 // Create a "sign" vector, containing the signs of the x and y values
 template <typename T>
 inline V3<int> V3<T>::sign() const
 {
-    return V3<int>(SIGN(x), SIGN(y), SIGN(z));
+  return V3<int>(SIGN(x), SIGN(y), SIGN(z));
 }
 
 // Calculate the norm (length) of the Vector
 template <typename T>
 inline float V3<T>::getNorm() const
 {
-    return sqrt(this->getNorm2());
+  return sqrt(this->getNorm2());
 }
 
 template <typename T>
 inline float V3<T>::getNorm2() const
 {
-    // This is less expensive since there is no sqrt to perform
-    return x*x + y*y + z*z;
+  // This is less expensive since there is no sqrt to perform
+  return x*x + y*y + z*z;
 }
 
 template <typename T>
-inline void V3<T>::setMagnitude(float new_magnitude)
+inline V3<T>& V3<T>::setMagnitude(float new_magnitude)
 {
-    (*this) *= (new_magnitude/getNorm());
+  return ((*this) *= (new_magnitude/getNorm()));
+}
+
+template <typename T>
+inline V3<T>& V3<T>::normalise()
+{
+  return (setMagnitude(1));
+}
+
+// Scalar product
+template <typename T>
+float dot(V3<T>const a, V3<T>const b)
+{
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+// Linear interpolation
+template <typename T>
+V3<T> inter(V3<T>const a, V3<T>const b, T f)
+{
+  return V3<T>((b-a)*f + b);
+}
+
+// Vector product
+template <typename T>
+V3<T> cross(V3<T>const a, V3<T>const b)
+{
+	return V3<T>(a.y*b.z - a.z*b.y,
+              a.z*b.x - a.x*b.z,
+              a.x*b.y - a.y*b.x);
 }
 
 /* OUTSTREAM OPERATOR */

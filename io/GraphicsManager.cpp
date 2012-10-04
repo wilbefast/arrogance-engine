@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GraphicsManager.hpp"
 
-#include "tinyxml/tinyxml_dump.h"
 #include "file.hpp"
 #include "../assert.hpp"
 #include "../warn.hpp"
 
+#include "tinyxml/tinyxml.h"
 
 /// SINGLETON
 
@@ -38,70 +38,31 @@ GraphicsManager* GraphicsManager::getInstance()
 /// CREATION & DESTRUCTION
 
 GraphicsManager::GraphicsManager() :
-started(false),
+ResourceManager(),
 textures(),
 animations()
 {
 }
 
-int GraphicsManager::startup()
+GraphicsManager::~GraphicsManager()
 {
-  // don't start twice!
-  if(started)
-    WARN_RTN("GraphicsManager::startup","already started!", EXIT_SUCCESS);
+}
 
+/// LOADING
+
+int GraphicsManager::load()
+{
   // load graphics
   ASSERT(load_xml(GET_ASSET("graphics.xml")) == EXIT_SUCCESS,
         "Loading graphical assets based on 'graphics.xml'");
 
   // All good!
-  started = true;
+  log(LOG_INFO, "GraphicsManager::load() - Okay");
   return EXIT_SUCCESS;
 }
 
-int GraphicsManager::load_xml(const char* xml_file)
+int GraphicsManager::unload()
 {
-  // pass string to the TinyXML document
-  TiXmlDocument doc;
-  ASSERT_AUX(io::read_xml(xml_file, &doc) == EXIT_SUCCESS,
-            "Opening graphics pack XML file", doc.ErrorDesc());
-
-  // create local variables for searching document tree
-  TiXmlHandle doc_handle(&doc);
-  TiXmlElement* element = NULL;
-
-  // the root is a 'graphics' tag
-  element = doc_handle.FirstChildElement("graphics").Element();
-  TiXmlHandle root_handle = TiXmlHandle(element);
-
-  // load textures
-  element = root_handle.FirstChild("texture_list").FirstChild().Element();
-  while(element)
-  {
-    // get the name of the texture and deduce its filename
-    const char* name = element->Attribute("name");
-    if(!name)
-      WARN_RTN("GraphicsManager::load_xml", "malformed texture tag", EXIT_FAILURE);
-    string filename(ASSET_PATH);
-      filename.append(name);
-      filename.append(".png");
-
-    // load the texture
-    load_texture(filename.c_str(), name);
-
-    // continue to the next sprite
-    element = element->NextSiblingElement();
-  }
-
-  // all good
-  return EXIT_SUCCESS;
-}
-
-int GraphicsManager::shutdown()
-{
-  if(!started)
-    WARN_RTN("GraphicsManager::shutdown","already shutdown!", EXIT_SUCCESS);
-
   // Clean up the animations
   for(AnimationI i = animations.begin(); i != animations.end(); i++)
     delete (*i).second;
@@ -110,20 +71,75 @@ int GraphicsManager::shutdown()
   for(TextureI i = textures.begin(); i != textures.end(); i++)
   {
     if((*i).second->unload() != EXIT_SUCCESS)
-      WARN_RTN("GraphicsManager::shutdown", "Failed to unload texture", EXIT_FAILURE);
+      WARN_RTN("GraphicsManager::unload", "Failed to unload texture",
+                                            EXIT_FAILURE);
     delete (*i).second;
   }
 
   // All good!
-  started = false;
+  log(LOG_INFO, "GraphicsManager::unload() - Okay");
   return EXIT_SUCCESS;
 }
 
-
-GraphicsManager::~GraphicsManager()
+int GraphicsManager::parse_root(void* root_handle)
 {
-  if(started)
-    shutdown();
+  // load textures
+  ASSERT(parse_list(root_handle, "texture_list") == EXIT_SUCCESS,
+              "GraphicsManager parsing list of textures");
+
+  // load animations
+  ASSERT(parse_list(root_handle, "animation_list") == EXIT_SUCCESS,
+              "GraphicsManager parsing list of animations");
+
+  // all clear!
+  return EXIT_SUCCESS;
+}
+
+int GraphicsManager::parse_element(void* element)
+{
+  // cast element to TinyXML element
+  TiXmlElement* txml_element = (TiXmlElement*)element;
+
+  // texture element
+  if(!strcmp(txml_element->Value(), "texture"))
+  {
+    // get the name of the texture and deduce its filename
+    const char* name = txml_element->Attribute("name");
+    if(!name)
+      WARN_RTN("GraphicsManager::load_xml", "malformed texture tag", EXIT_FAILURE);
+
+    // load the texture
+    string filename = io::name_to_path(name, TEXTURE_FILETYPE);
+    load_texture(filename.c_str(), name);
+
+    // continue to the next sprite
+    txml_element = txml_element->NextSiblingElement();
+  }
+
+  // animation element
+  else if(!strcmp(txml_element->Value(), "animation"))
+  {
+    // strip information from tag
+    const char *name = txml_element->Attribute("name"),
+               *texture = txml_element->Attribute("texture");
+    iRect frame;
+    int n_frames;
+    bool success = (name && texture
+      && (txml_element->QueryIntAttribute("x", &frame.x) == TIXML_SUCCESS)
+      && (txml_element->QueryIntAttribute("y", &frame.y) == TIXML_SUCCESS)
+      && (txml_element->QueryIntAttribute("w", &frame.w) == TIXML_SUCCESS)
+      && (txml_element->QueryIntAttribute("h", &frame.h) == TIXML_SUCCESS)
+      && (txml_element->QueryIntAttribute("n_frames", &n_frames) == TIXML_SUCCESS));
+
+    if(!success)
+      WARN_RTN("GraphicsManager::load_xml", "malformed animation tag", EXIT_FAILURE);
+
+    // create the animation
+    create_animation(texture, frame, n_frames, name);
+  }
+
+  // all clear!
+  return EXIT_SUCCESS;
 }
 
 
@@ -180,12 +196,20 @@ int GraphicsManager::create_animation(const char* texture_name,
 
 Animation* GraphicsManager::get_animation(const char* name)
 {
+  Animation* result = get_animation(numerise(name));
+  if(!result)
+    WARN("GraphicsManager::get_animation invalid identifier", name);
+
+  return result;
+}
+
+Animation* GraphicsManager::get_animation(str_id id)
+{
   // search for the resource
-  str_id hash = numerise(name);
-  AnimationI i = animations.find(hash);
+  AnimationI i = animations.find(id);
   // make sure that it is found
   if(i == animations.end())
-    WARN_RTN("GraphicsManager::get_animation invalid identifier", name, NULL);
+    return NULL;
 
   // return the animation we recovered
   return (*i).second;

@@ -69,6 +69,16 @@ const float& Colour::operator[](size_t i) const
   }
 }
 
+/// ACCESSORS
+
+unsigned char Colour::byte(unsigned int colour) const
+{
+  float component = (colour == 0) ? r
+                  : ((colour == 1) ? g
+                  : ((colour == 2) ? b : 0));
+  return (unsigned char)(component * 255);
+}
+
 /// INSTREAM, OUTSTREAM
 void Colour::read(istream& in)
 {

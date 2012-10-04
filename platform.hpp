@@ -35,6 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   #define KEY_EXIT SDLK_ESCAPE
 	#define KEY_BACK 1073742094 // FIXME - use SDL macro: SDL_SCANCODE_AC_BACK?
 	#define KEY_MENU 1073741942 // FIXME - use SDL macro: SDL_SCANCODE_AC_HOME?
+	#define KEY_VOLUME_UP 1073741952
+	#define KEY_VOLUME_DOWN 1073741953
 	#define GL_V_MAJOR 2    	//GLES 2.0
 	#define GL_V_MINOR 0
 	#define glOrtho(a,b,c,d,e,f) glOrthof(a,b,c,d,e,f) // Renaming hack
@@ -67,6 +69,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	#define KEY_EXIT SDLK_ESCAPE
 	#define KEY_MENU SDLK_ENTER
 	#define KEY_BACK SDLK_SPACE
+  #define KEY_VOLUME_UP SDLK_PLUS
+	#define KEY_VOLUME_DOWN SDLK_MINUS
 
   #define ASSET_PATH "./assets/"
   #define BUFFER_XML 1

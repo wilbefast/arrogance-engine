@@ -32,11 +32,11 @@ class MainMenu : public Scene
     fRect title_src, title_dest;
     // Constructors, destructors
     MainMenu();
-    ~MainMenu();
+    virtual ~MainMenu();
     int startup();
     int shutdown();
     // Executed each frame
-    int update(Scene** next);
+    int update(Scene** next, float delta);
     void draw();
     // Back to previous scene
     Scene* previous();

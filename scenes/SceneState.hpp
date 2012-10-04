@@ -25,50 +25,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class SceneState
 {
-    /// NESTING
+  /// NESTING
+public:
+  class Input
+  {
     public:
-    class Input
-    {
-        public:
-        // attributes
-        uV2 last_touch, cursor_position;
-        bool clicking, clicking_previous;
-        Button* last_button;
-        // constructor
-        Input() : clicking(false), clicking_previous(false), last_button(NULL)
-        {}
-    };
+    // attributes
+    uV2 last_touch, last_hover;
+    bool clicking, clicking_previous;
+    Button* last_button;
+    // constructor
+    Input() : clicking(false), clicking_previous(false), last_button(NULL)
+    {}
+  };
 
-    enum UpdateResult
-    {
-        CONTINUE,
-        EXIT,
-    };
+  enum UpdateResult
+  {
+      CONTINUE,
+      EXIT
+  };
 
-    /// FRIENDS
-    friend class Scene;
+  /// FRIENDS
+  friend class Scene;
 
-    /// ATTRIBUTES
-    protected:
-    // Input management
-    Input input;
+  /// ATTRIBUTES
+protected:
+  // Input management
+  Input input;
 
-    /// METHODS
-    public:
-    // Constructors, destructors
-    SceneState();
-    virtual ~SceneState();
-    // Explicit startup code, if needed
-    virtual int startup();
-    virtual int shutdown();
-    // Update and draw dynamic objects, if needed
-    virtual int update();
-    virtual void draw();
-    // Accessors
-    Input* getInput();
-    void setCursor(uV2 new_last_touch, bool new_clicking);
-    str_id releasedOnButton();
-    bool newClick() const;
+  /// METHODS
+public:
+  // Constructors, destructors
+  SceneState();
+  virtual ~SceneState();
+  // Explicit startup code, if needed
+  virtual int startup();
+  virtual int shutdown();
+  // Update and draw dynamic objects, if needed
+  virtual int update(float delta);
+  virtual void draw();
+  // Accessors
+  Input* getInput();
+  void setCursor(uV2 new_cursor_position, bool new_clicking);
+  str_id releasedOnButton();
+  bool newClick() const;
 };
 
 #endif // SCENESTATE_HPP_INCLUDED

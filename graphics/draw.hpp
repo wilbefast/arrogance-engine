@@ -20,26 +20,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICS_HPP_INCLUDED
 
 #include "Colour.hpp"
+#include "../math/Rect.hpp"
 #include "../math/V2.hpp"
 #include "../math/V3.hpp"
 
-#define CIRCLE_N_SEGMENTS 12
+#define CIRCLE_N_SEGMENTS 12 /// FIXME - should depend on circle size, no?
 
 namespace draw
 {
-    /// FUNCTIONS
-    void line(fV2 start, fV2 end, Colour c = Colour(), float thickness = 1.0f);
-    void line(fV3 start, fV3 end, Colour c = Colour(), float thickness = 1.0f);
-    void line_loop(fV2 points[], unsigned int n_pts, Colour c = Colour(),
-                                                  float thickness = 1.0f);
-    void height_line(float height[], unsigned int n_pts, float x_spacing,
-                    fV2 base = fV2(0.0f, 0.0f), unsigned int start_i = 0,
-                    Colour c = Colour(), float thickness = 1.0f);
-    void height_fill(float height[], unsigned int n_pts, float x_spacing,
-                fV2 base = fV2(0.0f, 0.0f), unsigned int start_i = 0,
-                Colour c = Colour());
-    void circle(fV2 position, double radius, Colour c = Colour(),
-                     bool fill = false);
+  /// FUNCTIONS
+  void rectangle(fRect rect, Colour c = Colour());
+  void line(fV2 start, fV2 end, Colour c = Colour(), float thickness = 1.0f);
+  void line(fV3 start, fV3 end, Colour c = Colour(), float thickness = 1.0f);
+  void line_loop(fV2 points[], unsigned int n_pts, Colour c = Colour(),
+                                                float thickness = 1.0f);
+  void height_line(float height[], unsigned int n_pts, float x_spacing,
+                  fV2 base = fV2(0.0f, 0.0f), unsigned int start_i = 0,
+                  Colour c = Colour(), float thickness = 1.0f);
+  void height_fill(float height[], unsigned int n_pts, float x_spacing,
+              fV2 base = fV2(0.0f, 0.0f), unsigned int start_i = 0,
+              Colour c = Colour());
+  void circle(fV2 position, double radius, Colour c = Colour(),
+                   bool fill = false);
 };
 
 #endif // GRAPHICS_HPP_INCLUDED

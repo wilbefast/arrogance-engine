@@ -27,20 +27,20 @@ class Thing;
 
 class BoundaryEvent : public ThingEvent
 {
-    /// FUNCTIONS
-    public:
-    static void generate(Thing* t, fRect* boundary);
+  /// FUNCTIONS
+  public:
+  static void generate(Thing* t, fRect* boundary);
 
-    /// ATTRIBUTES
-    private:
-    iV2 boundary_side;
+  /// ATTRIBUTES
+  private:
+  iV2 boundary_side;
 
-    /// METHODS
-    public:
-    // constructor, destructors
-    BoundaryEvent(const char* init_name, iV2 init_side);
-    // accessors
-    iV2 getSide() const;
+  /// METHODS
+  public:
+  // constructor, destructors
+  BoundaryEvent(const char* init_name, iV2 init_side);
+  // accessors
+  iV2 getSide() const;
 };
 
 #endif // BOUNDARYEVENT_HPP_INCLUDED

@@ -126,7 +126,7 @@ void Material::deactivate()
 
 /* SUBROUTINES */
 
-void Material::add_texture_coordinate(tex_coord_t new_texture_coordinate)
+void Material::add_texture_coordinate(tex_coord_t new_tx_c)
 {
-  texture_coordinates.push_back(new_texture_coordinate);
+  texture_coordinates.push_back(tex_coord_t(new_tx_c.x, 1.0f - new_tx_c.y));
 }

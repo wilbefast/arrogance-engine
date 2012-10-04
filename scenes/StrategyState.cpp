@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../global.hpp"                          // for viewport
 #include "../assert.hpp"
 
-#include "../resources/MeshManager.hpp"
+#include "../io/MeshManager.hpp"
 
 
 
@@ -81,15 +81,15 @@ int StrategyState::shutdown()
 
 /// OVERRIDES GAMESTATE
 
-int StrategyState::update()
+int StrategyState::update(float delta)
 {
   // Update camera angle and position
-  uV2 const& p = input.cursor_position;
+  uV2 const& p = input.last_hover;
   camera_angle.x = CAMERA_MAX_ANGLE*p.x/global::viewport.x*2 - CAMERA_MAX_ANGLE;
 	camera_angle.y = CAMERA_MAX_ANGLE*p.y/global::viewport.y*2 - CAMERA_MAX_ANGLE;
 
   // Update dynamic game objects
-  int result = GameState::update();
+  int result = GameState::update(delta);
   if(result != CONTINUE)
     return result;
 
@@ -97,28 +97,17 @@ int StrategyState::update()
   return EXIT_SUCCESS;
 }
 
-
-
-  GLfloat whiteSpecularLight[] = {1.0, 1.0, 1.0};
-  GLfloat blackAmbientLight[] = {0.2, 0.2, 0.2};
-  GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
-
-
 void StrategyState::draw()
 {
   glClear(GL_DEPTH_BUFFER_BIT);
   glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
-  glScalef(global::viewport.x, global::viewport.y, 1.0f);
+  glScalef(global::viewport.x/2, global::viewport.y/2, 1.0f);
 
   glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
   glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
 	glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
 	glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
 	glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
-
-  glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
 
   MeshManager::getInstance()->mesh.draw();
 

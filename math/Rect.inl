@@ -78,14 +78,14 @@ inline Rect<T>::operator Rect<U>() const
     return result; // Return type is unspecified because it is fixed
 }
 
-// Evalulate a rectangle as a bool (false if invalid)
+// Evaluate a rectangle as a bool (false if invalid)
 template<typename T>
 inline Rect<T>::operator bool() const
 {
     return ((w>0) && (h>0));
 }
 
-// Caste by affection from Rest<U> to Rect<T>. Ex: rt = ru;
+// Cast by affection from Rest<U> to Rect<T>. Ex: rt = ru;
 template<typename T>
 template <typename U>
 inline Rect<T>& Rect<T>::operator= (const Rect<U> &source)
@@ -306,26 +306,25 @@ bool Rect<T>::contains(const V2<T>& position) const
 template <typename T>
 bool Rect<T>::doesInter(Rect<T> const& other) const
 {
-    dV2 v1 = (other.getPosition()+other.getSize()) - this->getPosition();
-    dV2 v2 = (this->getPosition()+this->getSize()) - other.getPosition();
-    return(v1.x > 0 && v2.x > 0 && v1.y > 0 && v2.y > 0);
+  dV2 v1 = (other.getPosition()+other.getSize()) - this->getPosition();
+  dV2 v2 = (this->getPosition()+this->getSize()) - other.getPosition();
+  return (dot(v1, v2) > 0);
 }
 
 template <typename T>
 Rect<T> Rect<T>::getInter(Rect<T> const& other) const
 {
-    // Calculate the boundaries of the intersection
-    T left   = MAX(x,      other.x);
-    T top    = MAX(y,      other.y);
-    T right  = MIN(x + w,  other.x + other.w);
-    T bottom = MIN(y + h,  other.y + other.h);
+  // Calculate the boundaries of the intersection
+  T left   = MAX(x,      other.x);
+  T top    = MAX(y,      other.y);
+  T right  = MIN(x + w,  other.x + other.w);
+  T bottom = MIN(y + h,  other.y + other.h);
 
-    // If the intersection is invalid (negative lengths) return false
-    if((left >= right ) || (top >= bottom))
-        return Rect<T>(); //null rectangle: (0,0,0,0)
-    else //non-negative lengths
-        return Rect<T>(left, top, right - left, bottom - top);
-
+  // If the intersection is invalid (negative lengths) return false
+  if((left >= right ) || (top >= bottom))
+      return Rect<T>(); //null rectangle: (0,0,0,0)
+  else //non-negative lengths
+    return Rect<T>(left, top, right - left, bottom - top);
 }
 
 /// FANCY STUFF

@@ -24,22 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class CollisionEvent : public ThingEvent
 {
-    /// FUNCTIONS
-    public:
-    static void generate(Thing* a, Thing* b);
+  /// FUNCTIONS
+public:
+  static void generate(Thing* a, Thing* b);
 
-    /// ATTRIBUTES
-    private:
-    Thing* other;
-    iV2 collision_side;
+  /// ATTRIBUTES
+private:
+  Thing* other;
+  iV2 collision_side;
 
-    /// METHODS
-    public:
-    // constructors, destructor
-    CollisionEvent(Thing* other, iV2 side);
-    // accessors
-    Thing* getOther();
-    iV2 getSide() const;
+  /// METHODS
+public:
+  // constructors, destructor
+  CollisionEvent(Thing* other, iV2 side);
+  // accessors
+  Thing* getOther();
+  iV2 getSide() const;
 };
 
 #endif // COLLISIONEVENT_HPP_INCLUDED

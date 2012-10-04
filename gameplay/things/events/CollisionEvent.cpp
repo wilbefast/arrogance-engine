@@ -22,16 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void CollisionEvent::generate(Thing* a, Thing* b)
 {
-    // Save the side upon which the event occured
-    iV2 side;
+  // Save the side upon which the event occured
+  iV2 side;
 
-    // Check for collisions
-    if(!a->isDead() && !b->isDead() && a->isColliding(b, &side))
-    {
-        // Generate collision events
-        a->addEvent(new CollisionEvent(b, side));
-        b->addEvent(new CollisionEvent(a, -side));
-    }
+  // Check for collisions
+  if(!a->isDead() && !b->isDead() && a->isColliding(b, &side))
+  {
+    // Generate collision events
+    a->addEvent(new CollisionEvent(b, side));
+    b->addEvent(new CollisionEvent(a, -side));
+  }
 }
 
 /// METHODS
@@ -48,10 +48,10 @@ collision_side(init_side)
 // accessors
 Thing* CollisionEvent::getOther()
 {
-    return other;
+  return other;
 }
 
 iV2 CollisionEvent::getSide() const
 {
-    return collision_side;
+  return collision_side;
 }

@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../graphics/Texture.hpp"
 #include "../math/Rect.hpp"
-#include "../resources/numerise.hpp"
+#include "../math/numerise.hpp"
 
 class Button;
 
@@ -32,30 +32,30 @@ typedef ButtonSet::iterator ButtonIter;
 
 class Button
 {
-    /// ATTRIBUTES
-    private:
-    str_id tag;
-    Texture texture;
-    fRect destination;
-    fRect source_off;
-    fRect source_on;
-    bool pressed;
+  /// ATTRIBUTES
+private:
+  str_id tag;
+  Texture texture;
+  fRect destination;
+  fRect source_off;
+  fRect source_on;
+  bool pressed, hovered;
 
-    /// METHODS
-    public:
-    // constructors, destructors
-    Button(const char* name, Texture init_texture, fRect init_destination,
-               fRect init_source);
-    Button(str_id init_tag, Texture init_texture, fRect init_destination,
-           fRect init_source);
-    ~Button();
-    void correctAspect(fRect init_src, fRect init_dest);
-    // each frame
-    void draw();
-    // accessors
-    str_id getTag() const;
-    bool contains(fV2 position) const;
-    bool press(fV2 position, bool clicking);
+  /// METHODS
+public:
+  // constructors, destructors
+  Button(const char* name, Texture init_texture, fRect init_destination,
+             fRect init_source);
+  Button(str_id init_tag, Texture init_texture, fRect init_destination,
+         fRect init_source);
+  ~Button();
+  void correctAspect(fRect init_src, fRect init_dest);
+  // each frame
+  void draw();
+  // accessors
+  str_id getTag() const;
+  bool contains(fV2 position) const;
+  bool press(fV2 position, bool clicking);
 };
 
 #endif // BUTTON_HPP_INCLUDED

@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Thing.hpp"
 
-#include "../../resources/numerise.hpp"                          // for hash function
+#include "../../math/numerise.hpp"                          // for hash function
 
 #include "../../assert.hpp"
 #include "../../warn.hpp"
@@ -29,17 +29,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Constructors, destructors
 Thing::Thing(fV2 init_position, const char* type_name) :
-type(numerise(type_name)),
 dead(false),
+type(numerise(type_name)),
 position(init_position),
+body(NULL),
 events()
 {
 }
 
 Thing::Thing(fV2 init_position, str_id init_type) :
-type(init_type),
 dead(false),
+type(init_type),
 position(init_position),
+body(NULL),
 events()
 {
 }
@@ -53,53 +55,56 @@ events()
 
 Thing::~Thing()
 {
+  // delete ColliderElement if it was allocated
+  if(body != NULL)
+    delete body;
 }
 
 // Main methods
 
 void Thing::addEvent(ThingEvent* new_event)
 {
-    events.push_back(new_event);
+  events.push_back(new_event);
 }
 
 // Accessors
 
 bool Thing::isDead() const
 {
-    return dead;
+  return dead;
 }
 
 const EventList* Thing::getEvents()
 {
-    return &events;
+  return &events;
 }
 
 void Thing::deleteEvents()
 {
-    // Delete the events contained in the list, not the list itself
-    for(EventIter i = events.begin(); i != events.end(); i++)
-        delete (*i);
-    events.clear();
+  // Delete the events contained in the list, not the list itself
+  for(EventIter i = events.begin(); i != events.end(); i++)
+    delete (*i);
+  events.clear();
 }
 
 str_id Thing::getType() const
 {
-    return type;
+  return type;
 }
 
 fV2 Thing::getPosition() const
 {
-    return position;
+  return position;
 }
 
 void Thing::move(fV2 translation)
 {
-    position += translation;
+  position += translation;
 }
 
 void Thing::moveTo(fV2 new_position)
 {
-    position = new_position;
+  position = new_position;
 }
 
 
@@ -107,8 +112,8 @@ void Thing::moveTo(fV2 new_position)
 
 void Thing::die()
 {
-    // instance will be deleted at the *end* of its next update
-    dead = true;
+  // instance will be deleted at the *end* of its next update
+  dead = true;
 }
 
 void Thing::draw()
@@ -116,44 +121,43 @@ void Thing::draw()
     // overridden if visible
 }
 
-int Thing::update(GameState* context)
+int Thing::update(GameState* context, float delta)
 {
-    // clear all events from the list
-    deleteEvents();
+  // clear all events from the list
+  deleteEvents();
 
-    // should still be called at end of update, even if overridden
-    if(dead)
-        return GameState::DELETE_ME;
-    else
-        return GameState::CONTINUE;
+  // should still be called at end of update, even if overridden
+  if(dead)
+    return GameState::DELETE_ME;
+  else
+    return GameState::CONTINUE;
 }
 
 bool Thing::isColliding(Thing* other, iV2* side)
 {
-    // must have a ColliderElement to collide
-    if(!body || !other->body)
-        return false;
-    else
-        return body->isColliding(other->body, side);
+  // must have a ColliderElement to collide
+  if(!body || !other->body)
+    return false;
+  else
+    return body->isColliding(other->body, side);
 }
 
 bool Thing::isOutside(fRect* bounds, iV2* side)
 {
-    // must have a ColliderElement to be outside boundaries
-    if(!body)
-        return false;
-    else
-        return body->isOutside(bounds, side);
+  // must have a ColliderElement to be outside boundaries
+  if(!body)
+    return false;
+  else
+    return body->isOutside(bounds, side);
 }
 
 bool Thing::isLeaving(fRect* bounds, iV2* side)
 {
-    // must have a ColliderElement to intersect boundaries
-    if(!body)
-        return false;
-    else
-        return body->isLeaving(bounds, side);
-
+  // must have a ColliderElement to intersect boundaries
+  if(!body)
+    return false;
+  else
+    return body->isLeaving(bounds, side);
 }
 
 

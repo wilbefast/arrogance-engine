@@ -17,15 +17,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdlib.h>
-#include <iostream>
 
 #include "assert.hpp"
-#include "StrategyApplication.hpp"
-
-#include "resources/MeshManager.hpp"
+#include "Application.hpp"
+#include "scenes/MainMenu.hpp"
+#include "scenes/Game.hpp"  /// FIXME
 
 using namespace std;
-
 
 int main(int argc, char* argv[])
 {
@@ -33,13 +31,13 @@ int main(int argc, char* argv[])
   srand(time(NULL));
 
   // Load up the application
-  StrategyApplication application;
+  Application application(new Game());
   ASSERT_SDL(application.startup() == EXIT_SUCCESS, "Starting up application");
 
   // Run the application until an exit condition is encountered
   bool stop = false;
   do
-      stop = application.run();
+    stop = application.run();
   while(!stop);
 
   // Shut down the application completely

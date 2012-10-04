@@ -29,7 +29,7 @@ class V3
 {
   /* ATTRIBUTES */
 public:
-      T x, y, z;
+  T x, y, z;
 
   /* METHODS */
 public:
@@ -84,7 +84,8 @@ public:
   V3<int> sign() const;
   float getNorm() const;
   float getNorm2() const;
-  void setMagnitude(float new_magnitude);
+  V3<T>& setMagnitude(float new_magnitude);
+  V3<T>& normalise();
 
   // outstream
   void print(std::ostream& out) const;
@@ -92,6 +93,11 @@ public:
   // instream
   void read(std::istream& in);
 };
+
+// static functions
+template <typename T> float dot(V3<T>const a, V3<T>const b);
+template <typename T> V3<T> cross(V3<T>const a, V3<T>const b);
+template <typename T> V3<T> inter(V3<T>const a, V3<T>const b, T f);
 
 // outstream operator
 template <typename T>

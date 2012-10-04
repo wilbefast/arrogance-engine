@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Scene::Scene(SceneState* init_state) :
 buttons()
 {
-    state = init_state ? init_state : new SceneState();
+  state = init_state ? init_state : new SceneState();
 }
 
 Scene::~Scene()
@@ -38,69 +38,70 @@ Scene::~Scene()
 
  void Scene::draw()
  {
-    // Draw the buttons
-    for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
-        (*i)->draw();
+  // Draw the buttons
+  for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
+    (*i)->draw();
 
-    // Draw anything dynamic
-    state->draw();
+  // Draw anything dynamic
+  state->draw();
  }
 
-int Scene::update(Scene** next)
- {
+int Scene::update(Scene** next, float delta)
+{
+  // Update buttons based on touch position
+  for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
+    if((*i)->press(state->input.last_hover, state->input.clicking))
+    {
+      // Save the first button we're touching and break
+      state->input.last_button = (*i);
+      break;
+    }
+
+  // update anything dynamic, go back to previous scene if nessecary
+  if(state->update(delta) == SceneState::EXIT)
+  {
     // Either continue (value of next is ignored) or go back to previous
     (*next) = previous();
+    return Scene::CHANGE;
+  }
 
-    // Update buttons based on touch position
-    for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
-        if((*i)->press(state->input.last_touch, state->input.clicking))
-        {
-            // Save the first button we're touching and break
-            state->input.last_button = (*i);
-            break;
-        }
-
-    // update anything dynamic, go back to previous scene if nessecary
-    if(state->update() == SceneState::EXIT)
-        return Scene::CHANGE;
-
-    //continue
-    return Scene::NO_CHANGE;
+  //continue
+  return Scene::NO_CHANGE;
  }
 
- int Scene::startup()
- {
-    // Start the state if applicable
-    ASSERT(state->startup() == EXIT_SUCCESS, "Scene initialising state");
+int Scene::startup()
+{
+  // Start the state if applicable
+  ASSERT(state->startup() == EXIT_SUCCESS, "Scene initialising state");
 
-    // All clear
-    return EXIT_SUCCESS;
- }
+  // All clear
+  return EXIT_SUCCESS;
+}
 
- int Scene::shutdown()
- {
-    // Delete buttons
-    for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
-        delete (*i);
+int Scene::shutdown()
+{
+  // Delete buttons
+  for(ButtonIter i = buttons.begin(); i != buttons.end(); i++)
+    delete (*i);
 
-    // Delete anything dynamic
-    ASSERT(state->shutdown() == EXIT_SUCCESS, "Scene shutting down state");
-    delete state;
+  // Delete anything dynamic
+  ASSERT(state->shutdown() == EXIT_SUCCESS, "Scene shutting down SceneState");
+  delete state;
 
-    // All clear
-    return EXIT_SUCCESS;
- }
+  // All clear
+  return EXIT_SUCCESS;
+}
 
 Scene* Scene::previous()
 {
-    return NULL;
+  return NULL;
 }
 
 /// ACCESSORS
 
 void Scene::addButton(Button* new_button)
 {
-    buttons.push_back(new_button);
+  buttons.push_back(new_button);
 }
 
 SceneState* Scene::getState()
@@ -113,42 +114,42 @@ SceneState* Scene::getState()
 int Scene::splitRect(fRect src, fRect result[], uV2 n_divisions,
                          double scale)
 {
-    // Compute the split rectangle size
-    fRect split = src / fV2(n_divisions);
+  // Compute the split rectangle size
+  fRect split = src / fV2(n_divisions);
 
-    // Create each of the rectangles
-    for(uV2 i(0,0); i.y < n_divisions.y; i.y++)
-        for(i.x = 0; i.x < n_divisions.x; i.x++)
-        {
-            // Create and scale
-            fRect new_rect = fRect(split + fV2(i)*split.getSize());
-            new_rect.stretch_centered(scale);
-            // Add to the resulting unroled matrix
-            result[i.x + (i.y)*n_divisions.x] = new_rect;
-        }
-    return EXIT_SUCCESS;
+  // Create each of the rectangles
+  for(uV2 i(0,0); i.y < n_divisions.y; i.y++)
+    for(i.x = 0; i.x < n_divisions.x; i.x++)
+    {
+      // Create and scale
+      fRect new_rect = fRect(split + fV2(i)*split.getSize());
+      new_rect.stretch_centered(scale);
+      // Add to the resulting unroled matrix
+      result[i.x + (i.y)*n_divisions.x] = new_rect;
+    }
+  return EXIT_SUCCESS;
 }
 
 fRect Scene::squashRect(fRect src, fV2 amount)
 {
-    // Squash horizontally
-    if(amount.x > 0)
-    {
-        src.x += amount.x;
-        src.w -= amount.x;
-    }
-    else
-        src.w += amount.x;
+  // Squash horizontally
+  if(amount.x > 0)
+  {
+    src.x += amount.x;
+    src.w -= amount.x;
+  }
+  else
+    src.w += amount.x;
 
-    // Squash vertically
-    if(amount.y > 0)
-    {
-        src.y += amount.y;
-        src.h -= amount.y;
-    }
-    else
-        src.h += amount.y;
+  // Squash vertically
+  if(amount.y > 0)
+  {
+    src.y += amount.y;
+    src.h -= amount.y;
+  }
+  else
+    src.h += amount.y;
 
-    // Return result
-    return src;
+  // Return result
+  return src;
 }

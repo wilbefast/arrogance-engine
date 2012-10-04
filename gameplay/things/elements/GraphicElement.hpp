@@ -20,32 +20,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICELEMENT_HPP_INCLUDED
 
 #include "ThingElement.hpp"
-#include "../../../graphics/Graphic.hpp"
+#include "../../../graphics/GraphicIncarnation.hpp"
 
-class GraphicElement : public ThingElement
+class GraphicElement : public ThingElement, public GraphicIncarnation
 {
-    /// ATTRIBUTES
-    protected:
-    Graphic* sprite;
-    fRect destination;
-    fV2 offset;
-    float angle;
-
-    /// METHODS
-    public:
-    // contructors, destructors
-    GraphicElement(Thing* init_owner, fV2 size, fV2 _offset = fV2(0.0f, 0.0f));
-    ~GraphicElement();
-    // accessors
-    void setAngle(float new_angle);
-    bool setSprite(Graphic* new_sprite);
-    // overrides
-    virtual int update(GameState* context);     // ThingElement
-    virtual void draw();                        // ThingElement
-    // subroutines
-    protected:
-    void centreFrame();
-
+  /// METHODS
+public:
+  // contructors, destructors
+  GraphicElement(Thing* init_owner, fV2 _size = fV2(0.0f, 0.0f),
+                                    fV2 _offset = fV2(0.0f, 0.0f),
+                                    char _flags = CENTER_X|CENTER_Y);
+  ~GraphicElement();
+  // overrides
+  virtual int update(GameState* context, float delta);     // ThingElement
+  virtual void draw();                        // ThingElement
 };
 
 #endif // GRAPHICELEMENT_HPP_INCLUDED

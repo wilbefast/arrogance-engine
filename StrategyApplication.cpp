@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "StrategyApplication.hpp"
 
-#include "resources/GraphicsManager.hpp"
-#include "resources/AudioManager.hpp"
-#include "resources/file.hpp"             // for GET_ASSET
+#include "io/GraphicsManager.hpp"
+#include "io/AudioManager.hpp"
+#include "io/file.hpp"             // for GET_ASSET
 
 #include "assert.hpp"                     // for ASSERT
 

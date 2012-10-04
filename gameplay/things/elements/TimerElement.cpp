@@ -18,28 +18,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "TimerElement.hpp"
 
-TimerElement::TimerElement(Thing* _owner, const char* _name, int init_time) :
+TimerElement::TimerElement(Thing* _owner, const char* _name, float init_time) :
 ThingElement(_owner),
 name(numerise(_name)),
-remaining_time(init_time < 0 ? 0 : init_time)
+remaining_time(init_time < 0.0f ? 0.0f : init_time)
 {
 }
 
-bool TimerElement::ticking() const
+float TimerElement::check() const
 {
   return remaining_time;
 }
 
-void TimerElement::set(unsigned int time)
+bool TimerElement::ticking() const
+{
+  return (remaining_time >= 0.0f);
+}
+
+void TimerElement::set(float time)
 {
   remaining_time = time;
 }
 
-void TimerElement::decrement()
+void TimerElement::unset()
 {
+  remaining_time = -1.0f;
+}
+
+void TimerElement::decrement(float delta)
+{
+  if(remaining_time < 0.0f)
+    return;
+
   // decrement timer
-  if(remaining_time)
-    remaining_time--;
+  if(remaining_time > delta)
+    remaining_time -= delta;
   else
+  {
     owner->addEvent(new ThingEvent(name));
+    remaining_time = -1.0f;
+  }
 }

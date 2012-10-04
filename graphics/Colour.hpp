@@ -41,6 +41,9 @@ public:
   float& operator[](size_t i);
   const float& operator[](size_t i) const;
 
+  // accessors
+  unsigned char byte(unsigned int i) const;
+
   // instream, outstream
   void read(std::istream& in);
   void write(std::ostream& stream) const;

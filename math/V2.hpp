@@ -30,7 +30,7 @@ class V2
 {
   /* ATTRIBUTES */
 public:
-      T x, y;
+  T x, y;
 
   /* METHODS */
 public:
@@ -69,13 +69,25 @@ public:
   V2& operator/=(V2 const& other);
   V2 operator/(V2 const& other) const;
 
+  // incrementation and decrementation
+  V2& operator++(); // prefix
+  V2& operator--();
+  V2 operator++(int); // postfix
+  V2 operator--(int);
+
+  // Array-style access
+  T* front();
+  T& operator[](size_t i);
+  const T& operator[](size_t i) const;
+
   // accessors
   V2 abs() const;
   V2<int> sign() const;
   float getAngle() const;
   float getNorm() const;
   float getNorm2() const;
-  void setMagnitude(float new_magnitude);
+  V2<T>& setMagnitude(float new_magnitude);
+  V2<T>& normalise();
 
   // outstream
   void print(std::ostream& stream) const;
@@ -84,7 +96,13 @@ public:
   void read(std::istream& in);
 };
 
-  // outstream operator
+// static functions
+template <typename T> float dot(V2<T>const a, V2<T>const b);
+template <typename T> V2<T> cross(V2<T>const a, V2<T>const b);
+template <typename T> T det(V2<T>const a, V2<T>const b);
+template <typename T> V2<T> inter(V2<T>const a, V2<T>const b, T f);
+
+// outstream operator
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, V2<T> const& v);
 

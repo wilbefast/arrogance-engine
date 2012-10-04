@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace global
 {
-    extern uV2 viewport;
+    extern iV2 viewport;
     extern fV2 scale;
 };
 

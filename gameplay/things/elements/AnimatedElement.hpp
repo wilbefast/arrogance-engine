@@ -19,33 +19,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ANIMATEDELEMENT_HPP_INCLUDED
 #define ANIMATEDELEMENT_HPP_INCLUDED
 
-#include "GraphicElement.hpp"
-#include "../../../graphics/Animation.hpp"
+#include "ThingElement.hpp"
+#include "../../../graphics/AnimationIncarnation.hpp"
 
-class AnimatedElement : public GraphicElement
+class AnimatedElement : public ThingElement, public AnimationIncarnation
 {
-    /// ATTRIBUTES
-    private:
-    float frame_current;
-    float frame_speed;
 
-    /// METHODS
-    public:
-    // contructors, destructors
-    AnimatedElement(Thing* init_owner, fV2 size, fV2 offset = fV2(0.0f, 0.0f));
-    ~AnimatedElement();
-    // accessors
-    void setFrame(float new_frame);
-    void setRandFrame();
-    bool setSprite(Animation* new_sprite, float new_speed = 0);
-    // overrides
-    int update(GameState* context);     // ThingElement
-    void draw();                        // ThingElement
+  /// METHODS
+public:
+  // contructors, destructors
+  AnimatedElement(Thing* init_owner, fV2 size = fV2(0.0f, 0.0f),
+                                    fV2 offset = fV2(0.0f, 0.0f),
+                                    char flags = CENTER_X|CENTER_Y);
+  ~AnimatedElement();
 
-    /// SUBROUTINES
-    private:
-    void loopAnim();
 
+ // overrides
+  int update(GameState* context, float delta);     // ThingElement
+  void draw();                                     // ThingElement
+
+protected:
+  void animEnd();                     // AnimationIncarnation
 };
 
 #endif // ANIMATEDELEMENT_HPP_INCLUDED

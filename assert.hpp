@@ -22,14 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "SDL.h"   //needed for SDL_GetError()
 #include "log.hpp" //needed for LOG
 
-#define ASSERT_AUX_RTN(assertion, what, why, rtn)   \
-	if(!(assertion))                                  \
-	{									                                \
-		log(LOG_ERROR, "%s : %s", what, why);	          \
-		return rtn;                                     \
-  }                                                 \
-  else                                              \
-    log(LOG_INFO, "%s : Okay", what)
+#define ASSERT_AUX_RTN(assertion, what, why, rtn)     \
+	if(!(assertion))                                    \
+	{									                                  \
+		log(LOG_ERROR, "%s - %s", what, why);	                \
+		return rtn;                                       \
+  }                                                   \
+  else                                                \
+    log(LOG_INFO, "%s - Okay", what);
 
 #define ASSERT_AUX(assertion, what, why)                \
 	ASSERT_AUX_RTN(assertion, what, why, EXIT_FAILURE)
@@ -45,10 +45,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ASSERT_GL(assertion, what)                      \
     ASSERT_AUX(assertion, what, GL_GetError())
-
-#define ASSERT_MIX(assertion, what)                     \
-    ASSERT_AUX(assertion, what, Mix_GetError())
-
 
 
 #endif // ASSERT_HPP_INCLUDED

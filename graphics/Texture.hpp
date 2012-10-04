@@ -19,23 +19,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEXTURE_HPP_INCLUDED
 #define TEXTURE_HPP_INCLUDED
 
+#include "SDL.h"               // Needed for SDL_Surface
+
 #include "../platform.hpp"     // Needed for GLuint
-#include "../math/V2.hpp"           // Needed for iV2
-#include "../math/Rect.hpp"         // Needed for iRect
+#include "../math/V2.hpp"      // Needed for iV2
+#include "../math/Rect.hpp"    // Needed for iRect
 
 class Texture
 {
   /// ATTRIBUTES
 private:
   GLuint handle;
+  bool loaded;
   iRect area; // size of the texture
 
   /// METHODS
 public:
+  // constructors, destructors
+  Texture();
+  int load(const char* filename);
+  int from_surface(SDL_Surface* surface);
+  int unload();
+  ~Texture();
+  // accessors
   iRect getArea() const;
   GLuint getHandle() const;
-  int load(const char* filename);
-  int unload();
   void draw(const fRect* source_pointer,
             const fRect* destination_pointer,
             float angle = 0.0);

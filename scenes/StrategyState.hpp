@@ -41,7 +41,7 @@ public:
   int startup();
   int shutdown();
   // Overrides GameState
-  int update();
+  int update(float delta);
   void draw();
 };
 

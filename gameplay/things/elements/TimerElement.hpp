@@ -20,22 +20,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TIMERELEMENT_HPP_INCLUDED
 
 #include "ThingElement.hpp"
-#include "../../../resources/numerise.hpp"     // for str_id
+#include "../../../math/numerise.hpp"     // for str_id
 
 class TimerElement : public ThingElement
 {
-    /// ATTRIBUTES
-    private:
-    str_id name;
-    int remaining_time;
+  /// ATTRIBUTES
+private:
+  str_id name;
+  float remaining_time; // slow machine may perform, say, 1.3 updates rather than 1
 
-
-    /// METHODS
-    public:
-    TimerElement(Thing* _owner, const char* _name, int init_time = -1);
-    bool ticking() const;
-    void set(unsigned int time);
-    void decrement();
+  /// METHODS
+public:
+  TimerElement(Thing* _owner, const char* _name, float init_time = -1.0f);
+  // query
+  float check() const;
+  bool ticking() const;
+  // modification
+  void set(float time);
+  void unset();
+  void decrement(float delta);
 };
 
 #endif // TIMERELEMENT_HPP_INCLUDED

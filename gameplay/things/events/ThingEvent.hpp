@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>     // for std::ostream
 #include <list>
 
-#include "../../../resources/numerise.hpp"
+#include "../../../math/numerise.hpp"
 
 class ThingEvent;
 
@@ -35,15 +35,17 @@ class ThingEvent
     /// ATTRIBUTES
     private:
     str_id type;   // hash
+    void* sender;
 
     /// METHODS
     public:
     // constructors, destructors
-    ThingEvent(const char* init_type_name);
-    ThingEvent(str_id init_type_name);
+    ThingEvent(const char* init_type_name, void* _sender = NULL);
+    ThingEvent(str_id init_type_name, void* sender = NULL);
     // accessors
-    str_id getType();
-    bool isType(const char* type_name);
+    void* getSender() const;
+    str_id getType() const;
+    bool isType(const char* type_name) const;
 
     // outstream operator
     void print(std::ostream& stream) const;

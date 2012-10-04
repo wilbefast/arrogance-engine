@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../../../resources/numerise.hpp"
+#include "../../../math/numerise.hpp"
 #include "ThingEvent.hpp"
 
 using namespace std;
@@ -24,37 +24,45 @@ using namespace std;
 
 /// CONSTRUCTORS, DESTRUCTORS
 
-ThingEvent::ThingEvent(const char* _type) :
-type(numerise(_type))
+ThingEvent::ThingEvent(const char* _type, void* _sender) :
+type(numerise(_type)),
+sender(_sender)
 {
 }
 
-ThingEvent::ThingEvent(str_id _type) :
-type(_type)
+ThingEvent::ThingEvent(str_id _type, void* _sender) :
+type(_type),
+sender(_sender)
 {
 }
 
 
 /// ACCESSORS
-str_id ThingEvent::getType()
+
+void* ThingEvent::getSender() const
 {
-    return type;
+  return sender;
 }
 
-bool ThingEvent::isType(const char* name)
+str_id ThingEvent::getType() const
 {
-    return (type == numerise(name));
+  return type;
+}
+
+bool ThingEvent::isType(const char* name) const
+{
+  return (type == numerise(name));
 }
 
 
 /// OUTSTREAM OPERATOR
 void ThingEvent::print(ostream& stream) const
 {
-    stream << "ThingEvent " << type;
+  stream << "ThingEvent " << type;
 }
 
 ostream& operator<<(std::ostream& stream, ThingEvent const& e)
 {
-    e.print(stream);
-    return stream;
+  e.print(stream);
+  return stream;
 }

@@ -20,6 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 
-uV2 global::viewport;
+iV2 global::viewport;
 
 fV2 global::scale;

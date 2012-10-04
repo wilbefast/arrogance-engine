@@ -20,17 +20,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICSMANAGER_HPP_INCLUDED
 
 #include <map>
-#include "numerise.hpp"         // for str_id
+#include "../math/numerise.hpp"         // for str_id
+
+#include "ResourceManager.hpp"
 
 #include "../graphics/Texture.hpp"
 #include "../graphics/Animation.hpp"
+
+#define TEXTURE_FILETYPE "png"
 
 typedef std::map<str_id, Texture*> TextureMap;
 typedef TextureMap::iterator TextureI;
 typedef std::map<str_id, Animation*> AnimationMap;
 typedef AnimationMap::iterator AnimationI;
 
-class GraphicsManager
+class GraphicsManager : public ResourceManager
 {
     /// CONSTANTS
 private:
@@ -43,7 +47,6 @@ public:
 
   /// ATTRIBUTES
 private:
-  bool started;
   TextureMap textures;
   AnimationMap animations;
 
@@ -52,17 +55,21 @@ private:
   // creation & destruction
   GraphicsManager();
 public:
-  int startup();
-  int load_xml(const char* xml_file);
-  int shutdown();
   ~GraphicsManager();
+  // loading -- overrides ResourceManager
+  int load();
+  int unload();
+  int parse_root(void* root_handle);
+  int parse_element(void* element);
   // textures
   int load_texture(const char* source_file, const char* name);
   Texture* get_texture(const char* name);
+  Texture* get_texture(str_id id);
   // animations
   int create_animation(const char* texture_name,
                       iRect frame, int n_frames, const char* name);
   Animation* get_animation(const char* name);
+  Animation* get_animation(str_id id);
 };
 
 #endif // GRAPHICSMANAGER_HPP_INCLUDED

@@ -23,20 +23,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class ResourceElement : public ThingElement
 {
-    /// ATTRIBUTES
-    private:
-    int current_amount;
-    int max_amount;
+  /// ATTRIBUTES
+  private:
+  unsigned int current_amount;
+  unsigned int max_amount;
 
-    /// METHODS
-    public:
-    ResourceElement(Thing* owner, int init_max, int init_amount = -1);
-    bool anyLeft() const;
-    int getBalance() const;
-    bool tryWithdraw(int try_amount = 1);
-    int withdrawAll();
-    void deposit(int add_amount = 1);
-    void depositMax();
+  /// METHODS
+  public:
+  ResourceElement(Thing* owner, unsigned int init_max,
+                                  int init_amount = -1);
+  bool anyLeft() const;
+  bool isFull() const;
+  unsigned int getBalance() const;
+  unsigned int tryWithdraw(unsigned int try_amount = 1);
+  unsigned int withdrawAll();
+  void deposit(unsigned int add_amount = 1);
+  void depositMax();
 };
 
 #endif // RESOURCEELEMENT_HPP_INCLUDED

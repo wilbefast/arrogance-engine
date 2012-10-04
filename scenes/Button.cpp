@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Button.hpp"
 
 #include "../warn.hpp"
+#include "../io/AudioManager.hpp" // for button-click sounds
 
 /// CONSTRUCTORS, DESTRUCTORS
 
@@ -29,7 +30,8 @@ texture(init_texture),
 destination(init_destination),
 source_off(init_source),
 source_on(init_source + uV2(init_source.w,0)),
-pressed(false)
+pressed(false),
+hovered(false)
 {
     correctAspect(init_source, init_destination);
 }
@@ -43,13 +45,13 @@ source_off(init_source),
 source_on(init_source + uV2(init_source.w,0)),
 pressed(false)
 {
-    correctAspect(init_source, init_destination);
+  correctAspect(init_source, init_destination);
 }
 
 void Button::correctAspect(fRect src_area, fRect dest_area)
 {
-    destination.setRatio(src_area.getRatio());
-    destination.centreWithin(dest_area);
+  destination.setRatio(src_area.getRatio());
+  destination.centreWithin(dest_area);
 }
 
 Button::~Button()
@@ -60,27 +62,34 @@ Button::~Button()
 
 void Button::draw()
 {
-    if(pressed)
-        texture.draw(&source_on, &destination);
-    else
-        texture.draw(&source_off, &destination);
+  if(pressed || hovered)
+    texture.draw(&source_on, &destination);
+  else
+    texture.draw(&source_off, &destination);
 }
 
 /// ACCESSORS
 
 bool Button::contains(fV2 position) const
 {
-    return destination.contains(position);
+  return destination.contains(position);
 }
 
 bool Button::press(fV2 position, bool clicking)
 {
-    // switch off button if not touching, otherwise turn or or off based on
-    // position on touch.
-    return (pressed = (clicking && contains(position)));
+  // switch off button if not touching, otherwise turn or or off based on
+  // position on touch.
+  hovered = contains(position);
+  bool new_pressed = (clicking && hovered);
+
+  // play sound when button is pressed
+  if(new_pressed && !pressed)
+    AudioManager::getInstance()->play_sound("ui_interact");
+
+  return (pressed = new_pressed);
 }
 
 str_id Button::getTag() const
 {
-    return tag;
+  return tag;
 }

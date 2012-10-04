@@ -23,12 +23,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "SDL_mixer.h"          // Mix_Music
 
 #include <map>
-#include "numerise.hpp"         // for str_id
+#include "../math/numerise.hpp"         // for str_id
+
+#include "ResourceManager.hpp"
+
+// custom assertion
+#include "../assert.hpp"
+#define ASSERT_MIX(assertion, what)                     \
+    ASSERT_AUX(assertion, what, Mix_GetError())
+
+#define SOUND_FILETYPE "wav"
+#define MUSIC_FILETYPE "ogg"
+#define VOLUME_STEP MIX_MAX_VOLUME/14
 
 typedef std::map<str_id, Mix_Chunk*> SoundMap;
 typedef SoundMap::iterator SoundI;
 
-class AudioManager
+class AudioManager : public ResourceManager
 {
   /// CONSTANTS
 private:
@@ -43,10 +54,13 @@ public:
 
   /// ATTRIBUTES
 private:
-  bool started;
+  unsigned short volume; // value between 0 and MIX_MAX_VOLUME = 128
   // music
   Mix_Music* music;
   SDL_RWops* music_file;
+  #ifdef __ANDROID__
+    const char* sdcard_file;
+  #endif // #ifdef __ANDROID__
   // sound
   SoundMap sounds;
 
@@ -55,10 +69,15 @@ private:
   // creation & destruction
   AudioManager();
 public:
-  int startup();
-  int load_xml(const char* xml_file);
-  int shutdown();
   ~AudioManager();
+  // loading -- overrides ResourceManager
+  int load();
+  int unload();
+  int parse_root(void* root_handle);
+  int parse_element(void* element);
+  // global volume
+  void volume_up();
+  void volume_down();
   // music
   int load_music(const char* source_file);
   int play_music(bool loop);
@@ -67,6 +86,9 @@ public:
   // sound
   int load_sound(const char* source_file, const char* name);
   int play_sound(const char* name);
+  int play_sound(str_id id);
+private:
+  void set_volume(unsigned short new_volume);
 };
 
 #endif // AUDIOMANAGER_HPP_INCLUDED

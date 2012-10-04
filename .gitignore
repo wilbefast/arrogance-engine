@@ -6,7 +6,7 @@
 # Backup files
 **~
 
-# Compiled Object files
+# Compiled files
 bin/**
 obj/**
 **.slo
