@@ -43,7 +43,7 @@ public:
   // Constructors
   M44();
   M44(V4<T> c1, V4<T> c2, V4<T> c3, V4<T> c4);
-  M44(V4<T> _row[]);
+  M44(V4<T> _col[]);
   M44(std::istream& in);
 
   template <typename U>
@@ -85,8 +85,8 @@ public:
   // Utilities
   M44 getTranspose() const;
   M44 getInverse() const;
+  bool isScaleFree() const;
   M44& toIdentity();
-
 
   // outstream
   void print(std::ostream& out) const;

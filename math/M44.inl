@@ -249,10 +249,25 @@ inline M44<T> M44<T>::getTranspose() const
 template <typename T>
 inline M44<T> M44<T>::getInverse() const
 {
+  if(!isScaleFree())
+    cout << "MATRIX IS NOT SCALE FREE!" << endl;
+
   M44<T> Rt =
     M44<T>(col[0].noW(), col[1].noW(), col[2].noW(), V4<T>()).getTranspose();
   V4<T> invT = -Rt*col[3]; invT.w = 1;
   return M44<T>(Rt.col[0], Rt.col[1], Rt.col[2], invT);
+}
+
+template <typename T>
+inline bool M44<T>::isScaleFree() const
+{
+  V4<T> row0 = row(0), row1 = row(1), row2 = row(2);
+  return(row0.getNorm2() == 1
+         && row1.getNorm2() == 1
+         && row2.getNorm2() == 1
+         && dot(row0, row1) == 0
+         && dot(row0, row2) == 0
+         && dot(row1, row2) == 0);
 }
 
 template <typename T>

@@ -26,11 +26,15 @@ private:
 		float rotation;
     fV2 position;
 		int direction; // either 1 or -1
+    fV2 box[4];
 
 		// constructor
 	public:
 		Spatial(float _rotation, float _x, float _y) :
 				rotation(_rotation), position(_x, _y), direction(1) {}
+    // other methods
+    void recalculateBox();
+    void interpolateBox(Spatial const& start, Spatial const& end, float frac);
 	};
 
 	/// ATTRIBUTES
@@ -57,6 +61,8 @@ public:
 	// polling
 	void update(float delta);
 	void draw();
+private:
+  void recalculateBox();
 };
 
 #endif // PUPPET_HPP_INCLUDED
