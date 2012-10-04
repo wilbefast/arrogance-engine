@@ -75,10 +75,10 @@ int Application::startup()
     == EXIT_SUCCESS, "Starting Graphics Manager");
   // Start the Audio Manager
   ASSERT(AudioManager::getInstance()->startup()
-    == EXIT_SUCCESS, "Starting Audio Manager");
+    == EXIT_SUCCESS, "Starting Audio Manager");*/
   // Start the Font Manager
   ASSERT(FontManager::getInstance()->startup()
-    == EXIT_SUCCESS, "Starting Font Manager");*/
+    == EXIT_SUCCESS, "Starting Font Manager");
   // Start the Mesh Manager
   ASSERT(MeshManager::getInstance()->startup()
     == EXIT_SUCCESS, "Starting Mesh Manager");
@@ -97,7 +97,7 @@ int Application::run()
   // Update current scene, switch to the next scene if
   // need be (in which case we break from the loop and restart).
   Scene* next = NULL;
-  if(scene->update(&next, (this_tick - prev_tick) / 1000.0f * MAX_FPS)
+  if(scene->update(&next, (this_tick - prev_tick) / 1000.0f)
       != Scene::NO_CHANGE)
     return setScene(next);
 
@@ -131,6 +131,9 @@ int Application::shutdown()
   delete scene;
 
   // Shut down subsystems
+  //!! FIXME
+  //! MeshManager::getInstance()->shutdown();
+  FontManager::getInstance()->shutdown();
   AudioManager::getInstance()->shutdown();
   GraphicsManager::getInstance()->shutdown();
 
@@ -188,7 +191,6 @@ int Application::startSDL()
 int Application::startGL()
 {
   // Black background by default
-  /// CHECKHERE
   glClearColor(0, 0, 0, 255);
   glEnable(GL_TEXTURE_2D);
 

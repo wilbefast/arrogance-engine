@@ -98,8 +98,9 @@ int AudioManager::parse_root(void* root_handle)
   TiXmlHandle* txml_root = (TiXmlHandle*)root_handle;
 
   // load music
-  ASSERT(parse_element(txml_root->FirstChild("music").Element()) == EXIT_SUCCESS,
-              "AudioManager parsing music element");
+  ASSERT(parse_element(txml_root->FirstChild("music").Element())
+         == EXIT_SUCCESS,
+            "AudioManager parsing music element");
 
   // load sound effects
   ASSERT(parse_list(txml_root, "sound_list") == EXIT_SUCCESS,
@@ -113,9 +114,14 @@ int AudioManager::parse_element(void* element)
 {
   // cast element to TinyXML element
   TiXmlElement* txml_element = (TiXmlElement*)element;
+  if(!txml_element)
+  {
+    WARN("AudioManager::parse_element", "Non-existent element");
+    return EXIT_SUCCESS;
+  }
 
   // music element
-  if(!strcmp(txml_element->Value(), "music"))
+  else if(!strcmp(txml_element->Value(), "music"))
   {
     // conver the name attribute to a file name
     const char* name = txml_element->Attribute("name");

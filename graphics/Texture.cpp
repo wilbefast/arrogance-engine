@@ -53,7 +53,6 @@ int Texture::load(const char* filepath)
   return result;
 }
 
-
 int Texture::from_surface(SDL_Surface* surface)
 {
   // Free any previous content
@@ -100,7 +99,6 @@ int Texture::from_surface(SDL_Surface* surface)
   glBindTexture(GL_TEXTURE_2D, handle);
 
   // Set the texture’s properties
-  /// CHECKHERE
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

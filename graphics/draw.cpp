@@ -65,11 +65,11 @@ void draw::rectangle(fRect rect, Colour c)
 
 void draw::line(fV3 start, fV3 end, Colour c, float thickness)
 {
-    // Specify coordinates to draw
-    GLfloat points[6]  = { (GLfloat)start.x, (GLfloat)start.y, (GLfloat)start.z,
-                            (GLfloat)end.x,  (GLfloat)end.y, (GLfloat)end.z};
-    // draw the line in 3 dimensions
-    draw_line(points, 3, c, thickness);
+  // Specify coordinates to draw
+  GLfloat points[6]  = { (GLfloat)start.x, (GLfloat)start.y, (GLfloat)start.z,
+                          (GLfloat)end.x,  (GLfloat)end.y, (GLfloat)end.z};
+  // draw the line in 3 dimensions
+  draw_line(points, 3, c, thickness);
 }
 
 void draw::line(fV2 start, fV2 end, Colour c, float thickness)
@@ -100,7 +100,7 @@ void draw::line_loop(fV2 points[], unsigned int n_pts, Colour c, float thickness
 
   // Draw points
   glVertexPointer(2, GL_FLOAT, 0, loop);
-  glDrawArrays(GL_LINE_STRIP, 0, n_pts);
+  glDrawArrays(GL_LINE_LOOP, 0, n_pts);
 
   // Shut down
   glDisable(GL_LINE_SMOOTH);

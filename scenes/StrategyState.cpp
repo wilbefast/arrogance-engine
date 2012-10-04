@@ -44,7 +44,7 @@ camera_offset()
 int StrategyState::startup()
 {
   // basic startup
-  ASSERT(GameState::shutdown() == EXIT_SUCCESS,
+  ASSERT(GameState::startup() == EXIT_SUCCESS,
         "StrategyState starting GameState");
 
   // Occlusion on
@@ -94,7 +94,7 @@ int StrategyState::update(float delta)
     return result;
 
   // All clear
-  return EXIT_SUCCESS;
+  return CONTINUE;
 }
 
 void StrategyState::draw()

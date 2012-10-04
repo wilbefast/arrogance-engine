@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Application.hpp"
 #include "scenes/MainMenu.hpp"
 #include "scenes/Game.hpp"  /// FIXME
+#include "tp2/math_test.hpp"
 
 using namespace std;
 
@@ -29,6 +30,8 @@ int main(int argc, char* argv[])
 {
   // Initialise random numbers
   srand(time(NULL));
+
+  math_test();
 
   // Load up the application
   Application application(new Game());

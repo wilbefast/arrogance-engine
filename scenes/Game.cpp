@@ -23,11 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "MainMenu.hpp"             // previous scene
 
 #include "StrategyState.hpp"
+#include "../tp1/TP1State.hpp" //! FIXME
 
 /// CREATION & DESTRUCTION
 
 Game::Game(bool tutorial) :
-Scene(new StrategyState())
+Scene(new TP1State())
 {
 }
 
