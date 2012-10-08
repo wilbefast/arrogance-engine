@@ -7,11 +7,11 @@
 #define N_PUPPETS 5
 Puppet puppet[N_PUPPETS] =
 {
-  Puppet("CNST", 0.0f, 100.0f),
-  Puppet("60Hz", 1.0f/60.0f, 200.0f),
-  Puppet("30Hz", 1.0f/30.0f, 300.0f),
-  Puppet("05Hz", 1.0f/5.0f, 400.0f),
-  Puppet("INTP", 1.0f/5.0f, 500.0f, true)
+  Puppet("CNST", 0.0f, Puppet::SIZE),
+  Puppet("60Hz", 1.0f/60.0f, Puppet::SIZE*3),
+  Puppet("30Hz", 1.0f/30.0f, Puppet::SIZE*5),
+  Puppet("05Hz", 1.0f/5.0f, Puppet::SIZE*7),
+  Puppet("INTP", 1.0f/5.0f, Puppet::SIZE*9, true)
 };
 
 TP1State::TP1State() :

@@ -3,7 +3,7 @@ Arrogance Engine: a simple SDL/OpenGL game engine for Desktop and Android.
 Copyright (C) 2012 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under he terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -221,6 +221,14 @@ inline V4<T> M44<T>::row(size_t i) const
 }
 
 template <typename T>
+inline M44<T>& M44<T>::setRow(size_t i, V4<T> new_row)
+{
+  for(size_t c = 0; c < 4; c++)
+    col[c][i] = new_row[c];
+  return (*this);
+}
+
+template <typename T>
 inline V4<T>* M44<T>::front()
 {
   return col; // equivalent to &(col[0])
@@ -277,6 +285,16 @@ inline M44<T>& M44<T>::toIdentity()
     col[c][r] = (r == c) ? 1 : 0;
   return (*this);
 }
+
+template <typename T>
+inline M44<T>& M44<T>::orthogonalise()
+{
+  // we want ensure 0 perpendicular to 1 and 2, and 1 to 2.
+  setRow(2, cross(row(1), row(2))); // 0 and 1 perpendicular to 2
+  setRow(1, cross(row(0), row(2))); // 1 perpendicular to 2
+  return (*this);
+}
+
 
 /* STATIC FUNCTIONS */
 

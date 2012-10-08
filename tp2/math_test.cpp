@@ -99,5 +99,11 @@ int math_test()
   cout << "M.getInverse() = Minv = " << Minv << endl;
   cout << "Minv*M = " << Minv*M << endl << " M*Minv = " << M*Minv << endl;
 
+  cout << endl << "ORTHOGONALISATION" << endl;
+  M.col[0][0] = M.col[1][1] = 0.1;
+  cout << M << endl;
+  M.orthogonalise();
+  cout << M << endl;
+
   return EXIT_SUCCESS;
 }

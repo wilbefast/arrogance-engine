@@ -28,7 +28,9 @@ class Application
 {
   /// FUNCTIONS
 public:
+#ifdef SDL2
   static iV2 normaliseTouch(SDL_TouchID, iV2 touch);
+#endif
 
   /// CONSTANTS
 private:
@@ -43,9 +45,13 @@ private:
 private:
   // We might need to force cleanup upon destruction
   bool initialised;
+#ifdef SDL2
   // Window and OpenGL context
   SDL_Window* window;
   SDL_GLContext context;
+#else
+  SDL_Surface* screen;
+#endif
   // Timing
   int prev_tick, this_tick, next_tick;
   // Object containing all the game-related data

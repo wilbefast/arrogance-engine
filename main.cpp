@@ -31,8 +31,6 @@ int main(int argc, char* argv[])
   // Initialise random numbers
   srand(time(NULL));
 
-  math_test();
-
   // Load up the application
   Application application(new Game());
   ASSERT_SDL(application.startup() == EXIT_SUCCESS, "Starting up application");

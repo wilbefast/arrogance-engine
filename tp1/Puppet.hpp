@@ -6,8 +6,8 @@
 class Puppet
 {
 	/// CONSTANTS
-private:
-	const static int SIZE = 64,
+public:
+	const static int SIZE = 48,
 										HALF_SIZE = SIZE/2,
 										SPEED = 250,
 										ROT_SPEED = 1,

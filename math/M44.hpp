@@ -78,6 +78,7 @@ public:
 
   // Array-style access
   V4<T> row(size_t i) const;
+  M44& setRow(size_t i, V4<T> new_row);
   V4<T>* front();
   V4<T>& operator[](size_t i);
   const V4<T>& operator[](size_t i) const;
@@ -87,6 +88,7 @@ public:
   M44 getInverse() const;
   bool isScaleFree() const;
   M44& toIdentity();
+  M44& orthogonalise();
 
   // outstream
   void print(std::ostream& out) const;

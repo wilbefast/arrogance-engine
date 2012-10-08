@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	#include <GLES/gl.h>    	//OpenGL ES rather than OpenGL
 
 	#define WINDOW_FLAGS WINDOW_DEFAULT_FLAGS|SDL_WINDOW_BORDERLESS
+  #define WINDOW_C_DEPTH 32
 
 	#define LOG_INFO ANDROID_LOG_INFO
 	#define LOG_WARN ANDROID_LOG_WARN
@@ -53,12 +54,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   #else
     #define GL_V_MAJOR 1    // OpenGL 1.5
     #define GL_V_MINOR 5
-  #endif
+  #endif // WIN32
 
 	#include <stdio.h>  // for printf
 	#include <GL/gl.h>  // for OpenGL rather than OpenGL ES
 
 	#define WINDOW_FLAGS WINDOW_DEFAULT_FLAGS
+	#define WINDOW_C_DEPTH 32
 
   #define LOG_INFO 0
 	#define LOG_WARN 1

@@ -71,11 +71,11 @@ int Application::startup()
   ASSERT(startGL() == EXIT_SUCCESS, "Starting OpenGL/GLES");
 
   // Start up resource subsystems
-  /*ASSERT(GraphicsManager::getInstance()->startup()
+  ASSERT(GraphicsManager::getInstance()->startup()
     == EXIT_SUCCESS, "Starting Graphics Manager");
   // Start the Audio Manager
   ASSERT(AudioManager::getInstance()->startup()
-    == EXIT_SUCCESS, "Starting Audio Manager");*/
+    == EXIT_SUCCESS, "Starting Audio Manager");
   // Start the Font Manager
   ASSERT(FontManager::getInstance()->startup()
     == EXIT_SUCCESS, "Starting Font Manager");
@@ -138,9 +138,13 @@ int Application::shutdown()
   GraphicsManager::getInstance()->shutdown();
 
   // Destory application display and control structures
+#ifdef SDL2
   SDL_GL_MakeCurrent(NULL, NULL);
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
+#else // SDL1.6
+  SDL_FreeSurface(screen);
+#endif // SDL2
 
 	// Shut down SDL
 	SDL_Quit();
@@ -164,15 +168,14 @@ int Application::startSDL()
 
 	// Open the window where we will draw. NB: Android will override the
 	// specified height and width no matter what they are!
+#ifdef SDL2
 	window = SDL_CreateWindow(APP_NAME, SDL_WINDOWPOS_CENTERED,
                            SDL_WINDOWPOS_CENTERED, WINDOW_DEFAULT_W,
                            WINDOW_DEFAULT_H, WINDOW_FLAGS);
-  ASSERT_SDL(window, "Opening SDL application window");
+  ASSERT_SDL(window, "Opening SDL2.0 application window");
 
   // Since the window size can be overriden, check what it is actually
   SDL_GetWindowSize(window, &global::viewport.x, &global::viewport.y);
-  global::scale = fV2(global::viewport.x / (float)WINDOW_DEFAULT_W,
-                        global::viewport.y / (float)WINDOW_DEFAULT_H);
 
   // Create the OpenGL context for the window we just opened
   context = SDL_GL_CreateContext(window);
@@ -183,6 +186,15 @@ int Application::startSDL()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, GL_V_MAJOR);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, GL_V_MINOR);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+#else // SDL1.6
+  screen = SDL_SetVideoMode(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H,
+                            WINDOW_C_DEPTH, SDL_OPENGL);
+  ASSERT_SDL(screen, "Creating SDL1.6 application screen-surface");
+  global::viewport = fV2(screen->w, screen->h);
+  SDL_WM_SetCaption(APP_NAME, NULL);
+#endif // SDL2
+  global::scale = fV2(global::viewport.x / (float)WINDOW_DEFAULT_W,
+                        global::viewport.y / (float)WINDOW_DEFAULT_H);
 
   // No problems, return success code!
   return EXIT_SUCCESS;
@@ -224,7 +236,12 @@ void Application::draw()
   scene->draw();
 
   // Flip the buffers to update the screen
+#ifdef SDL2
   SDL_GL_SwapWindow(window);
+#else // SDL1.6
+  glFlush();
+  SDL_GL_SwapBuffers();
+#endif // SDL2
 }
 
 // Regulate the number of frames per second, pausing only if need be
@@ -360,6 +377,7 @@ int Application::setScene(Scene* new_scene)
 
 /// CLASS NAMESPACE FUNCTIONS
 
+#ifdef SDL2 // required for SDL_TouchID
 iV2 Application::normaliseTouch(SDL_TouchID device_id, iV2 touch)
 {
   // There's only 1 touch device: memorise itss resolution upon initial call
@@ -371,3 +389,4 @@ iV2 Application::normaliseTouch(SDL_TouchID device_id, iV2 touch)
   // Normalise the touch position
   return touch * default_window_size / device_resolution;
 }
+#endif // SDL2

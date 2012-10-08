@@ -51,7 +51,6 @@ int ResourceManager::shutdown()
   // check that we're initialised
   if(!loaded)
   {
-    int i = 3;
     WARN_RTN("ResourceManager::shutdown","already shut down!", EXIT_SUCCESS);
   }
   // if so, unload everything

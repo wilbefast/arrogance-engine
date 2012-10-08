@@ -87,12 +87,6 @@ void Puppet::draw()
 {
 	// draw rectangle
 	draw::line_loop(where_now.box, 4, Colour(255, 255, 255));
-
-	// draw text
-	/*RECT R;
-	R.left = where_now.x;
-	R.top = where_now.y;
-	DrawText(context, name, 4, &R, DT_SINGLELINE|DT_NOCLIP);*/
 }
 
 void Puppet::Spatial::recalculateBox()
