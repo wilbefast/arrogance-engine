@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGYSTATE_HPP_INCLUDED
-#define STRATEGYSTATE_HPP_INCLUDED
+#ifndef MODELVIEWSTATE_HPP_INCLUDED
+#define MODELVIEWSTATE_HPP_INCLUDED
 
 #include "../math/V3.hpp"
 
 #include "GameState.hpp"
 
-class StrategyState : public GameState
+class ModelViewState : public GameState
 {
   /// CONSTANTS
 private:
@@ -37,7 +37,7 @@ private:
   /// METHODS
 public:
   // Creation, destruction
-  StrategyState();
+  ModelViewState();
   int startup();
   int shutdown();
   // Overrides GameState
@@ -45,4 +45,4 @@ public:
   void draw();
 };
 
-#endif // STRATEGYSTATE_HPP_INCLUDED
+#endif // MODELVIEWSTATE_HPP_INCLUDED

@@ -22,13 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../assert.hpp"            // ASSERT
 #include "MainMenu.hpp"             // previous scene
 
-#include "StrategyState.hpp"
+#include "ModelViewState.hpp"
 #include "../tp1/TP1State.hpp" //! FIXME
+#include "../tp3/TP3State.hpp" //! FIXME
 
 /// CREATION & DESTRUCTION
 
 Game::Game(bool tutorial) :
-Scene(new TP1State())
+Scene(new TP3State())
 {
 }
 

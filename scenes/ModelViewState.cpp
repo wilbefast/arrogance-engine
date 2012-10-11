@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "StrategyState.hpp"
+#include "ModelViewState.hpp"
 
 #include "../global.hpp"                          // for viewport
 #include "../assert.hpp"
@@ -34,18 +34,18 @@ Joint joint4(&joint3, vertex_t(0.9, 0.5, 0.0));
 
 /// CREATION, DESTRUCTION
 
-StrategyState::StrategyState() :
+ModelViewState::ModelViewState() :
 GameState(),
 camera_angle(),
 camera_offset()
 {
 }
 
-int StrategyState::startup()
+int ModelViewState::startup()
 {
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
-        "StrategyState starting GameState");
+        "ModelViewState starting GameState");
 
   // Occlusion on
   glEnable(GL_DEPTH_TEST);
@@ -62,11 +62,11 @@ int StrategyState::startup()
   return EXIT_SUCCESS;
 }
 
-int StrategyState::shutdown()
+int ModelViewState::shutdown()
 {
   // basic shutdown
   ASSERT(GameState::shutdown() == EXIT_SUCCESS,
-        "StrategyState stopping GameState");
+        "ModelViewState stopping GameState");
 
   // Occlusion off
   glDisable(GL_DEPTH_TEST);
@@ -81,7 +81,7 @@ int StrategyState::shutdown()
 
 /// OVERRIDES GAMESTATE
 
-int StrategyState::update(float delta)
+int ModelViewState::update(float delta)
 {
   // Update camera angle and position
   uV2 const& p = input.last_hover;
@@ -97,7 +97,7 @@ int StrategyState::update(float delta)
   return CONTINUE;
 }
 
-void StrategyState::draw()
+void ModelViewState::draw()
 {
   glClear(GL_DEPTH_BUFFER_BIT);
   glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
