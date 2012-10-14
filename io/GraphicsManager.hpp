@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICSMANAGER_HPP_INCLUDED
 
 #include <map>
-#include "../math/numerise.hpp"         // for str_id
+#include "../math/numerise.h"         // for str_id
 
 #include "ResourceManager.hpp"
 

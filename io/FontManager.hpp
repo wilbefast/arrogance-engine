@@ -25,11 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ResourceManager.hpp"
 
 #include <map>
-#include "../math/numerise.hpp"         // for str_id
+#include "../math/numerise.h"         // for str_id
 #include "../graphics/draw.hpp"         // for Colour
 
 // custom assert
-#include "../debug/assert.hpp"
+#include "../debug/assert.h"
 #define ASSERT_TTF(assertion, what)                     \
     ASSERT_AUX(assertion, what, TTF_GetError())
 

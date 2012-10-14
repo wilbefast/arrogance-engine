@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Inline file: a special implementation that is included
 
-#include "wjd_math.hpp"
+#include "wjd_math.h"
 
 
 using namespace std;

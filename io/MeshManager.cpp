@@ -20,14 +20,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <sstream>
 
-#include "../debug/assert.hpp"
-#include "../debug/warn.hpp"
+#include "MeshManager.hpp"
+
+#include "../debug/assert.h"
+#include "../debug/warn.h"
 #include "../math/V3.hpp"
 
 #include "../graphics/Mesh3D.hpp"
 
 #include "file.hpp"
-#include "MeshManager.hpp"
 
 using namespace std;
 

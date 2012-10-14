@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ModelViewState.hpp"
 
 #include "../global.hpp"                          // for viewport
-#include "../debug/assert.hpp"
+#include "../debug/assert.h"
 
 #include "../io/MeshManager.hpp"
 

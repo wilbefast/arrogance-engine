@@ -19,8 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FontManager.hpp"
 
 #include "file.hpp" // for GET_ASSET
-#include "../debug/warn.hpp"
 #include "../graphics/Texture.hpp"
+
+#include "../debug/warn.h"
 
 #include "tinyxml/tinyxml.h"
 

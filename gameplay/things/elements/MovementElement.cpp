@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "MovementElement.hpp"
 
 #include "../events/ThingEvent.hpp"
-#include "../../../math/wjd_math.hpp"           // for SQR
+#include "../../../math/wjd_math.h"           // for SQR
 
 using namespace std;
 

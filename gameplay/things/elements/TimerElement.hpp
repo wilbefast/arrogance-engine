@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TIMERELEMENT_HPP_INCLUDED
 
 #include "ThingElement.hpp"
-#include "../../../math/numerise.hpp"     // for str_id
+#include "../../../math/numerise.h"     // for str_id
 
 class TimerElement : public ThingElement
 {

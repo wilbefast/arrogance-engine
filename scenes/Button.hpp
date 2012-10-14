@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../graphics/Texture.hpp"
 #include "../math/Rect.hpp"
-#include "../math/numerise.hpp"
+#include "../math/numerise.h"
 
 class Button;
 

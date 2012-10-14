@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Mesh3D.hpp"
 
-#include "../debug/assert.hpp" // for ASSERT macro
-#include "../global.hpp" // for viewport
+#include "../debug/assert.h"          // for ASSERT macro
+#include "../io/file.hpp"               // for ASSET_PATH
 
 /* CREATION, DESTRUCTION */
 

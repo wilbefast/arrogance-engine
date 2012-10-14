@@ -1,11 +1,11 @@
 #include "TP3State.hpp"
 
-#include "../debug/assert.hpp"
+#include "../debug/assert.h"
 #include "../global.hpp"
 #include "../io/MeshManager.hpp"
 
 #include "OBJLoader.hpp"
-#include "../debug/log.hpp"
+#include "../debug/log.h"
 
 
 /// CREATION, DESTRUCTION

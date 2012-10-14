@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "SDL.h"               // Needed for SDL_Surface
 
-#include "../platform.hpp"     // Needed for GLuint
+#include "../opengl.h"         // Needed for GLuint
 #include "../math/V2.hpp"      // Needed for iV2
 #include "../math/Rect.hpp"    // Needed for iRect
 

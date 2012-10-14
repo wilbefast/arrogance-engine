@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GraphicsManager.hpp"
 
-#include "file.hpp"
-#include "../debug/assert.hpp"
-#include "../debug/warn.hpp"
+#include "../debug/assert.h"
+#include "../debug/warn.h"
 
+#include "file.hpp"
 #include "tinyxml/tinyxml.h"
 
 /// SINGLETON

@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "SDL.h"            // Needed for IMG_Load
 #include "SDL_image.h"
 
-#include "../global.hpp"       // Need for viewport
-#include "../platform.hpp"     // Needed for DIR_CUR, DIR_SEP, OpenGL/GLES
-#include "../debug/assert.hpp"       // Needed for assertions
-#include "../debug/warn.hpp"
-#include "../math/wjd_math.hpp"    // Needed for ISPWR2
+#include "../global.hpp"             // Need for viewport
+#include "../opengl.h"               // Needed for OpenGL/GLES
+#include "../debug/assert.h"       // Needed for ASSERT macro
+#include "../debug/warn.h"
+#include "../math/wjd_math.h"      // Needed for ISPWR2
 
 /// CONSTRUCTORS, DESTRUCTORS
 

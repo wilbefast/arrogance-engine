@@ -1,7 +1,7 @@
 #ifndef VERTEX_HPP_INCLUDED
 #define VERTEX_HPP_INCLUDED
 
-#include "../platform.hpp"  // for openGL types
+#include "../opengl.h"        // Needed for openGL/GLES types
 #include "../math/V3.hpp"
 
 #include <vector>

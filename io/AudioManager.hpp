@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "SDL_mixer.h"          // Mix_Music
 
 #include <map>
-#include "../math/numerise.hpp"         // for str_id
+#include "../math/numerise.h"         // for str_id
 
 #include "ResourceManager.hpp"
 
 // custom assertion
-#include "../debug/assert.hpp"
+#include "../debug/assert.h"
 #define ASSERT_MIX(assertion, what)                     \
     ASSERT_AUX(assertion, what, Mix_GetError())
 

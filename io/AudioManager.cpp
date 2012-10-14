@@ -18,12 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "AudioManager.hpp"
 
-#include "../debug/assert.hpp"
-#include "../debug/warn.hpp"
+#include "../debug/assert.h"
+#include "../debug/warn.h"
 
-#include "../math/wjd_math.hpp"
-#include "file.hpp" // for io::MAX_BLOCKS
+#include "../math/wjd_math.h"
 
+#include "file.hpp"                       // for io::MAX_BLOCKS
 #include "tinyxml/tinyxml.h"
 
 using namespace std;

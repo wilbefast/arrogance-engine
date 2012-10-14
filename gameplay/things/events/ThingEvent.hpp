@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>     // for std::ostream
 #include <list>
 
-#include "../../../math/numerise.hpp"
+#include "../../../math/numerise.h"
 
 class ThingEvent;
 

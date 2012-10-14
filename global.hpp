@@ -21,8 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "math/Rect.hpp"
 
-#define WINDOW_DEFAULT_FLAGS \
-  SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN
 #define WINDOW_DEFAULT_W 640    // size used by Desktop version
 #define WINDOW_DEFAULT_H 480
 #define MAX_FPS 30

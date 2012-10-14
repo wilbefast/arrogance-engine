@@ -1,6 +1,6 @@
 #include "TP1State.hpp"
 
-#include "../debug/assert.hpp"
+#include "../debug/assert.h"
 
 /// CREATION, DESTRUCTION
 

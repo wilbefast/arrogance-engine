@@ -18,19 +18,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Application.hpp"
 
-#include "SDL_image.h" //IMG_Load
+#include "SDL_image.h"                  // IMG_Load
 
-#include "global.hpp"         // needed for application defaults
-#include "platform.hpp"       // needed for LOG
-#include "debug/assert.hpp"   // needed for platform specific ASSERT macros
-#include "debug/warn.hpp"     // needed for WARN
+#include "global.hpp"         // needed for WINDOW_DEFAULT_W and MAX_FPS
+#include "debug/assert.h"   // needed for platform specific ASSERT macros
+#include "debug/warn.h"     // needed for WARN
 
-#include "io/file.hpp"                 // needed for ASSET_PATH macro
 #include "io/AudioManager.hpp"         // audio subsystem (singleton)
 #include "io/GraphicsManager.hpp"      // graphics subsystem (singleton)
 #include "io/FontManager.hpp"          // font subsystem (singleton)
-#include "io/MeshManager.hpp"   // 3D mesh subsystem (singleton)
+#include "io/MeshManager.hpp"          // 3D mesh subsystem (singleton)
 
+#define WINDOW_DEFAULT_FLAGS SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN
+
+#ifdef __ANDROID__
+	#define WINDOW_FLAGS WINDOW_DEFAULT_FLAGS|SDL_WINDOW_BORDERLESS
+  #define WINDOW_C_DEPTH 32
+  #define USE_TOUCH 1
+  #define USE_MOUSE 0
+  #define KEY_EXIT SDLK_ESCAPE
+  #define KEY_BACK 1073742094   // FIXME - use SDL macro: SDL_SCANCODE_AC_BACK?
+  #define KEY_MENU 1073741942   // FIXME - use SDL macro: SDL_SCANCODE_AC_HOME?
+  #define KEY_VOLUME_UP 1073741952
+  #define KEY_VOLUME_DOWN 1073741953
+#else // LINUX, MAC, WINDOWS
+	#define WINDOW_FLAGS WINDOW_DEFAULT_FLAGS
+	#define WINDOW_C_DEPTH 32
+  #define USE_TOUCH 0
+  #define USE_MOUSE 1
+	#define KEY_EXIT SDLK_ESCAPE
+	#define KEY_MENU SDLK_ENTER
+	#define KEY_BACK SDLK_SPACE
+  #define KEY_VOLUME_UP SDLK_PLUS
+	#define KEY_VOLUME_DOWN SDLK_MINUS
+#endif // #ifdef __ANDROID__
 
 /// CONSTRUCTOR & DESTRUCTOR (public)
 

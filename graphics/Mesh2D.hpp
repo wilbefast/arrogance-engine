@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MESH2D_HPP_INCLUDED
 #define MESH2D_HPP_INCLUDED
 
-#include "../platform.hpp"      // for OpenGL/GLES types
+#include "../opengl.h"      // for OpenGL/GLES types
 #include "draw.hpp"
 
 class Mesh2D

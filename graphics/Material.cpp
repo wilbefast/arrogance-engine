@@ -22,8 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Material.hpp"
 
-#include "../debug/assert.hpp"
-#include "../platform.hpp" // for activate
+#include "../debug/assert.h"          // for ASSERT macro
+#include "../io/file.hpp"               // for ASSET_PATH
 
 /* CREATION, DESTRUCTION */
 

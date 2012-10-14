@@ -17,12 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
-#include "../platform.hpp"
 
 #include "Joint.hpp"
 
 #include "draw.hpp"
-#include "../debug/warn.hpp"
+#include "../debug/warn.h"
 
 using namespace std;
 

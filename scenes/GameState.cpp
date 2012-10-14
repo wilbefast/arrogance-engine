@@ -18,14 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GameState.hpp"
 
-#include "../debug/warn.hpp"
-#include "../debug/assert.hpp"         // for platform specific ASSERT macros
+#include "../debug/warn.h"
+#include "../debug/assert.h"         // for platform specific ASSERT macros
 #include "../global.hpp"
 
-#include "../math/numerise.hpp"
+#include "../math/numerise.h"
 #include "../io/file.hpp"              // for loading assets
-
-#include "../platform.hpp"             // for ASSET_PATH
 
 #include "../gameplay/things/events/CollisionEvent.hpp" // for generating events
 #include "../gameplay/things/events/BoundaryEvent.hpp"  // for generating events

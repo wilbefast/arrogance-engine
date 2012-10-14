@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef THING_HPP_INCLUDED
 #define THING_HPP_INCLUDED
 
-#include "../../math/numerise.hpp"
+#include "../../math/numerise.h"
 #include "../../math/V2.hpp"
 #include "../../graphics/Texture.hpp"
 
