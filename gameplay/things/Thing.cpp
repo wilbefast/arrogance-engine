@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Thing.hpp"
 
-#include "../../math/numerise.hpp"                          // for hash function
+#include "../../math/numerise.hpp"              // for hash function
 
-#include "../../assert.hpp"
-#include "../../warn.hpp"
+#include "../../debug/assert.hpp"
+#include "../../debug/warn.hpp"
 
 #include "elements/ColliderElement.hpp"
 

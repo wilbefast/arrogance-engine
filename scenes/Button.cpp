@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Button.hpp"
 
-#include "../warn.hpp"
+#include "../debug/warn.hpp"
 #include "../io/AudioManager.hpp" // for button-click sounds
 
 /// CONSTRUCTORS, DESTRUCTORS

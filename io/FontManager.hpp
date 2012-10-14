@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../graphics/draw.hpp"         // for Colour
 
 // custom assert
-#include "../assert.hpp"
+#include "../debug/assert.hpp"
 #define ASSERT_TTF(assertion, what)                     \
     ASSERT_AUX(assertion, what, TTF_GetError())
 

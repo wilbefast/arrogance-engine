@@ -18,8 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ResourceManager.hpp"
 
 #include "file.hpp"
-#include "../assert.hpp"
-#include "../warn.hpp"
+#include "../debug/assert.hpp"
+#include "../debug/warn.hpp"
 
 #include "tinyxml/tinyxml.h"
 

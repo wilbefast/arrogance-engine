@@ -23,8 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../global.hpp"       // Need for viewport
 #include "../platform.hpp"     // Needed for DIR_CUR, DIR_SEP, OpenGL/GLES
-#include "../assert.hpp"       // Needed for assertions
-#include "../warn.hpp"
+#include "../debug/assert.hpp"       // Needed for assertions
+#include "../debug/warn.hpp"
 #include "../math/wjd_math.hpp"    // Needed for ISPWR2
 
 /// CONSTRUCTORS, DESTRUCTORS

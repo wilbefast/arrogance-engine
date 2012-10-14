@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../graphics/draw.hpp" // for draw::rectangle
 #include "../global.hpp"
-#include "../warn.hpp"
-#include "../assert.hpp"
+#include "../debug/warn.hpp"
+#include "../debug/assert.hpp"
 #include "../platform.hpp"
 #include "../io/GraphicsManager.hpp"
 

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Game.hpp"
 
 #include "../io/file.hpp"           // ASSET_PATH
-#include "../assert.hpp"            // ASSERT
+#include "../debug/assert.hpp"            // ASSERT
 #include "MainMenu.hpp"             // previous scene
 
 #include "ModelViewState.hpp"

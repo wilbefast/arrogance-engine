@@ -18,8 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "AudioManager.hpp"
 
-#include "../assert.hpp"
-#include "../warn.hpp"
+#include "../debug/assert.hpp"
+#include "../debug/warn.hpp"
 
 #include "../math/wjd_math.hpp"
 #include "file.hpp" // for io::MAX_BLOCKS

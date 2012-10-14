@@ -18,8 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GameState.hpp"
 
-#include "../warn.hpp"
-#include "../assert.hpp"            // for platform specific ASSERT macros
+#include "../debug/warn.hpp"
+#include "../debug/assert.hpp"         // for platform specific ASSERT macros
 #include "../global.hpp"
 
 #include "../math/numerise.hpp"

@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <sstream>
 
-#include "../assert.hpp"
-#include "../warn.hpp"
+#include "../debug/assert.hpp"
+#include "../debug/warn.hpp"
 #include "../math/V3.hpp"
 
 #include "../graphics/Mesh3D.hpp"

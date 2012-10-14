@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FontManager.hpp"
 
 #include "file.hpp" // for GET_ASSET
-#include "../warn.hpp"
+#include "../debug/warn.hpp"
 #include "../graphics/Texture.hpp"
 
 #include "tinyxml/tinyxml.h"

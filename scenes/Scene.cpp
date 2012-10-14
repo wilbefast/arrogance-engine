@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Scene.hpp"
 
 #include "../global.hpp"
-#include "../assert.hpp"
-#include "../warn.hpp"
+#include "../debug/assert.hpp"
+#include "../debug/warn.hpp"
 
 /// CONSTRUCTORS
 

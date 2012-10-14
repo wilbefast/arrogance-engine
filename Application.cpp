@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "SDL_image.h" //IMG_Load
 
-#include "global.hpp"   // needed for application defaults
-#include "platform.hpp" // needed for LOG
-#include "assert.hpp"   // needed for platform specific ASSERT macros
-#include "warn.hpp"     // needed for WARN
+#include "global.hpp"         // needed for application defaults
+#include "platform.hpp"       // needed for LOG
+#include "debug/assert.hpp"   // needed for platform specific ASSERT macros
+#include "debug/warn.hpp"     // needed for WARN
 
 #include "io/file.hpp"                 // needed for ASSET_PATH macro
 #include "io/AudioManager.hpp"         // audio subsystem (singleton)

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Material.hpp"
 
-#include "../assert.hpp"
+#include "../debug/assert.hpp"
 #include "../platform.hpp" // for activate
 
 /* CREATION, DESTRUCTION */

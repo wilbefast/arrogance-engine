@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "SDL.h"                // for SDL_RWops
 
-#include "../assert.hpp"
-#include "../warn.hpp"
+#include "../debug/assert.hpp"
+#include "../debug/warn.hpp"
 
 #include "tinyxml/tinyxml.h"
 

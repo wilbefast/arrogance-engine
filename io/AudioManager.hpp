@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ResourceManager.hpp"
 
 // custom assertion
-#include "../assert.hpp"
+#include "../debug/assert.hpp"
 #define ASSERT_MIX(assertion, what)                     \
     ASSERT_AUX(assertion, what, Mix_GetError())
 
