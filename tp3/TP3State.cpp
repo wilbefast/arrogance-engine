@@ -4,6 +4,10 @@
 #include "../global.hpp"
 #include "../io/MeshManager.hpp"
 
+#include "OBJLoader.hpp"
+#include "../log.hpp"
+
+
 /// CREATION, DESTRUCTION
 
 TP3State::TP3State() :
@@ -18,6 +22,15 @@ int TP3State::startup()
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
         "TP3State starting GameState");
+
+  SCENE* scene = ReadOBJFile("assets/Island_001.obj");
+  log(LOG_INFO, "scene = %p", scene);
+  log(LOG_INFO, "\t objects = %d", scene->u32ObjectsCount); // 50
+  log(LOG_INFO, "\t vertices = %d", scene->u32VerticesCount); // 86284
+  log(LOG_INFO, "\t normals = %d", scene->u32NormalsCount); // 86268
+  log(LOG_INFO, "\t texture coordinates = %d", scene->u32UVCount); // 94068
+  log(LOG_INFO, "\t faces = %d", scene->u32FacesCount); // 59393
+  log(LOG_INFO, "\t materials = %d", scene->u32MaterialsCount); //34
 
   // Occlusion on
   //glEnable(GL_DEPTH_TEST);

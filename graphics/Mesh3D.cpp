@@ -160,6 +160,11 @@ void Mesh3D::finalise()
     (*i) -= mid;
     (*i) *= inv_max_side;
   }
+
+  log(LOG_INFO, "\t vertices = %d", vertices.size()); // 86284
+  log(LOG_INFO, "\t normals = %d", normals.size()); // 86268
+  log(LOG_INFO, "\t texture coordinates = %d", material.texture_coordinates.size()); // 94068
+  log(LOG_INFO, "\t faces = %d", faces.size()); // 59393
 }
 
 /* DRAW */
