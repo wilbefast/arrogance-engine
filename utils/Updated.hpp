@@ -16,30 +16,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INTRUSIVELINKED_HPP_INCLUDED
-#define INTRUSIVELINKED_HPP_INCLUDED
+#ifndef UPDATED_HPP_INCLUDED
+#define UPDATED_HPP_INCLUDED
 
-#include "Visitor.hpp"
-
-template <typename T>
-class IntrusiveLinked
+class Updated
 {
-  /* ATTRIBUTES */
-private:
-  IntrusiveLinked* next, prev;
+  //! NESTING
+public:
+  static enum update_res_t
+  {
+    CONTINUE, STOP
+  };
 
-  /* METHODS */
-
-  // constructors, destructors
-  IntrusiveLinked();
-  ~IntrusiveLinked();
-
-  // add a new link
-  void linkBefore(IntrusiveLinked* newbie);
-  void linkAfter(IntrusiveLinked* newbie);
-
-  // map function onto linked elements
-  void receiveVisitor(Visitor* v);
+  //! INTERFACE
+public:
+  virtual update_res_t update(float delta) = 0;
 };
 
-#endif // INTRUSIVELINKED_HPP_INCLUDED
+#endif // UPDATED_HPP_INCLUDED

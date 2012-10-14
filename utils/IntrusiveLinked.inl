@@ -25,8 +25,7 @@ prev(NULL)
 {
 }
 
-template<T>
-IntrusiveLinked<T>::~IntrusiveLinked()
+template<T> IntrusiveLinked<T>::~IntrusiveLinked()
 {
   if(next)
     next->prev = prev;
@@ -36,8 +35,21 @@ IntrusiveLinked<T>::~IntrusiveLinked()
 
 //! ADD A NEW LINK
 
-  linkBefore(IntrusiveLinked* il);
-  linkAfter(IntrusiveLinked* il);
+template<T> void IntrusiveLinked<T>::linkBefore(IntrusiveLinked* newbie)
+{
+  prev->next = newbie;
+  newbie->next = this;
+  newbie->prev = prev;
+  prev = newbie;
+}
+
+template<T> void IntrusiveLinked<T>::linkAfter(IntrusiveLinked* newbie)
+{
+  next->prev = newbie;
+  newbie->next = next;
+  newbie->prev = this;
+  next = newbie;
+}
 
 //! VISITOR
 

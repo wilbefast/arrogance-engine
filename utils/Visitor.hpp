@@ -16,30 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INTRUSIVELINKED_HPP_INCLUDED
-#define INTRUSIVELINKED_HPP_INCLUDED
+#ifndef VISITOR_HPP_INCLUDED
+#define VISITOR_HPP_INCLUDED
 
-#include "Visitor.hpp"
-
-template <typename T>
-class IntrusiveLinked
+class Visitor()
 {
-  /* ATTRIBUTES */
-private:
-  IntrusiveLinked* next, prev;
-
-  /* METHODS */
-
-  // constructors, destructors
-  IntrusiveLinked();
-  ~IntrusiveLinked();
-
-  // add a new link
-  void linkBefore(IntrusiveLinked* newbie);
-  void linkAfter(IntrusiveLinked* newbie);
-
-  // map function onto linked elements
-  void receiveVisitor(Visitor* v);
+  //! INTERFACE
+  virtual void visit(void* target) = 0;
 };
 
-#endif // INTRUSIVELINKED_HPP_INCLUDED
+#endif // VISITOR_HPP_INCLUDED
