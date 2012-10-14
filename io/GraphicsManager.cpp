@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "file.hpp"
 #include "tinyxml/tinyxml.h"
 
+using namespace std;
+
 /// SINGLETON
 
 GraphicsManager* GraphicsManager::instance = NULL;

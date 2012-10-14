@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 typedef V2<GLfloat> tex_coord_t;
-typedef vector<tex_coord_t> tex_coord_list_t;
+typedef std::vector<tex_coord_t> tex_coord_list_t;
 typedef tex_coord_list_t::iterator tex_coord_list_it;
 
 class Material

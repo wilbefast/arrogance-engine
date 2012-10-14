@@ -26,11 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 typedef V3<GLubyte> face_t;
-typedef vector<face_t> face_list_t;
+typedef std::vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
 
 typedef V3<GLfloat> normal_t;
-typedef vector<normal_t> normal_list_t;
+typedef std::vector<normal_t> normal_list_t;
 typedef vertex_list_t::iterator normal_list_it;
 
 

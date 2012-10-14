@@ -20,8 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wjd_math.h"
 
-using namespace std;
-
 // Constructors
 
 // Null vector
@@ -343,13 +341,13 @@ V2<T> inter(V2<T>const a, V2<T>const b, T f)
 /* OUTSTREAM OPERATOR */
 
 template <typename T>
-inline void V2<T>::print(ostream& stream) const
+inline void V2<T>::print(std::ostream& stream) const
 {
   stream << '(' << x << ',' << y << ')';
 }
 
 template <typename T>
-inline ostream& operator<<(std::ostream& stream, V2<T> const& v)
+inline std::ostream& operator<<(std::ostream& stream, V2<T> const& v)
 {
   v.print(stream);
   return stream;

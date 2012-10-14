@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ResourceElement.hpp"
 
+using namespace std;
+
 ResourceElement::ResourceElement(Thing* owner, unsigned int init_max,
                                                 int init_amount) :
 ThingElement(owner),

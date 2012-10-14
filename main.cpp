@@ -24,9 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scenes/Game.hpp"  /// FIXME
 #include "tp2/math_test.hpp"
 
-using namespace std;
-
-
 int main(int argc, char* argv[])
 {
   // Initialise random numbers

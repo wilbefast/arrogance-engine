@@ -16,18 +16,37 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Inline file: a special implementation that is included
+//! CONSTRUCTORS, DESTRUCTORS
 
-
-inline str_id numerise(const char* str)
+template<T>
+IntrusiveLinked<T>::IntrusiveLinked() :
+next(NULL),
+prev(NULL)
 {
-    str_id hash = INIT_HASH;
-    unsigned int i = 0;
-    while(str[i])
-    {
-        hash = REHASH(str[i], hash);
-        i++;
-    }
-    return hash;
 }
 
+template<T>
+IntrusiveLinked<T>::~IntrusiveLinked()
+{
+  if(next)
+    next->prev = prev;
+  if(prev)
+    prev->next = next;
+}
+
+//! ADD A NEW LINK
+
+  linkBefore(IntrusiveLinked* il);
+  linkAfter(IntrusiveLinked* il);
+
+//! VISITOR
+
+template<T> void IntrusiveLinked<T>::receiveVisitor(Visitor* v)
+{
+  IntrusiveLinked* current = this;
+  while (current != NULL)
+  {
+    v->visit(current);
+    current = current->next;
+  }
+}

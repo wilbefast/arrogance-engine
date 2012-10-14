@@ -20,8 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wjd_math.h"
 
-using namespace std;
-
 // Constructors
 
 // Uninitialised matrix
@@ -258,7 +256,7 @@ template <typename T>
 inline M44<T> M44<T>::getInverse() const
 {
   if(!isScaleFree())
-    cout << "MATRIX IS NOT SCALE FREE!" << endl;
+    std::cout << "MATRIX IS NOT SCALE FREE!" << std::endl;
 
   M44<T> Rt =
     M44<T>(col[0].noW(), col[1].noW(), col[2].noW(), V4<T>()).getTranspose();
@@ -364,19 +362,19 @@ inline M44<T> scaleMatrix(T xscale, T yscale, T zscale)
 /* OUTSTREAM OPERATOR */
 
 template <typename T>
-inline void M44<T>::print(ostream& stream) const
+inline void M44<T>::print(std::ostream& stream) const
 {
-  stream << endl;
+  stream << std::endl;
   for(size_t i = 0; i < 4; i ++)
   {
     stream << '[' << row(i) << ']';
     if(i != 3)
-      stream << endl;
+      stream << std::endl;
   }
 }
 
 template <typename T>
-inline ostream& operator<<(std::ostream& stream, M44<T> const& m)
+inline std::ostream& operator<<(std::ostream& stream, M44<T> const& m)
 {
   m.print(stream);
   return stream;

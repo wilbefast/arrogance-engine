@@ -38,15 +38,10 @@ public:
   V2();
   V2(T x, T y);
   V2(std::istream& in);
+  template <typename U> explicit V2(const V2<U>& source);
 
-  template <typename U>
-  explicit V2(const V2<U>& source);
-
-  // Cast operator: Conversion from one Vector type to another ;D
-  template <typename U>
-  operator V2<U>() const;
-
-  // Conversion to a boolean
+  // Cast operators
+  template <typename U> operator V2<U>() const;
   operator bool() const;
 
   // Arithmetic operators

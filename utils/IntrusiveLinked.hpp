@@ -16,18 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Inline file: a special implementation that is included
+#ifndef INTRUSIVELINKED_HPP_INCLUDED
+#define INTRUSIVELINKED_HPP_INCLUDED
 
-
-inline str_id numerise(const char* str)
+template <typename T>
+class IntrusiveLinked
 {
-    str_id hash = INIT_HASH;
-    unsigned int i = 0;
-    while(str[i])
-    {
-        hash = REHASH(str[i], hash);
-        i++;
-    }
-    return hash;
-}
+  /* ATTRIBUTES */
+private:
+  IntrusiveLinked* next, prev;
 
+  /* METHODS */
+
+  // constructors, destructors
+  IntrusiveLinked();
+  ~IntrusiveLinked();
+
+  // add a new link
+  linkBefore(IntrusiveLinked* il);
+  linkAfter(IntrusiveLinked* il);
+
+  // map function onto linked elements
+  receiveVisitor(Visitor* v);
+};
+
+#endif // INTRUSIVELINKED_HPP_INCLUDED

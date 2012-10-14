@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debug/assert.h"          // for ASSERT macro
 #include "../io/file.hpp"               // for ASSET_PATH
 
+using namespace std;
+
 /* CREATION, DESTRUCTION */
 
 Mesh3D::Mesh3D() :

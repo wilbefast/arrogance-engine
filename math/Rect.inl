@@ -20,9 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wjd_math.h"
 
-
-using namespace std;
-
 /// CONSTRUCTORS
 
 // Point-rectangle
@@ -359,14 +356,14 @@ inline void Rect<T>::stretch_centered(T k)
 /// OUTSTREAM OPERATOR
 
 template <typename T>
-inline void Rect<T>::print(ostream& stream) const
+inline void Rect<T>::print(std::ostream& stream) const
 {
     stream << "(" << x << ", " << y << ", "
                   << w << ", " << h << ")";
 }
 
 template <typename T>
-inline ostream& operator<<(std::ostream& stream, Rect<T> const& r)
+inline std::ostream& operator<<(std::ostream& stream, Rect<T> const& r)
 {
     r.print(stream);
     return stream;
