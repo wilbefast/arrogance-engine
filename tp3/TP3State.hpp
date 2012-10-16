@@ -4,6 +4,8 @@
 #include "../scenes/GameState.hpp"
 #include "../math/V3.hpp"
 
+#include "Engine.hpp"
+
 class TP3State : public GameState
 {
   /// CONSTANTS
@@ -14,6 +16,7 @@ private:
 private:
   iV3 camera_angle;
   iV3 camera_offset;
+  Engine engine;
 
   /// METHODS
 public:

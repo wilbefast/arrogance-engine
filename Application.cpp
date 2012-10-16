@@ -101,8 +101,8 @@ int Application::startup()
   ASSERT(FontManager::getInstance()->startup()
     == EXIT_SUCCESS, "Starting Font Manager");
   // Start the Mesh Manager
-  ASSERT(MeshManager::getInstance()->startup()
-    == EXIT_SUCCESS, "Starting Mesh Manager");
+  /*ASSERT(MeshManager::getInstance()->startup()
+    == EXIT_SUCCESS, "Starting Mesh Manager"); */ //! FIXME
 
 // Load the initial scene
   ASSERT(scene->startup() == EXIT_SUCCESS, "Loading initial Scene");
@@ -228,8 +228,8 @@ int Application::startSDL()
 
 int Application::startGL()
 {
-  // Green background by default
-  glClearColor(0, 255, 0, 255);
+  // Black background by default
+  glClearColor(0, 0, 0, 255);
 
   // Texturing
   glEnable(GL_TEXTURE_2D);
@@ -238,6 +238,7 @@ int Application::startGL()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
 
   // Start in 2D mode by default
   draw::use2D();
@@ -249,7 +250,7 @@ int Application::startGL()
 void Application::draw()
 {
   // Clear the entire screen, reset everything back to normal
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //! FIXME - only clear depth in 3D mode?
   glLoadIdentity();
 
   // Draw any objects required by the current scene

@@ -69,7 +69,8 @@ void draw::use2D()
   // Set up viewport
   glViewport(0, 0, global::viewport.x, global::viewport.y);
   glMatrixMode(GL_PROJECTION);
-  glOrtho(0, global::viewport.x, global::viewport.y, 0, -10, 10);
+  glOrtho(0, global::viewport.x, global::viewport.y, 0, -1, 1);
+  glMatrixMode(GL_MODELVIEW);
 
   // Clean the slate
   glLoadIdentity();
