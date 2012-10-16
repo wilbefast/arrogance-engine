@@ -19,8 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FONTMANAGER_HPP_INCLUDED
 
 #include "SDL.h"
-//#include "SDL_ttf.h"
-#include "/usr/local/include/SDL2/SDL_ttf.h"
+#include "SDL_ttf.h"
 
 #include "ResourceManager.hpp"
 

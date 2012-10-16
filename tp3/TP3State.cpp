@@ -4,8 +4,12 @@
 #include "../global.hpp"
 #include "../io/MeshManager.hpp"
 
+#include "../graphics/Mesh3D.hpp"
+
 #include "OBJLoader.hpp"
 #include "../debug/log.h"
+
+using namespace std;
 
 
 /// CREATION, DESTRUCTION
@@ -17,11 +21,14 @@ camera_offset()
 {
 }
 
+#include <iostream> /// FIXME
 int TP3State::startup()
 {
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
         "TP3State starting GameState");
+
+  Mesh3D& m = MeshManager::getInstance()->mesh;
 
   SCENE* scene = ReadOBJFile("assets/Island_001.obj");
   log(LOG_INFO, "scene = %p", scene);
@@ -31,6 +38,19 @@ int TP3State::startup()
   log(LOG_INFO, "\t texture coordinates = %d", scene->u32UVCount); // 94068
   log(LOG_INFO, "\t faces = %d", scene->u32FacesCount); // 59393
   log(LOG_INFO, "\t materials = %d", scene->u32MaterialsCount); //34
+
+  //! CHECK UV COORDINATES
+  /*puts("CHECKING UV COORDINATES");
+  for(unsigned int i = 0; i < scene->u32UVCount; i++)
+  {
+    m.faces[i]
+    fV3 my_v = m.vertices[i],
+        other_v = fV3(scene->pVertices[i].fX,
+                      scene->pVertices[i].fY, scene->pVertices[i].fZ);
+    if(my_v != other_v)
+      puts("UV problem!");
+  }
+  puts("DONE CHECKING UV COORDINATES");*/
 
   // Occlusion on
   //glEnable(GL_DEPTH_TEST);

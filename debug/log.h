@@ -16,34 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef LOG_HPP_INCLUDED
+#define LOG_HPP_INCLUDED
 
-#include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#ifdef __ANDROID__
+	#define LOG_INFO ANDROID_LOG_INFO
+	#define LOG_WARN ANDROID_LOG_WARN
+	#define LOG_ERROR ANDROID_LOG_ERROR
+#else // LINUX, MAC, WINDOWS
+  #define LOG_INFO 0
+	#define LOG_WARN 1
+	#define LOG_ERROR 2
+#endif // #ifdef __ANDROID__
 
-#include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
+void log(unsigned int level, const char* format, ...);
 
-/// CREATION & DESTRUCTION
-
-Game::Game(bool tutorial) :
-Scene(new TP1State())
-{
-}
-
-int Game::startup()
-{
-  ASSERT(Scene::startup() == EXIT_SUCCESS, "Game generic startup");
-  // all clear !
-  return EXIT_SUCCESS;
-}
-
-Game::~Game()
-{
-}
-
-Scene* Game::previous()
-{
-  return new MainMenu();
-}
+#endif // LOG_HPP_INCLUDED

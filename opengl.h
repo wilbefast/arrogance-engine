@@ -16,34 +16,29 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef PLATFORM_HPP_INCLUDED
+#define PLATFORM_HPP_INCLUDED
 
-#include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#ifdef __ANDROID__
+	#include <GLES/gl.h>    	//OpenGL ES rather than OpenGL
 
-#include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
+	#define GL_V_MAJOR 2    	//GLES 2.0
+	#define GL_V_MINOR 0
+	#define glOrtho(a,b,c,d,e,f) glOrthof(a,b,c,d,e,f) // Renaming hack
 
-/// CREATION & DESTRUCTION
+#else // LINUX, MAC, WINDOWS
 
-Game::Game(bool tutorial) :
-Scene(new TP1State())
-{
-}
+  #ifdef WIN32
+    #include <windows.h>    // must be included before GL
+    #define GL_V_MAJOR 1    // OpenGL 1.1
+    #define GL_V_MINOR 1
+  #else
+    #define GL_V_MAJOR 1    // OpenGL 1.5
+    #define GL_V_MINOR 5
+  #endif // WIN32
 
-int Game::startup()
-{
-  ASSERT(Scene::startup() == EXIT_SUCCESS, "Game generic startup");
-  // all clear !
-  return EXIT_SUCCESS;
-}
+	#include <GL/gl.h>  // for OpenGL rather than OpenGL ES
 
-Game::~Game()
-{
-}
+#endif // __ANDROID__
 
-Scene* Game::previous()
-{
-  return new MainMenu();
-}
+#endif // PLATFORM_HPP_INCLUDED

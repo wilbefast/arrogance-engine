@@ -16,34 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef WJD_MATH_HPP_INCLUDED
+#define WJD_MATH_HPP_INCLUDED
 
-#include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#include <cmath>
+#include <stdlib.h>
 
-#include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
+#define PI 3.14159265
+#define RAD2DEG(r) (r*180/PI)
+#define MAX(x,y) (x>y?x:y)
+#define MIN(x,y) (x<y?x:y)
+#define SIGN(x) (x>0?1:(x<0?-1:0))
+#define ABS(x) ((x)*SIGN(x))
+#define SQR(x) ((x)*(x))
+#define RAND() (((double)rand())/RAND_MAX)
+#define RAND_BETWEEN(x,y) (RAND()*ABS(x-y)+MIN(x,y))
+#define RAND_SIGN() ((RAND()<0.5)?-1:1)
+#define ISPWR2(n) !(n & (n-1))
 
-/// CREATION & DESTRUCTION
+int nextpwr2(int n);
 
-Game::Game(bool tutorial) :
-Scene(new TP1State())
-{
-}
-
-int Game::startup()
-{
-  ASSERT(Scene::startup() == EXIT_SUCCESS, "Game generic startup");
-  // all clear !
-  return EXIT_SUCCESS;
-}
-
-Game::~Game()
-{
-}
-
-Scene* Game::previous()
-{
-  return new MainMenu();
-}
+#endif // WJD_MATH_HPP_INCLUDED
