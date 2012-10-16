@@ -162,33 +162,11 @@ void Mesh3D::finalise()
     (*i) -= mid;
     (*i) *= inv_max_side;
   }
-
-  log(LOG_INFO, "\t vertices = %d", vertices.size()); // 86284
-  log(LOG_INFO, "\t normals = %d", normals.size()); // 86268
-  log(LOG_INFO, "\t texture coordinates = %d", material.texture_coordinates.size()); // 94068
-  log(LOG_INFO, "\t faces = %d", faces.size()); // 59393
-  log(LOG_INFO, "\t min = (%f,%f) max = (%f, %f)", min.x, min.y, max.x, max.y);
 }
 
 /* DRAW */
 
 void Mesh3D::draw()
-{
-	// clear and reset
-	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-  // draw this object's faces
-  glBegin(GL_POINTS);
-    for(size_t i = 0; i < vertices.size(); i++)
-    {
-      cout << "sending " << vertices[i] << endl;
-      glVertex3fv(vertices[i].front());
-    }
-  glEnd();
-}
-/*
 {
   // Material
   material.activate();
@@ -211,4 +189,4 @@ void Mesh3D::draw()
   glDisableClientState(GL_NORMAL_ARRAY);
   material.deactivate();
   glLoadIdentity();
-}*/
+}

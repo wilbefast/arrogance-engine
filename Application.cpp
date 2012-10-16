@@ -207,13 +207,18 @@ int Application::startSDL()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, GL_V_MAJOR);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, GL_V_MINOR);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
 #else // SDL1.6
+
   screen = SDL_SetVideoMode(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H,
                             WINDOW_C_DEPTH, SDL_OPENGL);
   ASSERT_SDL(screen, "Creating SDL1.6 application screen-surface");
   global::viewport = fV2(screen->w, screen->h);
   SDL_WM_SetCaption(APP_NAME, NULL);
+
 #endif // SDL2
+
+  // Calculate the scale of the window relative the the default size
   global::scale = fV2(global::viewport.x / (float)WINDOW_DEFAULT_W,
                         global::viewport.y / (float)WINDOW_DEFAULT_H);
 
@@ -223,25 +228,19 @@ int Application::startSDL()
 
 int Application::startGL()
 {
-  // Black background by default
-  glClearColor(0, 0, 0, 255);
+  // Green background by default
+  glClearColor(0, 255, 0, 255);
+
+  // Texturing
   glEnable(GL_TEXTURE_2D);
 
-  // Blending
+  // Blending and anti-aliasing
   glEnable(GL_BLEND);
-  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  // Anti-aliasing
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-  // Viewport and world container
-  glViewport(0, 0, global::viewport.x, global::viewport.y);
-  glMatrixMode(GL_PROJECTION);
-  glOrtho(0, global::viewport.x, global::viewport.y, 0, -10, 10);
-          //NB - I'm using a macro to change this to "glOrthof" for GLES1.1
-  glMatrixMode(GL_MODELVIEW);
 
-  // Always start with a clean slate ;)
-  glLoadIdentity();
+  // Start in 2D mode by default
+  draw::use2D();
 
   // No problems, return success code!
   return EXIT_SUCCESS;
@@ -289,7 +288,6 @@ int Application::treatEvents()
 
   // static to avoid reallocating it ever time we run the function
   static SDL_Event event;
-
 
   // write each event to our static variable
   while (SDL_PollEvent(&event))

@@ -24,11 +24,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../math/V2.hpp"
 #include "../math/V3.hpp"
 
-#define CIRCLE_N_SEGMENTS 12 /// FIXME - should depend on circle size, no?
+#define CIRCLE_BASE_SEGMENTS 6
+
+#define NEAR 0.5
+#define FAR 1000
+#define VIEW_FIELD 60
 
 namespace draw
 {
   /// FUNCTIONS
+  // set draw mode
+  void use2D();
+  void use3D();
+  // draw primitives
   void rectangle(fRect rect, Colour c = Colour());
   void line(fV2 start, fV2 end, Colour c = Colour(), float thickness = 1.0f);
   void line(fV3 start, fV3 end, Colour c = Colour(), float thickness = 1.0f);
