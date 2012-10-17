@@ -44,6 +44,9 @@ int MainMenu::startup()
   // pass up hierarchy
   ASSERT(Scene::startup() == EXIT_SUCCESS, "MainMenu generic startup");
 
+  // set 2D mode
+  draw::use2D();
+
   // get the texture from the resource manager
   texture = GraphicsManager::getInstance()->get_texture("menus");
 

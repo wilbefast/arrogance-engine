@@ -56,15 +56,18 @@ int Mesh3D::load_obj(const char* filename)
     // vertex
     if(key == "v ")
       add_vertex(vertex_t(s));
-    // face
-    else if(key == "f ")
-      parse_faces(s);
     // vertex normal
     else if(key == "vn")
       normals.push_back(normal_t(s));
     // texture coordinates
     else if(key == "vt")
       material.add_texture_coordinate(tex_coord_t(s));
+    // face
+    else if(key == "f ")
+      parse_faces(s);
+    // group
+    else if (key == "g ")
+      cout << "groupe!" << endl;
     // material definition
     else if(key == "mt" && line.substr(0, 6) == "mtllib")
     {
@@ -156,17 +159,32 @@ void Mesh3D::finalise()
   float inv_max_side = 1.0f / (MAX(MAX(size.x, size.y), size.z));
 
   // center around the origin (0, 0, 0) and normalise
-  vertex_t mid = (max + min) / 2.0f;
+  /*vertex_t mid = (max + min) / 2.0f;
   for(vertex_list_it i = vertices.begin(); i != vertices.end(); i++)
   {
     (*i) -= mid;
     (*i) *= inv_max_side;
-  }
+  }*/
 }
 
 /* DRAW */
 
+
 void Mesh3D::draw()
+{
+	// clear and reset
+	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+  // move camera
+	glMatrixMode(GL_PROJECTION);
+
+  glBegin(GL_POINTS);
+	for(size_t i = 0; i < vertices.size(); i++)
+    glVertex3fv(vertices[i].front());
+  glEnd();
+}
+/*
 {
   // Material
   material.activate();
@@ -181,12 +199,12 @@ void Mesh3D::draw()
   glNormalPointer(GL_FLOAT, 0, &normals.front());
 
   // Draw the triangles using the specified normals
-  glDrawElements(GL_POINTS, 3*faces.size(), GL_UNSIGNED_BYTE, &faces.front());
+  glDrawElements(GL_TRIANGLES, 3*faces.size(), GL_UNSIGNED_BYTE, &faces.front());
 
   // Shut down
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_INDEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
-  material.deactivate();
+  //material.deactivate();
   glLoadIdentity();
-}
+}*/

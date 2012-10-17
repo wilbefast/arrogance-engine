@@ -22,7 +22,7 @@ private:
 
   //! METHODS
 public:
-  void render(unsigned int u32Width, unsigned int u32Height);
+  void render();
   void setup();
 	void keydown(int key);
 };

@@ -14,17 +14,62 @@ static void glPerspective(GLdouble fov, GLdouble aspect, GLdouble near, GLdouble
   glFrustum(-width, width, -height, height, near, far);
 }
 
-void Engine::render(unsigned int u32Width, unsigned int u32Height)
+void Engine::render()
 {
 	// clear and reset
 	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-	// set up camera frustum
+  // move camera
 	glMatrixMode(GL_PROJECTION);
-	glPerspective(60, u32Width/(float)u32Height, 0.5, 1000); // angle, aspect ratio, front, back
+	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
+
+  // draw this object's faces
+  glBegin(GL_POINTS);
+    // for each triangle in this object
+    for(unsigned int v_i = 0; v_i < scene->u32VerticesCount; v_i++)
+      glVertex3fv(&(scene->pVertices[v_i].fX));
+    // finished drawing the triangles
+  glEnd();
+}
+/*
+{
+	// clear and reset
+	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+  // move camera
+	glMatrixMode(GL_PROJECTION);
+	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
+
+  // draw this object's faces
+  glBegin(GL_TRIANGLES);
+    // for each triangle in this object
+    for(unsigned int tri_i = 0; tri_i < scene->u32FacesCount; tri_i++)
+    {
+				// cache the current triangle
+				FACE const& tri = scene->pFaces[tri_i];
+
+				// cache vertices
+				VERTEX* v[3] = { &(scene->pVertices[tri.pu32Vertices[0]]),
+											&(scene->pVertices[tri.pu32Vertices[1]]),
+											&(scene->pVertices[tri.pu32Vertices[2]]) };
+
+				glVertex3fv(&(v[0]->fX));
+				glVertex3fv(&(v[1]->fX));
+				glVertex3fv(&(v[2]->fX));
+			}
+    // finished drawing the triangles
+  glEnd();
+}
+*/
+/*{
+	// clear and reset
+	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
 
 	// move camera
+	glMatrixMode(GL_PROJECTION);
 	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
 
 	// for each object
@@ -55,7 +100,8 @@ void Engine::render(unsigned int u32Width, unsigned int u32Height)
 		// draw this object's faces
 		glBegin(GL_TRIANGLES);
 			// for each triangle in this object
-			for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0; tri_cnt < obj.u32FacesCount; tri_i++, tri_cnt++)
+			for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0;
+          tri_cnt < obj.u32FacesCount; tri_i++, tri_cnt++)
 			{
 				// cache the current triangle
 				FACE const& tri = scene->pFaces[tri_i];
@@ -99,7 +145,7 @@ void Engine::render(unsigned int u32Width, unsigned int u32Height)
 
 	}
 
-}
+}*/
 
 void Engine::setup()
 {

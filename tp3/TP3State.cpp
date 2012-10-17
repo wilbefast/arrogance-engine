@@ -10,6 +10,8 @@
 #include "OBJLoader.hpp"
 #include "../debug/log.h"
 
+#define USE_MOLIS false
+
 using namespace std;
 
 
@@ -23,7 +25,6 @@ engine()
 {
 }
 
-#include <iostream> /// FIXME
 int TP3State::startup()
 {
   // basic startup
@@ -32,7 +33,11 @@ int TP3State::startup()
 
   // load the 3D scene
   draw::use3D();
-  engine.setup();
+  if(USE_MOLIS)
+    engine.setup();
+  else
+    MeshManager::getInstance()->startup();
+  puts("ready");
 
   // all clear
   return EXIT_SUCCESS;
@@ -52,10 +57,11 @@ int TP3State::shutdown()
 
 int TP3State::update(float delta)
 {
-  // Update camera angle and position
-  uV2 const& p = input.last_hover;
-  camera_angle.x = CAMERA_MAX_ANGLE*p.x/global::viewport.x*2 - CAMERA_MAX_ANGLE;
-	camera_angle.y = CAMERA_MAX_ANGLE*p.y/global::viewport.y*2 - CAMERA_MAX_ANGLE;
+  if(input.clicking)
+  {
+    if(USE_MOLIS)
+      engine.keydown(SDLK_SPACE);
+  }
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -68,7 +74,11 @@ int TP3State::update(float delta)
 
 void TP3State::draw()
 {
-  engine.render(global::viewport.x,global::viewport.y);
+  draw::use3D();
+  if(USE_MOLIS)
+    engine.render();
+  else
+    MeshManager::getInstance()->mesh.draw();
 
   // Draw dynamic game objects
   GameState::draw();

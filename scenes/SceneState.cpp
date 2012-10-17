@@ -56,7 +56,7 @@ void SceneState::draw()
 
 /// ACCESSORS
 
-SceneState::Input* SceneState::getInput()
+Input* SceneState::getInput()
 {
   return &input;
 }

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCENESTATE_HPP_INCLUDED
 #define SCENESTATE_HPP_INCLUDED
 
-//#include "numerise.hpp"     // str_id
+#include "Input.hpp"
 #include "Button.hpp"
 #include "../math/V2.hpp"
 
@@ -27,18 +27,6 @@ class SceneState
 {
   /// NESTING
 public:
-  class Input
-  {
-    public:
-    // attributes
-    uV2 last_touch, last_hover;
-    bool clicking, clicking_previous;
-    Button* last_button;
-    // constructor
-    Input() : clicking(false), clicking_previous(false), last_button(NULL)
-    {}
-  };
-
   enum UpdateResult
   {
       CONTINUE,
@@ -64,11 +52,13 @@ public:
   // Update and draw dynamic objects, if needed
   virtual int update(float delta);
   virtual void draw();
-  // Accessors
+  // Input
   Input* getInput();
+  // Input -- mouse or touch-pad
   void setCursor(uV2 new_cursor_position, bool new_clicking);
   str_id releasedOnButton();
   bool newClick() const;
+  // Input -- keyboard
 };
 
 #endif // SCENESTATE_HPP_INCLUDED

@@ -70,16 +70,16 @@ void draw::use2D()
   glViewport(0, 0, global::viewport.x, global::viewport.y);
   glMatrixMode(GL_PROJECTION);
   glOrtho(0, global::viewport.x, global::viewport.y, 0, -1, 1);
-  glMatrixMode(GL_MODELVIEW);
 
   // Clean the slate
+  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
 
 void draw::use3D()
 {
   // Set up depth
-  glEnable(GL_DEPTH_TEST);
+  /*glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glFrontFace(GL_CCW);
   glDepthFunc(GL_LEQUAL);
@@ -89,13 +89,14 @@ void draw::use3D()
 	// Set up lighting
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT1);*/
 
   // Set up camera frustrum
   glMatrixMode(GL_PROJECTION);
   glPerspective(VIEW_FIELD, global::viewport.x/global::viewport.y, NEAR, FAR);
 
   // Clean the slate
+  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
 

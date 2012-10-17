@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../io/MeshManager.hpp"
 
-
+#include "../graphics/draw.hpp"
 
 #include "../graphics/Joint.hpp"
 Joint joint1(NULL, vertex_t(0.0, 0.0, 0.0));
@@ -46,17 +46,11 @@ int ModelViewState::startup()
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
         "ModelViewState starting GameState");
+  draw::use3D();
 
-  // Occlusion on
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glFrontFace(GL_CW);
-  glDepthFunc(GL_LEQUAL);
-  glClearDepth(1.0f);
-  glClear(GL_DEPTH_BUFFER_BIT);
-  // Lighting on
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  ASSERT(MeshManager::getInstance()->startup()
+    == EXIT_SUCCESS, "ModelViewState ---- Starting Mesh Manager...");
+  puts("ModelViewState ---- DONE !");
 
   // all clear
   return EXIT_SUCCESS;
@@ -67,13 +61,6 @@ int ModelViewState::shutdown()
   // basic shutdown
   ASSERT(GameState::shutdown() == EXIT_SUCCESS,
         "ModelViewState stopping GameState");
-
-  // Occlusion off
-  glDisable(GL_DEPTH_TEST);
-  glDisable(GL_CULL_FACE);
-  // Lighting off
-  glDisable(GL_LIGHTING);
-  glDisable(GL_LIGHT0);
 
   // all clear
   return EXIT_SUCCESS;
