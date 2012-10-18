@@ -19,9 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MESHMANAGER_HPP_INCLUDED
 #define MESHMANAGER_HPP_INCLUDED
 
+#include "ResourceManager.hpp"
 #include "../graphics/Mesh3D.hpp"
 
-class MeshManager
+class MeshManager : public ResourceManager
 {
   /// CONSTANTS
 private:
@@ -33,20 +34,20 @@ public:
   static MeshManager* getInstance();
 
   /// ATTRIBUTES
-private:
-  bool started;
 public: /// FIXME
   Mesh3D mesh;
 
   /// METHODS
-public:
+private:
   // creation, destruction
   MeshManager();
-  int startup();
-  int shutdown();
-  // load external resources
-  int load_obj(const char* filename);
-  int load_mtl(const char* filename, Material& destination);
+public:
+  ~MeshManager();
+  // loading -- overrides ResourceManager
+  int load();
+  int unload();
+  int parse_root(void* root_handle);
+  int parse_element(void* element);
 };
 
 #endif // MESHMANAGER_HPP_INCLUDED

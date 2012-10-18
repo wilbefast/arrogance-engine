@@ -264,6 +264,7 @@ void Mesh3D::unitise()
 
 
 void Mesh3D::draw()
+/*
 {
   // draw this object's faces
   glBegin(GL_TRIANGLES);
@@ -279,17 +280,8 @@ void Mesh3D::draw()
     }
     // finished drawing the triangles
   glEnd();
-}
-
-/*
+}*/
 {
-	// clear and reset
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
-
-	// move camera
-	glMatrixMode(GL_PROJECTION);
-
 	// for each object
   do
 	{
@@ -297,7 +289,7 @@ void Mesh3D::draw()
     //current_group->material.activate();
 
 		// draw the group's faces
-		glBegin(GL_POINTS);
+		glBegin(GL_TRIANGLES);
 			// for each triangle in this object
 			for(size_t face_i = current_group->first_face;
           face_i <= current_group->last_face; face_i++)
@@ -306,17 +298,17 @@ void Mesh3D::draw()
 				face_t const& face = faces[face_i];
 
 				// first vertex
-				//glNormal3fv(normals[face.normal_i[0]].front());
+				glNormal3fv(normals[face.normal_i[0]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
 				glVertex3fv(vertices[face.vertex_i[0]].front());
 
 				// second vertex
-				//glNormal3fv(normals[face.normal_i[1]].front());
+				glNormal3fv(normals[face.normal_i[1]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
 				glVertex3fv(vertices[face.vertex_i[1]].front());
 
 				// third vertex
-				//glNormal3fv(normals[face.normal_i[2]].front());
+				glNormal3fv(normals[face.normal_i[2]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
 				glVertex3fv(vertices[face.vertex_i[2]].front());
 			}
@@ -333,7 +325,7 @@ void Mesh3D::draw()
 	while(current_group != first_group);
 
 }
-*/
+
 
 /*
 {
@@ -365,35 +357,23 @@ void Mesh3D::draw()
 
 void Mesh3D::print(ostream& out) const
 {
+  // print all the vertices
+  for(size_t v_i = 0; v_i < vertices.size(); v_i++)
+    out << TAG_VERTEX << vertices[v_i] << endl;
+
+  // print all the texture (UV) coordinates
+  //! TODO
+
+  // print all the normals
+  for(size_t n_i = 0; n_i < normals.size(); n_i++)
+    out << TAG_NORMAL << ' ' << normals[n_i] << endl;
+
+  // print each group
   Group* group_i = first_group;
   do
   {
     // start group
     out << TAG_GROUP << endl;
-
-    // print the group's vertices
-    /*for(size_t face_i = current_group->first_face;
-    face_i <= current_group->last_face; face_i++)
-    {
-      for(size_t v_i = 0; v_i < 3; v_i++)
-      {
-        out << TAG_VERTEX;
-        vertex_t const& v = vertices[faces[face_i].vertex_i[v_i]];
-        out << v.x << ' ' << v.y << ' ' << v.z << endl;
-      }
-    }
-
-    // print the group's normals
-    for(size_t face_i = group_i->first_face;
-    face_i <= group_i->last_face; face_i++)
-    {
-      for(size_t v_i = 0; v_i < 3; v_i++)
-      {
-        out << TAG_NORMAL << ' ';
-        vertex_t const& v = normals[faces[face_i].vertex_i[v_i]];
-        out << v.x << ' ' << v.y << ' ' << v.z << endl;
-      }
-    }*/
 
     // print the group's faces
     for(size_t face_i = group_i->first_face;

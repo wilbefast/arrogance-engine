@@ -44,7 +44,7 @@ typedef face_list_t::iterator face_list_it;
 
 typedef V3<GLfloat> normal_t;
 typedef std::vector<normal_t> normal_list_t;
-typedef vertex_list_t::iterator normal_list_it;
+typedef normal_list_t::iterator normal_list_it;
 
 
 class Mesh3D

@@ -5,6 +5,8 @@
 
 #include <math.h>
 #include <iostream>
+#include <fstream>
+
 
 using namespace std;
 
@@ -13,7 +15,7 @@ void Engine::setup()
   camera.target_x = camera.target_y  = camera.target_z = 0.0f;
 
 	// load the scene
-  scene = ReadOBJFile("assets/Island_001.obj");
+  scene = ReadOBJFile("assets/rubik.obj");
 
 	// load textures into video memory
 	glEnable(GL_TEXTURE_2D);
@@ -77,7 +79,10 @@ void Engine::setup()
 	}
 
 	// print, for debug purposes
-	//print();
+
+  ofstream f;
+  f.open ("moulis_mesh.obj");
+	print(f);
 }
 
 void Engine::render()
@@ -101,7 +106,7 @@ void Engine::render()
 
 		// get this object's material
 		IMAGE_DATA* image = NULL;
-		if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
+		/*if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
 		{
 			// cache material reference
 			MATERIAL& m = scene->pMaterials[obj.u32Material];
@@ -116,7 +121,7 @@ void Engine::render()
 			image = m.pDiffuse;
 			if(image) //! WARNING
 				glBindTexture(GL_TEXTURE_2D, (GLuint)(long)m.pDiffuse->pUserData);
-		}
+		}*/
 
 		// draw this object's faces
 		glBegin(GL_TRIANGLES);
@@ -228,41 +233,39 @@ void Engine::keydown(int key)
 	}
 }
 
+static void print_vertex(ostream& out, const VERTEX& v)
+{
+  out << '(' << v.fX << ',' << v.fY << ',' << v.fZ << ')' << endl;
+}
+
 void Engine::print(ostream& out) const
 {
+  // print all the vertices
+  for(size_t v_i = 0; v_i < scene->u32VerticesCount; v_i++)
+  {
+    out << "v ";
+    print_vertex(out, scene->pVertices[v_i]);
+  }
+
+  // print all the texture (UV) coordinates
+  //! TODO
+
+  // print all the normals
+  for(size_t n_i = 0; n_i < scene->u32NormalsCount; n_i++)
+  {
+    out << "vn ";
+    print_vertex(out, scene->pNormals[n_i]);
+  }
+
+
+
   for(unsigned int obj_i = 0; obj_i < scene->u32ObjectsCount; obj_i++)
 	{
-		// cache the current object
+		// start group
 		OBJECT const& obj = scene->pObjects[obj_i];
-		out << "g" << endl;
-
-    // print the group's vertices
-    for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0;
-    tri_cnt < obj.u32FacesCount; tri_i++, tri_cnt++)
-    {
-      // cache the current triangle
-      FACE const& tri = scene->pFaces[tri_i];
-      for(size_t v_i = 0; v_i < 3; v_i++)
-      {
-        out << "v ";
-        VERTEX const& v = scene->pVertices[tri.pu32Vertices[v_i]];
-        out << v.fX << ' ' << v.fY << ' ' << v.fZ << endl;
-      }
-    }
-
-    // print the group's normals
-    for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0;
-    tri_cnt < obj.u32FacesCount; tri_i++, tri_cnt++)
-    {
-      // cache the current triangle
-      FACE const& tri = scene->pFaces[tri_i];
-      for(size_t v_i = 0; v_i < 3; v_i++)
-      {
-        out << "vn ";
-        VERTEX const& v = scene->pNormals[tri.pu32Normals[v_i]];
-        out << v.fX << ' ' << v.fY << ' ' << v.fZ << endl;
-      }
-    }
+		if(obj.u32FacesCount == 0)
+      continue;
+		out << "g " << endl;
 
     // print the group's faces
     for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0;

@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 
-/// SINGLETON<
+//! SINGLETON
 
 MeshManager* MeshManager::instance = NULL;
 
@@ -43,24 +43,60 @@ MeshManager* MeshManager::getInstance()
   return instance;
 }
 
-/// CREATION & DESTRUCTION
+//! CREATION & DESTRUCTION
 
 MeshManager::MeshManager() :
-started(false),
+ResourceManager(),
 mesh()
 {
 }
 
-int MeshManager::startup()
+MeshManager::~MeshManager()
 {
-  // don't start twice!
-  if(started)
-    WARN_RTN("MeshManager::startup","already started!", EXIT_SUCCESS);
+}
 
-  // load models
-  /// TODO
+/// LOADING
+
+int MeshManager::load()
+{
+  // load meshes and materials
+
+  //! FIXME
   ASSERT(mesh.load_obj(GET_ASSET("rubik.obj")) == EXIT_SUCCESS, "Loading mesh");
-  // All good!
-  started = true;
+
+  //! TODO
+  //ASSERT(load_xml(GET_ASSET("3Dobjects.xml")) == EXIT_SUCCESS,
+    //    "Loading 3D assets based on '3Dobjects.xml'");
+
+  // all clear!
+  log(LOG_INFO, "MeshManager::load() - Okay");
+  return EXIT_SUCCESS;
+}
+
+int MeshManager::unload()
+{
+  // Clean up meshes and materials
+
+  //! FIXME
+
+
+  //! TODO
+  // destroy meshes
+
+
+  // all clear!
+  log(LOG_INFO, "MeshManager::unload() - Okay");
+  return EXIT_SUCCESS;
+}
+
+int MeshManager::parse_root(void* root_handle)
+{
+  //! TODO
+  return EXIT_SUCCESS;
+}
+
+int MeshManager::parse_element(void* element)
+{
+  //! TODO
   return EXIT_SUCCESS;
 }
