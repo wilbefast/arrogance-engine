@@ -1,6 +1,7 @@
 #ifndef ENGINE_HPP_INCLUDED
 #define ENGINE_HPP_INCLUDED
 
+#include "../math/V3.hpp"
 #include "OBJLoader.hpp"
 
 class Engine
@@ -25,6 +26,10 @@ public:
   void render();
   void setup();
 	void keydown(int key);
+	void print(std::ostream& out) const;
+
+	void moveCamera(fV3 amount);
+	void turnCamera(float amount);
 };
 
 #endif // ENGINE_HPP_INCLUDED

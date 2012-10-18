@@ -148,6 +148,8 @@ GLuint Texture::getHandle() const
 
 void Texture::draw(const fRect* src_ptr, const fRect* dst_ptr, float angle)
 {
+  glPushMatrix();
+
   // Crop the source rectangle if necessary
   fRect src(area);
   if(src_ptr) // if no source is given the full texture is used!
@@ -204,6 +206,6 @@ void Texture::draw(const fRect* src_ptr, const fRect* dst_ptr, float angle)
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
   // Reset back to normal
-  glLoadIdentity();
+  glPopMatrix();
   glBindTexture(GL_TEXTURE_2D, 0);
 }

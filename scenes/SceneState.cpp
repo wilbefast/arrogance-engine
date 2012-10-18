@@ -50,9 +50,16 @@ int SceneState::update(float delta)
   return EXIT_SUCCESS;
 }
 
+int SceneState::trigger(int which, bool pressed)
+{
+  // Nothing to report
+  return EXIT_SUCCESS;
+}
+
 void SceneState::draw()
 {
 }
+
 
 /// ACCESSORS
 

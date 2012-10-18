@@ -23,17 +23,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTORS, DESTRUCTORS
 
 IntrusiveLinked::IntrusiveLinked() :
-next(NULL),
-prev(NULL)
+next(this),
+prev(this)
 {
 }
 
 IntrusiveLinked::~IntrusiveLinked()
 {
-  if(next)
+  if(next != this)
     next->prev = prev;
-  if(prev)
+  if(prev != this)
     prev->next = next;
+}
+
+void IntrusiveLinked::deleteConnections()
+{
+  while(next != this)
+    delete next;
 }
 
 //! NAVIGATION
@@ -53,21 +59,15 @@ IntrusiveLinked* IntrusiveLinked::getPrev() const
 IntrusiveLinked* IntrusiveLinked::newPrev(IntrusiveLinked* newbie)
 {
   newbie->next = this;
-  if(prev)
-  {
-    prev->next = newbie;
-    newbie->prev = prev;
-  }
+  prev->next = newbie;
+  newbie->prev = prev;
   return prev = newbie; // return the new elements
 }
 
 IntrusiveLinked* IntrusiveLinked::newNext(IntrusiveLinked* newbie)
 {
   newbie->prev = this;
-  if(next)
-  {
-    next->prev = newbie;
-    newbie->next = next;
-  }
+  next->prev = newbie;
+  newbie->next = next;
   return next = newbie; // return the new elements
 }

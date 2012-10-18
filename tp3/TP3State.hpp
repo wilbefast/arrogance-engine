@@ -14,9 +14,10 @@ private:
 
   /// ATTRIBUTES
 private:
-  iV3 camera_angle;
-  iV3 camera_offset;
+  float camera_angle;
+  fV3 camera_offset;
   Engine engine;
+  bool left, right, up, down, alt, space, ctrl;
 
   /// METHODS
 public:
@@ -26,6 +27,7 @@ public:
   int shutdown();
   // Overrides GameState
   int update(float delta);
+  int trigger(int which, bool pressed);
   void draw();
 };
 

@@ -25,6 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../io/file.hpp"               // for ASSET_PATH
 #include "../math/V4.hpp"               // used to store quads temporarily
 
+#define TAG_VERTEX "v "
+#define TAG_FACE "f "
+#define TAG_GROUP "g "
+#define TAG_NORMAL "vn"
+#define TAG_TEXTURE_COORDINATES "vt"
+#define TAG_MATERIAL "mt"
+
 using namespace std;
 
 //! PRIVATE FUNCTIONS
@@ -85,19 +92,19 @@ int Mesh3D::load_obj(const char* filename)
     istringstream s(line.substr(2));
 
     // vertex
-    if(key == "v ")
+    if(key == TAG_VERTEX)
       add_vertex(vertex_t(s));
     // vertex normal
-    else if(key == "vn")
+    else if(key == TAG_NORMAL)
       normals.push_back(normal_t(s));
     // texture coordinates
-    else if(key == "vt")
+    else if(key == TAG_TEXTURE_COORDINATES)
       current_group->material.add_texture_coordinate(tex_coord_t(s));
     // face
-    else if(key == "f ")
+    else if(key == TAG_FACE)
       parse_faces(s);
     // group
-    else if (key == "g " && faces.size()) // never close empty groups
+    else if (key == TAG_GROUP && faces.size()) // never close empty groups
     {
       // close current group
       current_group->last_face = faces.size()-1;
@@ -107,7 +114,7 @@ int Mesh3D::load_obj(const char* filename)
 
     }
     // material definition
-    else if(key == "mt" && line.substr(0, 6) == "mtllib")
+    else if(key == TAG_MATERIAL)
     {
       // parse the material filename
       string mtl_file = line.substr(7).insert(0, ASSET_PATH);
@@ -130,12 +137,7 @@ int Mesh3D::load_obj(const char* filename)
 
 Mesh3D::~Mesh3D()
 {
-  IntrusiveLinked* deletion_iterator = current_group->getNext();
-  while(deletion_iterator != NULL)
-  {
-    delete deletion_iterator;
-    deletion_iterator = current_group->getNext();
-  }
+  current_group->deleteConnections();
   delete current_group;
 }
 
@@ -160,6 +162,9 @@ void Mesh3D::add_vertex(vertex_t new_vertex)
 
 void Mesh3D::parse_faces(istringstream& s)
 {
+  // the position in the stream
+  size_t str_i = 0;
+
   // we'll consider only faces with 3 (triangle) or 4 (quad) faces
   iV4 vert_indices(-1, -1, -1, -1),
       uv_indices(-1, -1, -1, -1),
@@ -173,8 +178,7 @@ void Mesh3D::parse_faces(istringstream& s)
       so we might have something of the form:
         A = Vi//
       */
-  static bool first = true;
-  size_t str_i = 0;
+
   for(size_t vtx_i = 0; vtx_i < 4  && s.peek() >= ' '; vtx_i++)
   {
     // 1. read the vertex index
@@ -202,8 +206,9 @@ void Mesh3D::parse_faces(istringstream& s)
   faces.push_back(--triangle);
 
   // add a second triangle only if the face was a quad
-  if(vertices[3] == -1)
+  if(vert_indices[3] == -1)
     return;
+
   triangle = face_t(toSecondV3(vert_indices),
                     toSecondV3(uv_indices),
                     toSecondV3(norm_indices));
@@ -222,13 +227,10 @@ void Mesh3D::finalise()
   normal_list_t(normals).swap(normals);
 
   // Discard the last (empty) Group we created
-  IntrusiveLinked* delete_iterator = current_group;
-  current_group = (Group*)current_group->getPrev();
-  delete delete_iterator;
-
-  // Connect first and last elements and sent pointer back at the start
-  current_group->newNext(first_group);
+  delete current_group;
   current_group = first_group;
+
+  cout << (*this);
 }
 
 void Mesh3D::unitise()
@@ -249,10 +251,111 @@ void Mesh3D::unitise()
 
 }
 
-/* DRAW */
+//! DRAW
 
 
 void Mesh3D::draw()
+{
+  // draw this object's faces
+  glBegin(GL_TRIANGLES);
+    // for each triangle in this object
+    for(unsigned int tri_i = 0; tri_i < faces.size(); tri_i++)
+    {
+      // cache the current triangle
+      face_t const& tri = faces[tri_i];
+
+      glVertex3fv(vertices[tri.vertex_i[0]].front());
+      glVertex3fv(vertices[tri.vertex_i[1]].front());
+      glVertex3fv(vertices[tri.vertex_i[2]].front());
+    }
+    // finished drawing the triangles
+  glEnd();
+}
+/*
+{
+	// clear and reset
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+	// move camera
+	glMatrixMode(GL_PROJECTION);
+
+	// for each object
+  do
+	{
+		// get this object's material
+		IMAGE_DATA* image = NULL;
+		if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
+		{
+			// cache material reference
+			MATERIAL& m = scene->pMaterials[obj.u32Material];
+
+			glMaterialfv(GL_FRONT, GL_AMBIENT, m.pfAmbient);
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, m.pfDiffuse);
+			glMaterialfv(GL_FRONT, GL_SPECULAR, m.pfSpecular);
+			glMaterialfv(GL_FRONT, GL_EMISSION, m.pfEmission);
+			glMaterialf(GL_FRONT, GL_SHININESS, m.fShininess);
+
+			// activate texture
+			image = m.pDiffuse;
+			if(image) //! WARNING
+				glBindTexture(GL_TEXTURE_2D, (GLuint)(long)m.pDiffuse->pUserData);
+		}
+
+		// draw this object's faces
+		glBegin(GL_POINTS);
+			// for each triangle in this object
+			for(size_t face_i = current_group->first_face;
+          face_i <= current_group->last_face; face_i++)
+			{
+				// cache the current triangle
+				face_t const& face = faces[face_i];
+
+				// cache normals
+				vertex_t* n[3] = { &(normals[face.normal_i[0]]),
+													&(normals[face.normal_i[1]]),
+													&(normals[face.normal_i[2]]) };
+
+				// cache texture coordinates
+				TEXTURE_COORDS* tc[3] = { &(scene->pUV[face.pu32UV[0]]),
+													&(scene->pUV[face.pu32UV[1]]),
+													&(scene->pUV[face.pu32UV[2]]) };
+
+				// cache vertices
+				vertex_t* v[3] = { &(vertices[face.vertex_i[0]]),
+													&(vertices[face.vertex_i[1]]),
+													&(vertices[face.vertex_i[2]]) };
+
+				// first vertex
+				//glNormal3fv(n[0]->front());
+				//glTexCoord2fv(&(tc[0]->fU));
+				glVertex3fv(v[0]->front());
+
+				// second vertex
+				//glNormal3fv(n[1]->front());
+				//glTexCoord2fv(&(tc[0]->fU));
+				glVertex3fv(v[1]->front());
+
+				// third vertex
+				//glNormal3fv(n[2]->front());
+				//glTexCoord2fv(&(tc[0]->fU));
+				glVertex3fv(v[2]->front());
+			}
+			// finished drawing the triangles
+		glEnd();
+
+		// deactivate texture
+		//if(image)
+			//glBindTexture(GL_TEXTURE_2D, 0);
+
+    // move on to next group
+    current_group = (Group*)current_group->getNext();
+	}
+	while(current_group != first_group);
+
+}
+*/
+/*
 {
 	// clear and reset
 	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
@@ -266,6 +369,7 @@ void Mesh3D::draw()
     glVertex3fv(vertices[i].front());
   glEnd();
 }
+*/
 /*
 {
   // Material
@@ -290,3 +394,62 @@ void Mesh3D::draw()
   //material.deactivate();
   glLoadIdentity();
 }*/
+
+
+//! FOR DEBUGGING
+
+void Mesh3D::print(ostream& out) const
+{
+  Group* group_i = first_group;
+  do
+  {
+    // start group
+    out << TAG_GROUP << endl;
+
+    // print the group's vertices
+    for(size_t face_i = current_group->first_face;
+    face_i <= current_group->last_face; face_i++)
+    {
+      for(size_t v_i = 0; v_i < 3; v_i++)
+      {
+        out << TAG_VERTEX;
+        vertex_t const& v = vertices[faces[face_i].vertex_i[v_i]];
+        out << v.x << ' ' << v.y << ' ' << v.z << endl;
+      }
+    }
+
+    // print the group's normals
+    for(size_t face_i = group_i->first_face;
+    face_i <= group_i->last_face; face_i++)
+    {
+      for(size_t v_i = 0; v_i < 3; v_i++)
+      {
+        out << TAG_NORMAL << ' ';
+        vertex_t const& v = normals[faces[face_i].vertex_i[v_i]];
+        out << v.x << ' ' << v.y << ' ' << v.z << endl;
+      }
+    }
+
+    // print the group's faces
+    for(size_t face_i = group_i->first_face;
+    face_i <= group_i->last_face; face_i++)
+    {
+      out << TAG_FACE;
+      for(size_t v_i = 0; v_i < 3; v_i++)
+       out << faces[face_i].vertex_i[v_i]+1 << '/'
+            << faces[face_i].uv_i[v_i]+1 << '/'
+            << faces[face_i].normal_i[v_i]+1 << ' ';
+        out << endl;
+    }
+
+    // move on to next group
+    group_i = (Group*)group_i->getNext();
+	}
+	while(group_i != first_group);
+}
+
+std::ostream& operator<<(std::ostream& stream, Mesh3D const& m)
+{
+  m.print(stream);
+  return stream;
+}

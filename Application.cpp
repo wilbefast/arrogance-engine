@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   #define USE_MOUSE 1
 	#define KEY_EXIT SDLK_ESCAPE
 	#define KEY_MENU SDLK_ENTER
-	#define KEY_BACK SDLK_SPACE
+	#define KEY_BACK SDLK_BACKSPACE
   #define KEY_VOLUME_UP SDLK_PLUS
 	#define KEY_VOLUME_DOWN SDLK_MINUS
 #endif // #ifdef __ANDROID__
@@ -228,6 +228,9 @@ int Application::startSDL()
 
 int Application::startGL()
 {
+  // Define viewport
+  glViewport(0, 0, global::viewport.x, global::viewport.y);
+
   // Black background by default
   glClearColor(0, 0, 0, 255);
 
@@ -239,7 +242,6 @@ int Application::startGL()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-
   // Start in 2D mode by default
   draw::use2D();
 
@@ -249,9 +251,9 @@ int Application::startGL()
 
 void Application::draw()
 {
-  // Clear the entire screen, reset everything back to normal
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //! FIXME - only clear depth in 3D mode?
-  glLoadIdentity();
+  // Clear and reset
+  glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+  glMatrixMode(GL_MODELVIEW);
 
   // Draw any objects required by the current scene
   scene->draw();
@@ -298,7 +300,7 @@ int Application::treatEvents()
       // exit if the window is closed (ex: pressing the cross)
       case SDL_QUIT:
         return Application::EXIT;
-        break;
+      break;
 
       // check for keypresses
       case SDL_KEYDOWN:
@@ -310,15 +312,22 @@ int Application::treatEvents()
             return Application::EXIT;
           case KEY_VOLUME_UP:
             AudioManager::getInstance()->volume_up();
-            break;
+          break;
           case KEY_VOLUME_DOWN:
             AudioManager::getInstance()->volume_down();
-            break;
+          break;
           default:
-            // here we DO want a default break, as not all keys are needed
-            break;
+            // the input is used to modify the state of the scene
+            scene->getState()->trigger(event.key.keysym.sym, true);
+          break;
         }
-        break;
+      break;
+
+      // check for key releases
+      case SDL_KEYUP:
+        // the input is used to modify the state of the scene
+        scene->getState()->trigger(event.key.keysym.sym, false);
+      break;
 
       #if USE_TOUCH
       // touch events
@@ -326,16 +335,16 @@ int Application::treatEvents()
         cursor = normaliseTouch(event.tfinger.touchId,
                                    iV2(event.tfinger.x, event.tfinger.y));
         clicking = true;
-        break;
+      break;
 
       case SDL_FINGERUP:
         clicking = false;
-        break;
+      break;
 
       case SDL_FINGERMOTION:
         cursor = normaliseTouch(event.tfinger.touchId,
                                 iV2(event.tfinger.x, event.tfinger.y));
-        break;
+      break;
       #endif  // USE_TOUCH
 
       #if USE_MOUSE
@@ -344,21 +353,21 @@ int Application::treatEvents()
         if(event.button.button == SDL_BUTTON_RIGHT)
           return Application::BACK;
         clicking = true;
-        break;
+      break;
 
       case SDL_MOUSEBUTTONUP:
         if(event.button.button == SDL_BUTTON_LEFT)
           clicking = false;
-        break;
+      break;
 
       case SDL_MOUSEMOTION:
         cursor = fV2(event.motion.x, event.motion.y) / global::scale;
-        break;
+      break;
       #endif  // USE_MOUSE
 
       default:
         // not all possible inputs are needed, so we DO want a default break
-        break;
+      break;
     }
   }
 

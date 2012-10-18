@@ -36,6 +36,7 @@ Mesh2D::~Mesh2D()
 void Mesh2D::draw(float offset_x, Colour c)
 {
   // Start up
+  glPushMatrix();
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(c.r, c.g, c.b, c.a);
   glTranslatef(offset_x*global::scale.x, 0.0f, 0.0f);
@@ -50,5 +51,5 @@ void Mesh2D::draw(float offset_x, Colour c)
   // Shut down
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 }

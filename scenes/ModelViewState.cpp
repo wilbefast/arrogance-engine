@@ -49,8 +49,7 @@ int ModelViewState::startup()
   draw::use3D();
 
   ASSERT(MeshManager::getInstance()->startup()
-    == EXIT_SUCCESS, "ModelViewState ---- Starting Mesh Manager...");
-  puts("ModelViewState ---- DONE !");
+    == EXIT_SUCCESS, "Starting Mesh Manager");
 
   // all clear
   return EXIT_SUCCESS;
@@ -86,7 +85,6 @@ int ModelViewState::update(float delta)
 
 void ModelViewState::draw()
 {
-  glClear(GL_DEPTH_BUFFER_BIT);
   glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
   glScalef(global::viewport.x/2, global::viewport.y/2, 1.0f);
 

@@ -59,7 +59,7 @@ int MeshManager::startup()
 
   // load models
   /// TODO
-  ASSERT(mesh.load_obj(GET_ASSET("Island_001.obj")) == EXIT_SUCCESS, "Loading mesh");
+  ASSERT(mesh.load_obj(GET_ASSET("rubik.obj")) == EXIT_SUCCESS, "Loading mesh");
   // All good!
   started = true;
   return EXIT_SUCCESS;

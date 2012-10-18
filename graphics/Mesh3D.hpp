@@ -32,9 +32,9 @@ class face_t
 {
 public:
   // attributes
-  V3<GLubyte> vertex_i, uv_i, normal_i;
+  V3<size_t> vertex_i, uv_i, normal_i;
   // constructor
-  face_t(V3<GLubyte> _vertex_i, V3<GLubyte> _uv_i, V3<GLubyte> _normal_i) :
+  face_t(V3<size_t> _vertex_i, V3<size_t> _uv_i, V3<size_t> _normal_i) :
                     vertex_i(_vertex_i), uv_i(_uv_i), normal_i(_normal_i) { }
   // decrementation operator: C++ indices start at 0, OBJ indices at 1
   face_t& operator--(){ vertex_i--; uv_i--; normal_i--; return (*this); }
@@ -88,6 +88,8 @@ public:
   void draw();
   // set the size to 1
   void unitise();
+  // for debugging
+  void print(std::ostream& out) const;
 
   //! SUBROUTINES
 private:
@@ -98,5 +100,7 @@ private:
   void finalise();
 
 };
+
+std::ostream& operator<<(std::ostream& stream, Mesh3D const& m);
 
 #endif // MESH3D_HPP_INCLUDED

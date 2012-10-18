@@ -30,6 +30,7 @@ public:
   // constructors, destructors
   IntrusiveLinked();
   ~IntrusiveLinked();
+  void deleteConnections();
 
   // navigation
   IntrusiveLinked* getNext() const;

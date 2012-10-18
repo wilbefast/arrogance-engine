@@ -22,6 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../math/wjd_math.h"       // for trigonometry
 
 
+
+//! FIXME
+#include <stdio.h>
+
 //! PRIVATE SUBROUTINES
 
 // This function is adapted from NeHe: it replaces gluPerspective.
@@ -36,6 +40,7 @@ void glPerspective(GLdouble fov, GLdouble aspect, GLdouble near, GLdouble far)
 void draw_line(GLfloat points[], size_t dimension, Colour c, float thickness)
 {
   // Start up
+  glPushMatrix();
   glEnableClientState(GL_VERTEX_ARRAY);
   glLineWidth(thickness);
   glColor4f(c.r, c.g, c.b, c.a);
@@ -50,7 +55,7 @@ void draw_line(GLfloat points[], size_t dimension, Colour c, float thickness)
   glDisable(GL_LINE_SMOOTH);
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 }
 
 //! SET DRAW MODE
@@ -67,8 +72,8 @@ void draw::use2D()
 	glDisable(GL_LIGHT1);
 
   // Set up viewport
-  glViewport(0, 0, global::viewport.x, global::viewport.y);
   glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   glOrtho(0, global::viewport.x, global::viewport.y, 0, -1, 1);
 
   // Clean the slate
@@ -79,9 +84,10 @@ void draw::use2D()
 void draw::use3D()
 {
   // Set up depth
-  /*glEnable(GL_DEPTH_TEST);
+  glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glFrontFace(GL_CCW);
+  glCullFace(GL_BACK);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0f);
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -89,10 +95,11 @@ void draw::use3D()
 	// Set up lighting
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);*/
+	glEnable(GL_LIGHT1);
 
   // Set up camera frustrum
   glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   glPerspective(VIEW_FIELD, global::viewport.x/global::viewport.y, NEAR, FAR);
 
   // Clean the slate
@@ -104,24 +111,25 @@ void draw::use3D()
 
 void draw::rectangle(fRect rect, Colour c)
 {
-  // Specify coordinates to draw
-  GLfloat points[8] = { rect.x, rect.y,
-                      rect.x, rect.y+rect.h,
-                      rect.x+rect.w, rect.y,
-                      rect.x+rect.w, rect.y+rect.h };
-
   // Start up
-  glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(c.r, c.g, c.b, c.a);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glPushMatrix();
 
-  // Draw points
-  glVertexPointer(2, GL_FLOAT, 0, points);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    // Specify coordinates to draw
+    GLfloat points[8] = { rect.x, rect.y,
+                        rect.x, rect.y+rect.h,
+                        rect.x+rect.w, rect.y,
+                        rect.x+rect.w, rect.y+rect.h };
+
+    // Draw points
+    glVertexPointer(2, GL_FLOAT, 0, points);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   // Shut down
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 }
 
 void draw::line(fV3 start, fV3 end, Colour c, float thickness)
@@ -159,15 +167,14 @@ void draw::line_loop(fV2 points[], unsigned int n_pts, Colour c, float thickness
   glEnable(GL_LINE_SMOOTH);
   glScalef(global::scale.x, global::scale.y, 0.0f);
 
-  // Draw points
-  glVertexPointer(2, GL_FLOAT, 0, loop);
-  glDrawArrays(GL_LINE_LOOP, 0, n_pts);
+    // Draw points
+    glVertexPointer(2, GL_FLOAT, 0, loop);
+    glDrawArrays(GL_LINE_LOOP, 0, n_pts);
 
   // Shut down
   glDisable(GL_LINE_SMOOTH);
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
 }
 
 void draw::height_line(float height[], unsigned int n_pts, float x_spacing,
@@ -192,21 +199,24 @@ void draw::height_line(float height[], unsigned int n_pts, float x_spacing,
   vertices[v_i++] = height[head_i];
 
   // Start up
+  glPushMatrix();
   glEnableClientState(GL_VERTEX_ARRAY);
   glLineWidth(thickness);
   glColor4f(c.r, c.g, c.b, c.a);
   glEnable(GL_LINE_SMOOTH);
-  glScalef(global::scale.x, global::scale.y, 0.0f);
 
-  // Draw points
-  glVertexPointer(2, GL_FLOAT, 0, vertices);
-  glDrawArrays(GL_LINE_STRIP, 0, n_pts);
+    // Set scale
+    glScalef(global::scale.x, global::scale.y, 0.0f);
+
+    // Draw points
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+    glDrawArrays(GL_LINE_STRIP, 0, n_pts);
 
   // Shut down
   glDisable(GL_LINE_SMOOTH);
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 
   /// Remember to free the memory allocated !
   delete[] vertices;
@@ -287,18 +297,19 @@ void draw::height_fill(float height[], unsigned int n_pts, float x_spacing,
   }
 
   // Start up
+  glPushMatrix();
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(c.r, c.g, c.b, c.a);
 
-  // Draw points
-  glVertexPointer(2, GL_FLOAT, 0, vertices);
-  // Unfortunately there is no way we can use FAN or STRIP here or I would !
-  glDrawArrays(GL_TRIANGLES, 0, 9*(n_pts-1));
+    // Draw points
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+    // Unfortunately there is no way we can use FAN or STRIP here or I would !
+    glDrawArrays(GL_TRIANGLES, 0, 9*(n_pts-1));
 
   // Shut down
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 
   /// Remember to free the memory allocated !
   delete vertices;
@@ -318,23 +329,24 @@ void draw::circle(fV2 position, double radius, Colour c, bool fill)
   }
 
   // Start up
+  glPushMatrix();
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(c.r, c.g, c.b, c.a);
   glEnable(GL_LINE_SMOOTH);
 
-  // Draw points
-  glVertexPointer(2, GL_FLOAT, 0, polygon);
-  // Fill circle, or not
-  if(fill)
-    glDrawArrays(GL_TRIANGLE_FAN, 0, n_segments);
-  else
-    glDrawArrays(GL_LINE_LOOP, 0, n_segments);
+    // Draw points
+    glVertexPointer(2, GL_FLOAT, 0, polygon);
+    // Fill circle, or not
+    if(fill)
+      glDrawArrays(GL_TRIANGLE_FAN, 0, n_segments);
+    else
+      glDrawArrays(GL_LINE_LOOP, 0, n_segments);
 
   // Shut down
   glDisable(GL_LINE_SMOOTH);
   glColor4f(1, 1, 1, 1);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glLoadIdentity();
+  glPopMatrix();
 
   // Free allocated memory
   delete[] polygon;

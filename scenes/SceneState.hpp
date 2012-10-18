@@ -51,6 +51,7 @@ public:
   virtual int shutdown();
   // Update and draw dynamic objects, if needed
   virtual int update(float delta);
+  virtual int trigger(int key, bool pressed);
   virtual void draw();
   // Input
   Input* getInput();
