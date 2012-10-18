@@ -19,27 +19,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef INTRUSIVELINKED_HPP_INCLUDED
 #define INTRUSIVELINKED_HPP_INCLUDED
 
-#include "Visitor.hpp"
-
-template <typename T>
 class IntrusiveLinked
 {
-  /* ATTRIBUTES */
-private:
-  IntrusiveLinked* next, prev;
+  //! ATTRIBUTES
+public: /// FIXME
+  IntrusiveLinked *next, *prev;
 
-  /* METHODS */
-
+  //! METHODS
+public:
   // constructors, destructors
   IntrusiveLinked();
   ~IntrusiveLinked();
 
-  // add a new link
-  void linkBefore(IntrusiveLinked* newbie);
-  void linkAfter(IntrusiveLinked* newbie);
+  // navigation
+  IntrusiveLinked* getNext() const;
+  IntrusiveLinked* getPrev() const;
 
-  // map function onto linked elements
-  void receiveVisitor(Visitor* v);
+  // add a new link
+  IntrusiveLinked* newPrev(IntrusiveLinked* newbie);
+  IntrusiveLinked* newNext(IntrusiveLinked* newbie);
 };
 
 #endif // INTRUSIVELINKED_HPP_INCLUDED

@@ -16,16 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "IntrusiveLinked.hpp"
+
+#include <stdlib.h> // for NULL
+
 //! CONSTRUCTORS, DESTRUCTORS
 
-template<T>
-IntrusiveLinked<T>::IntrusiveLinked() :
+IntrusiveLinked::IntrusiveLinked() :
 next(NULL),
 prev(NULL)
 {
 }
 
-template<T> IntrusiveLinked<T>::~IntrusiveLinked()
+IntrusiveLinked::~IntrusiveLinked()
 {
   if(next)
     next->prev = prev;
@@ -33,32 +36,38 @@ template<T> IntrusiveLinked<T>::~IntrusiveLinked()
     prev->next = next;
 }
 
+//! NAVIGATION
+
+IntrusiveLinked* IntrusiveLinked::getNext() const
+{
+  return next;
+}
+
+IntrusiveLinked* IntrusiveLinked::getPrev() const
+{
+  return prev;
+}
+
 //! ADD A NEW LINK
 
-template<T> void IntrusiveLinked<T>::linkBefore(IntrusiveLinked* newbie)
+IntrusiveLinked* IntrusiveLinked::newPrev(IntrusiveLinked* newbie)
 {
-  prev->next = newbie;
   newbie->next = this;
-  newbie->prev = prev;
-  prev = newbie;
-}
-
-template<T> void IntrusiveLinked<T>::linkAfter(IntrusiveLinked* newbie)
-{
-  next->prev = newbie;
-  newbie->next = next;
-  newbie->prev = this;
-  next = newbie;
-}
-
-//! VISITOR
-
-template<T> void IntrusiveLinked<T>::receiveVisitor(Visitor* v)
-{
-  IntrusiveLinked* current = this;
-  while (current != NULL)
+  if(prev)
   {
-    v->visit(current);
-    current = current->next;
+    prev->next = newbie;
+    newbie->prev = prev;
   }
+  return prev = newbie; // return the new elements
+}
+
+IntrusiveLinked* IntrusiveLinked::newNext(IntrusiveLinked* newbie)
+{
+  newbie->prev = this;
+  if(next)
+  {
+    next->prev = newbie;
+    newbie->next = next;
+  }
+  return next = newbie; // return the new elements
 }

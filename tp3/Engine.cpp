@@ -20,54 +20,6 @@ void Engine::render()
 	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  // move camera
-	glMatrixMode(GL_PROJECTION);
-	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
-
-  // draw this object's faces
-  glBegin(GL_POINTS);
-    // for each triangle in this object
-    for(unsigned int v_i = 0; v_i < scene->u32VerticesCount; v_i++)
-      glVertex3fv(&(scene->pVertices[v_i].fX));
-    // finished drawing the triangles
-  glEnd();
-}
-/*
-{
-	// clear and reset
-	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
-
-  // move camera
-	glMatrixMode(GL_PROJECTION);
-	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
-
-  // draw this object's faces
-  glBegin(GL_TRIANGLES);
-    // for each triangle in this object
-    for(unsigned int tri_i = 0; tri_i < scene->u32FacesCount; tri_i++)
-    {
-				// cache the current triangle
-				FACE const& tri = scene->pFaces[tri_i];
-
-				// cache vertices
-				VERTEX* v[3] = { &(scene->pVertices[tri.pu32Vertices[0]]),
-											&(scene->pVertices[tri.pu32Vertices[1]]),
-											&(scene->pVertices[tri.pu32Vertices[2]]) };
-
-				glVertex3fv(&(v[0]->fX));
-				glVertex3fv(&(v[1]->fX));
-				glVertex3fv(&(v[2]->fX));
-			}
-    // finished drawing the triangles
-  glEnd();
-}
-*/
-/*{
-	// clear and reset
-	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
-
 	// move camera
 	glMatrixMode(GL_PROJECTION);
 	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
@@ -145,7 +97,40 @@ void Engine::render()
 
 	}
 
-}*/
+}
+/*
+{
+	// clear and reset
+	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+  // move camera
+	glMatrixMode(GL_PROJECTION);
+	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
+
+  // draw this object's faces
+  glBegin(GL_TRIANGLES);
+    // for each triangle in this object
+    for(unsigned int tri_i = 0; tri_i < scene->u32FacesCount; tri_i++)
+    {
+				// cache the current triangle
+				FACE const& tri = scene->pFaces[tri_i];
+
+				// cache vertices
+				VERTEX* v[3] = { &(scene->pVertices[tri.pu32Vertices[0]]),
+											&(scene->pVertices[tri.pu32Vertices[1]]),
+											&(scene->pVertices[tri.pu32Vertices[2]]) };
+
+				glVertex3fv(&(v[0]->fX));
+				glVertex3fv(&(v[1]->fX));
+				glVertex3fv(&(v[2]->fX));
+			}
+    // finished drawing the triangles
+  glEnd();
+}
+*/
+
+
 
 void Engine::setup()
 {

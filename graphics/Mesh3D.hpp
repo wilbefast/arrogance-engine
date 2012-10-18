@@ -22,10 +22,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "vertex.hpp"
 #include "Material.hpp"
 
+#include "../utils/IntrusiveLinked.hpp"   // for Group
+
 #include <sstream>
 #include <vector>
 
-typedef V3<GLubyte> face_t;
+// faces, for debugging
+class face_t
+{
+public:
+  // attributes
+  V3<GLubyte> vertex_i, uv_i, normal_i;
+  // constructor
+  face_t(V3<GLubyte> _vertex_i, V3<GLubyte> _uv_i, V3<GLubyte> _normal_i) :
+                    vertex_i(_vertex_i), uv_i(_uv_i), normal_i(_normal_i) { }
+  // decrementation operator: C++ indices start at 0, OBJ indices at 1
+  face_t& operator--(){ vertex_i--; uv_i--; normal_i--; return (*this); }
+};
 typedef std::vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
 
@@ -36,7 +49,24 @@ typedef vertex_list_t::iterator normal_list_it;
 
 class Mesh3D
 {
-  /* ATTRIBUTES */
+  //! NESTING
+private:
+
+  // sub-mesh within the mesh, associated with a given material
+  class Group : public IntrusiveLinked
+  {
+    // ATTRIBUTES
+  public:
+    // faces in this group
+    size_t first_face, last_face;
+    // material
+    Material material;
+    // METHODS
+  public:
+    Group() : IntrusiveLinked(), first_face(0), last_face(0), material() { }
+  };
+
+  //! ATTRIBUTES
 private:
   // containers
   vertex_list_t vertices;
@@ -44,10 +74,11 @@ private:
   normal_list_t normals;
   // max and minimum coordinates
   vertex_t min, max;
-  // material
-  Material material;
+  // there is always at least one group within the mesh
+  Group *first_group, *current_group;
 
-  /* METHODS */
+
+  //! METHODS
 public:
   // creation, destruction
   Mesh3D();
@@ -55,8 +86,10 @@ public:
   ~Mesh3D();
   // draw
   void draw();
+  // set the size to 1
+  void unitise();
 
-  /* SUBROUTINES */
+  //! SUBROUTINES
 private:
   // build iteratively
   void add_vertex(vertex_t new_vertex);
