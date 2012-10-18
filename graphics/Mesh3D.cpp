@@ -36,9 +36,14 @@ using namespace std;
 
 //! PRIVATE FUNCTIONS
 
-static inline bool isSeperator(char c)
+static inline bool seperatorSymbol(char c)
 {
   return (c == ' ' || c == '\t' || c == '/');
+}
+
+static inline bool numberSymbol(char c)
+{
+  return (c >= '0' && c <= '9');
 }
 
 // in the case of a quad, indices are arranged as follows (at least when the
@@ -124,6 +129,7 @@ int Mesh3D::load_obj(const char* filename)
         "'Mesh3D::load_obj' loading associated material file");
     }
   }
+  current_group->last_face = faces.size()-1;
 
   // file is no longer needed
   in.close();
@@ -179,23 +185,25 @@ void Mesh3D::parse_faces(istringstream& s)
         A = Vi//
       */
 
-  for(size_t vtx_i = 0; vtx_i < 4  && s.peek() >= ' '; vtx_i++)
+  size_t vtx_i;
+  for(vtx_i = 0; vtx_i < 4  && s.peek() >= ' '; vtx_i++)
   {
     // 1. read the vertex index
     s >> vert_indices[vtx_i];
 
     // 2. read the (optional) texture coordinate index
-    do { s.seekg(str_i++, ios_base::beg); } while(s.peek() > '/');
-    if(s.peek() == '/') s.seekg(str_i++, ios_base::beg); else break;
+    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
+    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
     s >> uv_indices[vtx_i];
 
     // 3. read the (optional) normal index
-    do { s.seekg(str_i++, ios_base::beg); } while(s.peek() > '/');
-    if(s.peek() == '/') s.seekg(str_i++, ios_base::beg); else break;
+    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
+    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
     s >> norm_indices[vtx_i];
 
     // 4. move on to the next block
-    while(isSeperator((s.peek()))) { s.seekg(str_i++, ios_base::beg); }
+    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
+    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
   }
 
   // always add a first triangle
@@ -226,11 +234,12 @@ void Mesh3D::finalise()
   face_list_t(faces).swap(faces);
   normal_list_t(normals).swap(normals);
 
-  // Discard the last (empty) Group we created
-  delete current_group;
+  // Move group pointer back to the first group
   current_group = first_group;
 
-  cout << (*this);
+  ofstream f;
+  f.open ("arrogance_mesh.obj");
+  f << (*this);
 }
 
 void Mesh3D::unitise()
@@ -271,6 +280,7 @@ void Mesh3D::draw()
     // finished drawing the triangles
   glEnd();
 }
+
 /*
 {
 	// clear and reset
@@ -283,26 +293,10 @@ void Mesh3D::draw()
 	// for each object
   do
 	{
-		// get this object's material
-		IMAGE_DATA* image = NULL;
-		if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
-		{
-			// cache material reference
-			MATERIAL& m = scene->pMaterials[obj.u32Material];
+		// activate the current group's material
+    //current_group->material.activate();
 
-			glMaterialfv(GL_FRONT, GL_AMBIENT, m.pfAmbient);
-			glMaterialfv(GL_FRONT, GL_DIFFUSE, m.pfDiffuse);
-			glMaterialfv(GL_FRONT, GL_SPECULAR, m.pfSpecular);
-			glMaterialfv(GL_FRONT, GL_EMISSION, m.pfEmission);
-			glMaterialf(GL_FRONT, GL_SHININESS, m.fShininess);
-
-			// activate texture
-			image = m.pDiffuse;
-			if(image) //! WARNING
-				glBindTexture(GL_TEXTURE_2D, (GLuint)(long)m.pDiffuse->pUserData);
-		}
-
-		// draw this object's faces
+		// draw the group's faces
 		glBegin(GL_POINTS);
 			// for each triangle in this object
 			for(size_t face_i = current_group->first_face;
@@ -311,35 +305,20 @@ void Mesh3D::draw()
 				// cache the current triangle
 				face_t const& face = faces[face_i];
 
-				// cache normals
-				vertex_t* n[3] = { &(normals[face.normal_i[0]]),
-													&(normals[face.normal_i[1]]),
-													&(normals[face.normal_i[2]]) };
-
-				// cache texture coordinates
-				TEXTURE_COORDS* tc[3] = { &(scene->pUV[face.pu32UV[0]]),
-													&(scene->pUV[face.pu32UV[1]]),
-													&(scene->pUV[face.pu32UV[2]]) };
-
-				// cache vertices
-				vertex_t* v[3] = { &(vertices[face.vertex_i[0]]),
-													&(vertices[face.vertex_i[1]]),
-													&(vertices[face.vertex_i[2]]) };
-
 				// first vertex
-				//glNormal3fv(n[0]->front());
+				//glNormal3fv(normals[face.normal_i[0]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(v[0]->front());
+				glVertex3fv(vertices[face.vertex_i[0]].front());
 
 				// second vertex
-				//glNormal3fv(n[1]->front());
+				//glNormal3fv(normals[face.normal_i[1]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(v[1]->front());
+				glVertex3fv(vertices[face.vertex_i[1]].front());
 
 				// third vertex
-				//glNormal3fv(n[2]->front());
+				//glNormal3fv(normals[face.normal_i[2]].front());
 				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(v[2]->front());
+				glVertex3fv(vertices[face.vertex_i[2]].front());
 			}
 			// finished drawing the triangles
 		glEnd();
@@ -355,21 +334,7 @@ void Mesh3D::draw()
 
 }
 */
-/*
-{
-	// clear and reset
-	glClear(GL_DEPTH_BUFFER_BIT |GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
 
-  // move camera
-	glMatrixMode(GL_PROJECTION);
-
-  glBegin(GL_POINTS);
-	for(size_t i = 0; i < vertices.size(); i++)
-    glVertex3fv(vertices[i].front());
-  glEnd();
-}
-*/
 /*
 {
   // Material
@@ -407,7 +372,7 @@ void Mesh3D::print(ostream& out) const
     out << TAG_GROUP << endl;
 
     // print the group's vertices
-    for(size_t face_i = current_group->first_face;
+    /*for(size_t face_i = current_group->first_face;
     face_i <= current_group->last_face; face_i++)
     {
       for(size_t v_i = 0; v_i < 3; v_i++)
@@ -428,7 +393,7 @@ void Mesh3D::print(ostream& out) const
         vertex_t const& v = normals[faces[face_i].vertex_i[v_i]];
         out << v.x << ' ' << v.y << ' ' << v.z << endl;
       }
-    }
+    }*/
 
     // print the group's faces
     for(size_t face_i = group_i->first_face;
