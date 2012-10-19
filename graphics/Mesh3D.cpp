@@ -30,7 +30,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAG_GROUP "g "
 #define TAG_NORMAL "vn"
 #define TAG_TEXTURE_COORDINATES "vt"
-#define TAG_MATERIAL "mt"
+#define TAG_MATERIAL_LIBRARY "mt"
+  #define STR_MATERIAL_LIBRARY "mtllib"
+#define TAG_USE_MATERIAL "us"
+  #define STR_USE_MATERIAL "usemtl"
 
 using namespace std;
 
@@ -73,6 +76,7 @@ Mesh3D::Mesh3D() :
 vertices(),
 faces(),
 normals(),
+texture_coordinates(),
 min(),
 max(),
 first_group(new Group()),
@@ -104,22 +108,26 @@ int Mesh3D::load_obj(const char* filename)
       normals.push_back(normal_t(s));
     // texture coordinates
     else if(key == TAG_TEXTURE_COORDINATES)
-      current_group->material.add_texture_coordinate(tex_coord_t(s));
+      add_texture_coordinate(tex_coord_t(s));
     // face
     else if(key == TAG_FACE)
       parse_faces(s);
     // group
-    else if (key == TAG_GROUP && faces.size()) // never close empty groups
+    else if (key == TAG_GROUP)
     {
-      // close current group
-      current_group->last_face = faces.size()-1;
-      // start new group
-      current_group = (Group*)current_group->newNext(new Group());
-      current_group->first_face = faces.size();
+      if(faces.size()) // never close empty groups
+      {
+        // close current group
+        current_group->last_face = faces.size()-1;
+        // start new group
+        current_group = (Group*)current_group->newNext(new Group());
+        current_group->first_face = faces.size();
+      }
 
     }
-    // material definition
-    else if(key == TAG_MATERIAL)
+    // material library
+    else if(key == TAG_MATERIAL_LIBRARY &&
+            !line.substr(0, 6).compare(STR_MATERIAL_LIBRARY))
     {
       // parse the material filename
       string mtl_file = line.substr(7).insert(0, ASSET_PATH);
@@ -128,6 +136,15 @@ int Mesh3D::load_obj(const char* filename)
       ASSERT(current_group->material.load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
         "'Mesh3D::load_obj' loading associated material file");
     }
+
+    // use material from library
+    else if (key == TAG_USE_MATERIAL &&
+             !line.substr(0, 6).compare(STR_USE_MATERIAL))
+    {
+      cout << "use material!\n";
+    }
+    else
+      cout << line << ": unrecognised\n";
   }
   current_group->last_face = faces.size()-1;
 
@@ -164,6 +181,11 @@ void Mesh3D::add_vertex(vertex_t new_vertex)
   }
 
   vertices.push_back(new_vertex);
+}
+
+void Mesh3D::add_texture_coordinate(tex_coord_t new_tx_c)
+{
+  texture_coordinates.push_back(tex_coord_t(new_tx_c.x, 1.0f - new_tx_c.y));
 }
 
 void Mesh3D::parse_faces(istringstream& s)
@@ -233,6 +255,7 @@ void Mesh3D::finalise()
   vertex_list_t(vertices).swap(vertices);
   face_list_t(faces).swap(faces);
   normal_list_t(normals).swap(normals);
+  tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
 
   // Move group pointer back to the first group
   current_group = first_group;
@@ -264,23 +287,6 @@ void Mesh3D::unitise()
 
 
 void Mesh3D::draw()
-/*
-{
-  // draw this object's faces
-  glBegin(GL_TRIANGLES);
-    // for each triangle in this object
-    for(unsigned int tri_i = 0; tri_i < faces.size(); tri_i++)
-    {
-      // cache the current triangle
-      face_t const& tri = faces[tri_i];
-
-      glVertex3fv(vertices[tri.vertex_i[0]].front());
-      glVertex3fv(vertices[tri.vertex_i[1]].front());
-      glVertex3fv(vertices[tri.vertex_i[2]].front());
-    }
-    // finished drawing the triangles
-  glEnd();
-}*/
 {
 	// for each object
   do

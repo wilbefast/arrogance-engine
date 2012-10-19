@@ -21,19 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Colour.hpp"
 #include "Texture.hpp"
-#include "../math/V3.hpp"
-
-#include <vector>
-
-typedef V2<GLfloat> tex_coord_t;
-typedef std::vector<tex_coord_t> tex_coord_list_t;
-typedef tex_coord_list_t::iterator tex_coord_list_it;
 
 class Material
 {
-  /* FRIENDS */
-  friend class Mesh3D;
-
   /* ATTRIBUTES */
 public:
   // material
@@ -42,7 +32,6 @@ public:
   // UV map
   bool use_texture;
   Texture texture;
-  tex_coord_list_t texture_coordinates;
 
   /* METHODS */
 public:
@@ -56,10 +45,6 @@ public:
   // drawing
   void activate();
   void deactivate();
-
-  /* SUBROUTINES */
-private:
-  void add_texture_coordinate(tex_coord_t new_texture_coordinate);
 };
 
 #endif // MATERIAL_HPP_INCLUDED

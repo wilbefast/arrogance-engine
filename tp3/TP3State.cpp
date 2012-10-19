@@ -44,7 +44,6 @@ int TP3State::startup()
     engine.setup();
   else
     MeshManager::getInstance()->startup();
-  puts("ready");
 
   // all clear
   return EXIT_SUCCESS;

@@ -30,8 +30,13 @@ using namespace std;
 /* CREATION, DESTRUCTION */
 
 Material::Material(Colour a, Colour d, Colour s, Colour e, float shine) :
-ambient(a), diffuse(d), specular(s), emission(e), shininess(shine),
-use_texture(false), texture(), texture_coordinates()
+ambient(a),
+diffuse(d),
+specular(s),
+emission(e),
+shininess(shine),
+use_texture(false),
+texture()
 {
   if(shine < 0)
     shininess = 0;
@@ -90,9 +95,6 @@ int Material::load_mtl(const char* filename)
   // close the file even though the destructor does this for us - I have OCD :D
   in.close();
 
-  // finalise (shrink-wrap texture coordinates)
-  tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
-
   // all clear!
   return EXIT_SUCCESS;
 }
@@ -109,26 +111,22 @@ void Material::activate()
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,emission.front());
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
   // UV map
-  if(use_texture)
+  /*if(use_texture)
   {
     glBindTexture(GL_TEXTURE_2D, texture.getHandle());
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, &texture_coordinates.front());
-  }
+  }*/
 }
 
 void Material::deactivate()
 {
+  /*
   if(use_texture)
   {
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
+  */
 }
 
-/* SUBROUTINES */
-
-void Material::add_texture_coordinate(tex_coord_t new_tx_c)
-{
-  texture_coordinates.push_back(tex_coord_t(new_tx_c.x, 1.0f - new_tx_c.y));
-}

@@ -42,6 +42,10 @@ public:
 typedef std::vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
 
+typedef V2<GLfloat> tex_coord_t;
+typedef std::vector<tex_coord_t> tex_coord_list_t;
+typedef tex_coord_list_t::iterator tex_coord_list_it;
+
 typedef V3<GLfloat> normal_t;
 typedef std::vector<normal_t> normal_list_t;
 typedef normal_list_t::iterator normal_list_it;
@@ -72,6 +76,7 @@ private:
   vertex_list_t vertices;
   face_list_t faces;
   normal_list_t normals;
+  tex_coord_list_t texture_coordinates;
   // max and minimum coordinates
   vertex_t min, max;
   // there is always at least one group within the mesh
@@ -95,6 +100,7 @@ public:
 private:
   // build iteratively
   void add_vertex(vertex_t new_vertex);
+  void add_texture_coordinate(tex_coord_t new_texture_coordinate);
   void parse_faces(std::istringstream& s);
   // finished building
   void finalise();
