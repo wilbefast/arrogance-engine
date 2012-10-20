@@ -19,21 +19,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MATERIAL_HPP_INCLUDED
 #define MATERIAL_HPP_INCLUDED
 
+#include "../math/numerise.h"
+#include "../utils/IntrusiveLinked.hpp"
+
 #include "Colour.hpp"
 #include "Texture.hpp"
 
-class Material
+class Material : public IntrusiveLinked
 {
-  /* ATTRIBUTES */
+  //! FRIENDS
+  friend class MaterialLibrary;
+
+  //! ATTRIBUTES
 public:
+  // identifier
+  str_id id;
   // material
-  Colour ambient, diffuse, specular, emission;
+  Colour ambient, diffuse, specular, emissive;
   float shininess;
   // UV map
   bool use_texture;
   Texture texture;
 
-  /* METHODS */
+  //! METHODS
 public:
   // creation, destruction
   Material(Colour a = Colour(0.2f, 0.2f, 0.2f, 1.0f),
@@ -41,7 +49,6 @@ public:
           Colour s = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           Colour e = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           float shine = 0.0f);
-  int load_mtl(const char* filename);
   // drawing
   void activate();
   void deactivate();

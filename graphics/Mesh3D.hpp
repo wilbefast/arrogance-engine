@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MESH3D_HPP_INCLUDED
 
 #include "vertex.hpp"
-#include "Material.hpp"
+#include "MaterialLibrary.hpp"
 
 #include "../utils/IntrusiveLinked.hpp"   // for Group
 
@@ -64,10 +64,12 @@ private:
     // faces in this group
     size_t first_face, last_face;
     // material
-    Material material;
+    Material* material;
+    bool smooth;
     // METHODS
   public:
-    Group() : IntrusiveLinked(), first_face(0), last_face(0), material() { }
+    Group() : IntrusiveLinked(), first_face(0), last_face(0), material(NULL),
+              smooth(false){ }
   };
 
   //! ATTRIBUTES
@@ -80,8 +82,10 @@ private:
   // max and minimum coordinates
   vertex_t min, max;
   // there is always at least one group within the mesh
-  Group *first_group, *current_group;
+  Group first_group, *current_group;
   size_t n_groups;
+  // there is always at least one material library
+  MaterialLibrary mtlib;
 
 
   //! METHODS

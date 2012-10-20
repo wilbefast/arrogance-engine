@@ -62,7 +62,7 @@ int MeshManager::load()
   // load meshes and materials
 
   //! FIXME
-  ASSERT(mesh.load_obj(GET_ASSET("Island_001.obj")) == EXIT_SUCCESS, "Loading mesh");
+  ASSERT(mesh.load_obj(GET_ASSET("rubik.obj")) == EXIT_SUCCESS, "Loading mesh");
 
   //! TODO
   //ASSERT(load_xml(GET_ASSET("3Dobjects.xml")) == EXIT_SUCCESS,

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Arrogance3D" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="LIN_Debug_SDL_2_0">
+				<Option output="bin/Debug/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DSDL_NO_COMPAT" />
+					<Add option="-DSDL2" />
+					<Add option="-DDEBUG" />
+					<Add directory="/usr/local/include/SDL2" />
+				</Compiler>
+				<Linker>
+					<Add option="-lSDL2" />
+					<Add option="-lSDL2_image" />
+					<Add option="-lSDL2_mixer" />
+					<Add option="-lSDL2_ttf" />
+					<Add option="-lGL" />
+					<Add directory="/usr/local/lib" />
+				</Linker>
+			</Target>
+			<Target title="LIN_Release_SDL_2_0">
+				<Option output="bin/Release/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DSDL_NO_COMPAT" />
+					<Add option="-DSDL2" />
+					<Add directory="/usr/local/include/SDL2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lSDL2" />
+					<Add option="-lSDL2_image" />
+					<Add option="-lSDL2_mixer" />
+					<Add option="-lSDL2_ttf" />
+					<Add option="-lGL" />
+					<Add directory="/usr/local/lib" />
+				</Linker>
+			</Target>
+			<Target title="LIN_Debug_SDL_1_6">
+				<Option output="bin/Debug/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add directory="/usr/include/SDL/" />
+				</Compiler>
+				<Linker>
+					<Add option="-lSDL" />
+					<Add option="-lSDL_image" />
+					<Add option="-lSDL_mixer" />
+					<Add option="-lSDL_ttf" />
+					<Add option="-lGL" />
+					<Add directory="/usr/local/lib" />
+				</Linker>
+			</Target>
+			<Target title="LIN_Release_SDL_1_6">
+				<Option output="bin/Release/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="/usr/include/SDL/" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lSDL" />
+					<Add option="-lSDL_image" />
+					<Add option="-lSDL_mixer" />
+					<Add option="-lSDL_ttf" />
+					<Add option="-lGL" />
+					<Add directory="/usr/local/lib" />
+				</Linker>
+			</Target>
+			<Target title="WIN_Debug_SDL_1_6">
+				<Option output="bin/Debug/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add directory="C:/Program Files (x86)/- Software -/SDL/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-lSDL_image" />
+					<Add option="-lSDL_mixer" />
+					<Add option="-lSDL_ttf" />
+					<Add library="mingw32" />
+					<Add library="SDLmain" />
+					<Add library="SDL.dll" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winmm" />
+					<Add library="dxguid" />
+					<Add library="opengl32" />
+					<Add directory="C:/Program Files (x86)/- Software -/SDL/lib" />
+				</Linker>
+			</Target>
+			<Target title="WIN_Release_SDL_1_6">
+				<Option output="bin/Release/Arrogance3D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="C:/Program Files (x86)/- Software -/SDL/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lSDL_image" />
+					<Add option="-lSDL_mixer" />
+					<Add option="-lSDL_ttf" />
+					<Add library="mingw32" />
+					<Add library="SDLmain" />
+					<Add library="SDL.dll" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winmm" />
+					<Add library="dxguid" />
+					<Add library="opengl32" />
+					<Add directory="C:/Program Files (x86)/- Software -/SDL/lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Android.mk" />
+		<Unit filename="Application.cpp" />
+		<Unit filename="Application.hpp" />
+		<Unit filename="assets/Island_001.mtl" />
+		<Unit filename="assets/Island_001.obj" />
+		<Unit filename="assets/knight.mtl" />
+		<Unit filename="assets/knight.obj" />
+		<Unit filename="assets/rubik.obj" />
+		<Unit filename="debug/assert.h" />
+		<Unit filename="debug/log.cpp" />
+		<Unit filename="debug/log.h" />
+		<Unit filename="debug/warn.h" />
+		<Unit filename="gameplay/things/Thing.cpp" />
+		<Unit filename="gameplay/things/Thing.hpp" />
+		<Unit filename="gameplay/things/elements/AnimatedElement.cpp" />
+		<Unit filename="gameplay/things/elements/AnimatedElement.hpp" />
+		<Unit filename="gameplay/things/elements/AsymetricalMovementElement.cpp" />
+		<Unit filename="gameplay/things/elements/AsymetricalMovementElement.hpp" />
+		<Unit filename="gameplay/things/elements/ColliderElement.cpp" />
+		<Unit filename="gameplay/things/elements/ColliderElement.hpp" />
+		<Unit filename="gameplay/things/elements/GraphicElement.cpp" />
+		<Unit filename="gameplay/things/elements/GraphicElement.hpp" />
+		<Unit filename="gameplay/things/elements/MovementElement.cpp" />
+		<Unit filename="gameplay/things/elements/MovementElement.hpp" />
+		<Unit filename="gameplay/things/elements/ResourceElement.cpp" />
+		<Unit filename="gameplay/things/elements/ResourceElement.hpp" />
+		<Unit filename="gameplay/things/elements/SymetricalMovementElement.cpp" />
+		<Unit filename="gameplay/things/elements/SymetricalMovementElement.hpp" />
+		<Unit filename="gameplay/things/elements/ThingElement.cpp" />
+		<Unit filename="gameplay/things/elements/ThingElement.hpp" />
+		<Unit filename="gameplay/things/elements/TimerElement.cpp" />
+		<Unit filename="gameplay/things/elements/TimerElement.hpp" />
+		<Unit filename="gameplay/things/events/BoundaryEvent.cpp" />
+		<Unit filename="gameplay/things/events/BoundaryEvent.hpp" />
+		<Unit filename="gameplay/things/events/CollisionEvent.cpp" />
+		<Unit filename="gameplay/things/events/CollisionEvent.hpp" />
+		<Unit filename="gameplay/things/events/ThingEvent.cpp" />
+		<Unit filename="gameplay/things/events/ThingEvent.hpp" />
+		<Unit filename="global.cpp" />
+		<Unit filename="global.hpp" />
+		<Unit filename="graphics/Animation.cpp" />
+		<Unit filename="graphics/Animation.hpp" />
+		<Unit filename="graphics/AnimationIncarnation.cpp" />
+		<Unit filename="graphics/AnimationIncarnation.hpp" />
+		<Unit filename="graphics/Colour.cpp" />
+		<Unit filename="graphics/Colour.hpp" />
+		<Unit filename="graphics/Graphic.cpp" />
+		<Unit filename="graphics/Graphic.hpp" />
+		<Unit filename="graphics/GraphicIncarnation.cpp" />
+		<Unit filename="graphics/GraphicIncarnation.hpp" />
+		<Unit filename="graphics/HeightMesh.cpp" />
+		<Unit filename="graphics/HeightMesh.hpp" />
+		<Unit filename="graphics/Joint.cpp" />
+		<Unit filename="graphics/Joint.hpp" />
+		<Unit filename="graphics/Material.cpp" />
+		<Unit filename="graphics/Material.hpp" />
+		<Unit filename="graphics/MaterialLibrary.cpp" />
+		<Unit filename="graphics/MaterialLibrary.hpp" />
+		<Unit filename="graphics/Mesh2D.cpp" />
+		<Unit filename="graphics/Mesh2D.hpp" />
+		<Unit filename="graphics/Mesh3D.cpp" />
+		<Unit filename="graphics/Mesh3D.hpp" />
+		<Unit filename="graphics/Texture.cpp" />
+		<Unit filename="graphics/Texture.hpp" />
+		<Unit filename="graphics/draw.cpp" />
+		<Unit filename="graphics/draw.hpp" />
+		<Unit filename="graphics/vertex.hpp" />
+		<Unit filename="io/AudioManager.cpp" />
+		<Unit filename="io/AudioManager.hpp" />
+		<Unit filename="io/FontManager.cpp" />
+		<Unit filename="io/FontManager.hpp" />
+		<Unit filename="io/GraphicsManager.cpp" />
+		<Unit filename="io/GraphicsManager.hpp" />
+		<Unit filename="io/MeshManager.cpp" />
+		<Unit filename="io/MeshManager.hpp" />
+		<Unit filename="io/ResourceManager.cpp" />
+		<Unit filename="io/ResourceManager.hpp" />
+		<Unit filename="io/file.cpp" />
+		<Unit filename="io/file.hpp" />
+		<Unit filename="io/tinyxml/tinystr.cpp" />
+		<Unit filename="io/tinyxml/tinystr.h" />
+		<Unit filename="io/tinyxml/tinyxml.cpp" />
+		<Unit filename="io/tinyxml/tinyxml.h" />
+		<Unit filename="io/tinyxml/tinyxml_dump.cpp" />
+		<Unit filename="io/tinyxml/tinyxml_dump.h" />
+		<Unit filename="io/tinyxml/tinyxmlerror.cpp" />
+		<Unit filename="io/tinyxml/tinyxmlparser.cpp" />
+		<Unit filename="jni_glue.cpp" />
+		<Unit filename="licence-gpl-3.0.txt" />
+		<Unit filename="main.cpp" />
+		<Unit filename="math/M44.hpp" />
+		<Unit filename="math/M44.inl" />
+		<Unit filename="math/Rect.hpp" />
+		<Unit filename="math/Rect.inl" />
+		<Unit filename="math/V2.hpp" />
+		<Unit filename="math/V2.inl" />
+		<Unit filename="math/V3.hpp" />
+		<Unit filename="math/V3.inl" />
+		<Unit filename="math/V4.hpp" />
+		<Unit filename="math/V4.inl" />
+		<Unit filename="math/numerise.h" />
+		<Unit filename="math/numerise.inl" />
+		<Unit filename="math/wjd_math.cpp" />
+		<Unit filename="math/wjd_math.h" />
+		<Unit filename="readme.txt" />
+		<Unit filename="scenes/Button.cpp" />
+		<Unit filename="scenes/Button.hpp" />
+		<Unit filename="scenes/Game.cpp" />
+		<Unit filename="scenes/Game.hpp" />
+		<Unit filename="scenes/GameState.cpp" />
+		<Unit filename="scenes/GameState.hpp" />
+		<Unit filename="scenes/Input.cpp" />
+		<Unit filename="scenes/Input.hpp" />
+		<Unit filename="scenes/MainMenu.cpp" />
+		<Unit filename="scenes/MainMenu.hpp" />
+		<Unit filename="scenes/ModelViewState.cpp" />
+		<Unit filename="scenes/ModelViewState.hpp" />
+		<Unit filename="scenes/Scene.cpp" />
+		<Unit filename="scenes/Scene.hpp" />
+		<Unit filename="scenes/SceneState.cpp" />
+		<Unit filename="scenes/SceneState.hpp" />
+		<Unit filename="tp1/Puppet.cpp" />
+		<Unit filename="tp1/Puppet.hpp" />
+		<Unit filename="tp1/TP1State.cpp" />
+		<Unit filename="tp1/TP1State.hpp" />
+		<Unit filename="tp2/math_test.cpp" />
+		<Unit filename="tp2/math_test.hpp" />
+		<Unit filename="tp3/Engine.cpp" />
+		<Unit filename="tp3/Engine.hpp" />
+		<Unit filename="tp3/OBJLoader.cpp" />
+		<Unit filename="tp3/OBJLoader.hpp" />
+		<Unit filename="tp3/TGALoader.cpp" />
+		<Unit filename="tp3/TGALoader.hpp" />
+		<Unit filename="tp3/TP3State.cpp" />
+		<Unit filename="tp3/TP3State.hpp" />
+		<Unit filename="utils/Bounded.hpp" />
+		<Unit filename="utils/IntrusiveLinked.cpp" />
+		<Unit filename="utils/IntrusiveLinked.hpp" />
+		<Unit filename="utils/Updated.hpp" />
+		<Unit filename="utils/Visitor.hpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

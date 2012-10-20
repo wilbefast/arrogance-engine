@@ -80,8 +80,8 @@ normals(),
 texture_coordinates(),
 min(),
 max(),
-first_group(new Group()),
-current_group(first_group),
+first_group(),
+current_group(&first_group),
 n_groups(1)
 {
 }
@@ -133,20 +133,16 @@ int Mesh3D::load_obj(const char* filename)
       string mtl_file = line.substr(7).insert(0, ASSET_PATH);
       mtl_file = mtl_file.substr(0, mtl_file.find_first_of('\r'));
       // read the material file
-      ASSERT(current_group->material.load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
+      ASSERT(mtlib.load_mtl(mtl_file.c_str()) == EXIT_SUCCESS,
         "'Mesh3D::load_obj' loading associated material file");
     }
 
     // use material from library
     else if (key == TAG_USE_MATERIAL &&
              !line.substr(0, 6).compare(STR_USE_MATERIAL))
-    {
-      cout << "use material! " << line << endl;
-    }
+      current_group->material = mtlib.getMaterial(line.substr(7).c_str());
     else if (key == TAG_SMOOTH_SHADING)
-    {
-      cout << "smooth shading! " << line << endl;
-    }
+      s >> current_group->smooth;
     else
       cout << line << ": unrecognised\n";
   }
@@ -164,8 +160,7 @@ int Mesh3D::load_obj(const char* filename)
 
 Mesh3D::~Mesh3D()
 {
-  current_group->deleteConnections();
-  delete current_group;
+  first_group.deleteConnections();
 }
 
 
@@ -174,8 +169,8 @@ Mesh3D::~Mesh3D()
 void Mesh3D::add_group()
 {
   // never close empty groups
+  //if(current_group->first_face < faces.size())
   if(faces.size()) //! FIXME
-  //if(current_group->first_face != faces.size())
   {
     // close current group
     current_group->last_face = faces.size()-1;
@@ -295,9 +290,6 @@ void Mesh3D::finalise()
   normal_list_t(normals).swap(normals);
   tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
 
-  // Move group pointer back to the first group
-  current_group = first_group;
-
   ofstream f;
   f.open ("arrogance_mesh.obj");
   f << (*this);
@@ -330,7 +322,13 @@ void Mesh3D::draw()
   do
 	{
 		// activate the current group's material
-    //current_group->material.activate();
+		if(current_group->material)
+      current_group->material->activate();
+
+    if(current_group->smooth)
+      glShadeModel(GL_SMOOTH);
+    else
+      glShadeModel(GL_FLAT);
 
 		// draw the group's faces
 		glBegin(GL_TRIANGLES);
@@ -341,32 +339,29 @@ void Mesh3D::draw()
 				// cache the current triangle
 				face_t const& face = faces[face_i];
 
-				// first vertex
-				glNormal3fv(normals[face.normal_i[0]].front());
-				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(vertices[face.vertex_i[0]].front());
-
-				// second vertex
-				glNormal3fv(normals[face.normal_i[1]].front());
-				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(vertices[face.vertex_i[1]].front());
-
-				// third vertex
-				glNormal3fv(normals[face.normal_i[2]].front());
-				//glTexCoord2fv(&(tc[0]->fU));
-				glVertex3fv(vertices[face.vertex_i[2]].front());
+				for(size_t v_i = 0; v_i < 3; v_i++)
+				{
+				  // vertex position
+				  glVertex3fv(vertices[face.vertex_i[v_i]].front());
+          // vertex texture coordinate (optional)
+          //if(face.uv_i[v_i] >= 0)
+            //glTexCoord2fv(texture_coordinates[face.uv_i[v_i]].front());
+				  // vertex normal (optional)
+          if(face.normal_i[v_i] >= 0) // negative indices mean no normal!
+            glNormal3fv(normals[face.normal_i[v_i]].front());
+				}
 			}
 			// finished drawing the triangles
 		glEnd();
 
 		// deactivate texture
-		//if(image)
-			//glBindTexture(GL_TEXTURE_2D, 0);
+		if(current_group->material)
+      current_group->material->deactivate();
 
     // move on to next group
     current_group = (Group*)current_group->getNext();
 	}
-	while(current_group != first_group);
+	while(current_group != &first_group);
 
 }
 
@@ -424,7 +419,8 @@ void Mesh3D::print(ostream& out) const
 
   // print each group
   out << "# MESH GROUPS\n";
-  Group* group_i = first_group;
+  // we can't use current_group as it is not constant!
+  Group const* group_i = &first_group;
   do
   {
     // start group
@@ -439,9 +435,15 @@ void Mesh3D::print(ostream& out) const
       out << TAG_FACE;
       for(size_t v_i = 0; v_i < 3; v_i++)
       {
-        out << faces[face_i].vertex_i[v_i]+1 << '/'
-            << faces[face_i].uv_i[v_i]+1 << '/'
-            << faces[face_i].normal_i[v_i]+1 << ' ';
+        int v = faces[face_i].vertex_i[v_i]+1,
+            uv = faces[face_i].uv_i[v_i]+1,
+            n = faces[face_i].normal_i[v_i]+1;
+        out << v;
+        if(uv > 0)  // negative means that no uv coordinate was defined
+          out << '/' << uv;
+        if(n > 0) // negative means that no normal was defined
+          out << '/' << n;
+        out << ' ';
       }
       out << endl;
     }
@@ -449,7 +451,7 @@ void Mesh3D::print(ostream& out) const
     // move on to next group
     group_i = (Group*)group_i->getNext();
 	}
-	while(group_i != first_group);
+	while(group_i != &first_group);
 }
 
 std::ostream& operator<<(std::ostream& stream, Mesh3D const& m)
