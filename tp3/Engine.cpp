@@ -15,7 +15,7 @@ void Engine::setup()
   camera.target_x = camera.target_y  = camera.target_z = 0.0f;
 
 	// load the scene
-  scene = ReadOBJFile("assets/rubik.obj");
+  scene = ReadOBJFile("assets/Island_001.obj");
 
 	// load textures into video memory
 	glEnable(GL_TEXTURE_2D);
@@ -240,7 +240,14 @@ static void print_vertex(ostream& out, const VERTEX& v)
 
 void Engine::print(ostream& out) const
 {
+  // print totals as comments
+  out << "# " << scene->u32VerticesCount << " vertices\n";
+  out << "# " << scene->u32UVCount << " texture coordinates\n";
+  out << "# " << scene->u32NormalsCount << " normals\n";
+  out << "# " << scene->u32ObjectsCount << " mesh groups\n";
+
   // print all the vertices
+  out << "# VERTICES\n";
   for(size_t v_i = 0; v_i < scene->u32VerticesCount; v_i++)
   {
     out << "v ";
@@ -248,17 +255,20 @@ void Engine::print(ostream& out) const
   }
 
   // print all the texture (UV) coordinates
-  //! TODO
+  out << "# TEXTURE COORDINATES\n";
+  for(size_t tc_i = 0; tc_i < scene->u32UVCount; tc_i++)
+    out << "vt " << '('<< scene->pUV[tc_i].fU << ',' << scene->pUV[tc_i].fV << ')' <<  endl;
 
   // print all the normals
+  out << "# VERTEX NORMALS\n";
   for(size_t n_i = 0; n_i < scene->u32NormalsCount; n_i++)
   {
     out << "vn ";
     print_vertex(out, scene->pNormals[n_i]);
   }
 
-
-
+  // print the objects
+  out << "# MESH GROUPS\n";
   for(unsigned int obj_i = 0; obj_i < scene->u32ObjectsCount; obj_i++)
 	{
 		// start group
@@ -266,6 +276,7 @@ void Engine::print(ostream& out) const
 		if(obj.u32FacesCount == 0)
       continue;
 		out << "g " << endl;
+    out << "# group of " << obj.u32FacesCount << " faces\n";
 
     // print the group's faces
     for(unsigned int tri_i = obj.u32FirstFace, tri_cnt = 0;

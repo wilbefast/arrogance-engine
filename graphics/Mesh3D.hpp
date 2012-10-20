@@ -32,9 +32,9 @@ class face_t
 {
 public:
   // attributes
-  V3<size_t> vertex_i, uv_i, normal_i;
+  V3<int> vertex_i, uv_i, normal_i; // -1 if not used
   // constructor
-  face_t(V3<size_t> _vertex_i, V3<size_t> _uv_i, V3<size_t> _normal_i) :
+  face_t(V3<int> _vertex_i, V3<int> _uv_i, V3<int> _normal_i) :
                     vertex_i(_vertex_i), uv_i(_uv_i), normal_i(_normal_i) { }
   // decrementation operator: C++ indices start at 0, OBJ indices at 1
   face_t& operator--(){ vertex_i--; uv_i--; normal_i--; return (*this); }
@@ -81,6 +81,7 @@ private:
   vertex_t min, max;
   // there is always at least one group within the mesh
   Group *first_group, *current_group;
+  size_t n_groups;
 
 
   //! METHODS
@@ -99,6 +100,7 @@ public:
   //! SUBROUTINES
 private:
   // build iteratively
+  void add_group();
   void add_vertex(vertex_t new_vertex);
   void add_texture_coordinate(tex_coord_t new_texture_coordinate);
   void parse_faces(std::istringstream& s);

@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   #define STR_MATERIAL_LIBRARY "mtllib"
 #define TAG_USE_MATERIAL "us"
   #define STR_USE_MATERIAL "usemtl"
+#define TAG_SMOOTH_SHADING "s "
 
 using namespace std;
 
@@ -41,7 +42,7 @@ using namespace std;
 
 static inline bool seperatorSymbol(char c)
 {
-  return (c == ' ' || c == '\t' || c == '/');
+  return (c == ' ' || c == '\t');
 }
 
 static inline bool numberSymbol(char c)
@@ -80,7 +81,8 @@ texture_coordinates(),
 min(),
 max(),
 first_group(new Group()),
-current_group(first_group)
+current_group(first_group),
+n_groups(1)
 {
 }
 
@@ -94,8 +96,19 @@ int Mesh3D::load_obj(const char* filename)
   string line;
   while (getline(in, line))
   {
-    // lop off the first two characters, used to determine how we read the line
-    if(line.size() < 2 || line[0] == '#')
+    // group
+    if(line[0] == 'g')
+    {
+      add_group();
+      continue;
+    }
+
+    // comment
+    else if(line[0] == '#')
+      continue;
+
+    // grep the two characters, used to determine how we read the line
+    if(line.size() < 2)
       continue;
     string key(line.substr(0, 2));
     istringstream s(line.substr(2));
@@ -112,19 +125,6 @@ int Mesh3D::load_obj(const char* filename)
     // face
     else if(key == TAG_FACE)
       parse_faces(s);
-    // group
-    else if (key == TAG_GROUP)
-    {
-      if(faces.size()) // never close empty groups
-      {
-        // close current group
-        current_group->last_face = faces.size()-1;
-        // start new group
-        current_group = (Group*)current_group->newNext(new Group());
-        current_group->first_face = faces.size();
-      }
-
-    }
     // material library
     else if(key == TAG_MATERIAL_LIBRARY &&
             !line.substr(0, 6).compare(STR_MATERIAL_LIBRARY))
@@ -141,7 +141,11 @@ int Mesh3D::load_obj(const char* filename)
     else if (key == TAG_USE_MATERIAL &&
              !line.substr(0, 6).compare(STR_USE_MATERIAL))
     {
-      cout << "use material!\n";
+      cout << "use material! " << line << endl;
+    }
+    else if (key == TAG_SMOOTH_SHADING)
+    {
+      cout << "smooth shading! " << line << endl;
     }
     else
       cout << line << ": unrecognised\n";
@@ -167,6 +171,21 @@ Mesh3D::~Mesh3D()
 
 /* BUILD ITERATIVELY */
 
+void Mesh3D::add_group()
+{
+  // never close empty groups
+  if(faces.size()) //! FIXME
+  //if(current_group->first_face != faces.size())
+  {
+    // close current group
+    current_group->last_face = faces.size()-1;
+    // start new group
+    current_group = (Group*)current_group->newNext(new Group());
+    current_group->first_face = faces.size();
+    n_groups++;
+  }
+}
+
 void Mesh3D::add_vertex(vertex_t new_vertex)
 {
   // reset minimum and maximum coordinates of this mesh
@@ -185,7 +204,41 @@ void Mesh3D::add_vertex(vertex_t new_vertex)
 
 void Mesh3D::add_texture_coordinate(tex_coord_t new_tx_c)
 {
-  texture_coordinates.push_back(tex_coord_t(new_tx_c.x, 1.0f - new_tx_c.y));
+  texture_coordinates.push_back(tex_coord_t(new_tx_c.x, new_tx_c.y));
+}
+
+static bool end_block(istringstream& s, size_t& str_i)
+{
+  if(!seperatorSymbol(s.peek()))
+    // if there's a number it's not the end
+    return false;
+  else
+  {
+    // move to the next block before returing true
+    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
+    return true;
+  }
+}
+
+static bool next_block(istringstream& s, size_t& str_i, int& result)
+{
+  // if this block is empty, move on to the next one without reading anything
+  if(s.peek() == '/')
+  {
+    s.seekg(str_i++, ios_base::beg);
+    return !end_block(s, str_i);
+  }
+
+  // draw numbers from the stream, then skip over these numbers
+  s >> result;
+  do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
+
+  // if we encounter a '/' we should skip it
+  if(s.peek() == '/')
+    s.seekg(str_i++, ios_base::beg);
+
+  // return true if the next char is a number, false and skip white-space if not
+  return !end_block(s, str_i);
 }
 
 void Mesh3D::parse_faces(istringstream& s)
@@ -209,24 +262,9 @@ void Mesh3D::parse_faces(istringstream& s)
 
   size_t vtx_i;
   for(vtx_i = 0; vtx_i < 4  && s.peek() >= ' '; vtx_i++)
-  {
-    // 1. read the vertex index
-    s >> vert_indices[vtx_i];
-
-    // 2. read the (optional) texture coordinate index
-    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
-    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
-    s >> uv_indices[vtx_i];
-
-    // 3. read the (optional) normal index
-    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
-    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
-    s >> norm_indices[vtx_i];
-
-    // 4. move on to the next block
-    do { s.seekg(str_i++, ios_base::beg); } while(numberSymbol(s.peek()));
-    do { s.seekg(str_i++, ios_base::beg); } while(seperatorSymbol(s.peek()));
-  }
+    (next_block(s, str_i, vert_indices[vtx_i])
+      && next_block(s, str_i, uv_indices[vtx_i])
+      && next_block(s, str_i, norm_indices[vtx_i]));
 
   // always add a first triangle
   face_t triangle(toFirstV3(vert_indices),
@@ -363,23 +401,36 @@ void Mesh3D::draw()
 
 void Mesh3D::print(ostream& out) const
 {
+  // print total as comments
+  out << "# " << vertices.size() << " vertices\n";
+  out << "# " << texture_coordinates.size() << " texture coordinates\n";
+  out << "# " << normals.size() << " normals\n";
+  out << "# " << n_groups << " mesh groups\n";
+
   // print all the vertices
+  out << "# VERTICES\n";
   for(size_t v_i = 0; v_i < vertices.size(); v_i++)
     out << TAG_VERTEX << vertices[v_i] << endl;
 
+  out << "# TEXTURE COORDINATES\n";
   // print all the texture (UV) coordinates
-  //! TODO
+  for(size_t tc_i = 0; tc_i < texture_coordinates.size(); tc_i++)
+    out << TAG_TEXTURE_COORDINATES << ' ' << texture_coordinates[tc_i] << endl;
 
   // print all the normals
+  out << "# VERTEX NORMALS\n";
   for(size_t n_i = 0; n_i < normals.size(); n_i++)
     out << TAG_NORMAL << ' ' << normals[n_i] << endl;
 
   // print each group
+  out << "# MESH GROUPS\n";
   Group* group_i = first_group;
   do
   {
     // start group
     out << TAG_GROUP << endl;
+    out << "# group of " << group_i->last_face-group_i->first_face+1
+        << " faces\n";
 
     // print the group's faces
     for(size_t face_i = group_i->first_face;
@@ -387,10 +438,12 @@ void Mesh3D::print(ostream& out) const
     {
       out << TAG_FACE;
       for(size_t v_i = 0; v_i < 3; v_i++)
-       out << faces[face_i].vertex_i[v_i]+1 << '/'
+      {
+        out << faces[face_i].vertex_i[v_i]+1 << '/'
             << faces[face_i].uv_i[v_i]+1 << '/'
             << faces[face_i].normal_i[v_i]+1 << ' ';
-        out << endl;
+      }
+      out << endl;
     }
 
     // move on to next group

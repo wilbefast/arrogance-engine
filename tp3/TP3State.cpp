@@ -81,7 +81,7 @@ int TP3State::update(float delta)
       if(USE_MOULIS)
         engine.turnCamera(-1.0f);
       else
-        camera_angle += 1.0f;
+        camera_angle -= 1.0f;
     }
   }
   if(right)
@@ -93,7 +93,7 @@ int TP3State::update(float delta)
       if(USE_MOULIS)
         engine.turnCamera(1.0f);
       else
-        camera_angle -= 1.0f;
+        camera_angle += 1.0f;
     }
   }
   if(USE_MOULIS)

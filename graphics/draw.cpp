@@ -41,20 +41,20 @@ void draw_line(GLfloat points[], size_t dimension, Colour c, float thickness)
 {
   // Start up
   glPushMatrix();
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glLineWidth(thickness);
-  glColor4f(c.r, c.g, c.b, c.a);
-  glEnable(GL_LINE_SMOOTH);
-  //glScalef(global::scale.x, global::scale.y, 0.0f);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glLineWidth(thickness);
+    glColor4f(c.r, c.g, c.b, c.a);
+    glEnable(GL_LINE_SMOOTH);
+    //glScalef(global::scale.x, global::scale.y, 0.0f);
 
-  // Draw points
-  glVertexPointer(dimension, GL_FLOAT, 0, points);
-  glDrawArrays(GL_LINES, 0, 2);
+    // Draw points
+    glVertexPointer(dimension, GL_FLOAT, 0, points);
+    glDrawArrays(GL_LINES, 0, 2);
 
-  // Shut down
-  glDisable(GL_LINE_SMOOTH);
-  glColor4f(1, 1, 1, 1);
-  glDisableClientState(GL_VERTEX_ARRAY);
+    // Shut down
+    glDisable(GL_LINE_SMOOTH);
+    glColor4f(1, 1, 1, 1);
+    glDisableClientState(GL_VERTEX_ARRAY);
   glPopMatrix();
 }
 
