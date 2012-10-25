@@ -48,11 +48,12 @@ texture()
 void Material::activate()
 {
   // material
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissive.front());
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, ambient.front());
+  glMaterialfv(GL_FRONT, GL_SPECULAR, specular.front());
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse.front());
+  glMaterialfv(GL_FRONT, GL_EMISSION, emissive.front());
+  glMaterialfv(GL_FRONT, GL_SHININESS, &shininess);
+
   // UV map
   if(use_texture)
   {

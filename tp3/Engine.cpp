@@ -15,7 +15,7 @@ void Engine::setup()
   camera.target_x = camera.target_y  = camera.target_z = 0.0f;
 
 	// load the scene
-  scene = ReadOBJFile("assets/Island_001.obj");
+  scene = ReadOBJFile("assets/rubik.obj");
 
 	// load textures into video memory
 	glEnable(GL_TEXTURE_2D);
@@ -106,7 +106,7 @@ void Engine::render()
 
 		// get this object's material
 		IMAGE_DATA* image = NULL;
-		/*if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
+		if(obj.u32Material < scene->u32MaterialsCount) // check if there's a material
 		{
 			// cache material reference
 			MATERIAL& m = scene->pMaterials[obj.u32Material];
@@ -121,7 +121,7 @@ void Engine::render()
 			image = m.pDiffuse;
 			if(image) //! WARNING
 				glBindTexture(GL_TEXTURE_2D, (GLuint)(long)m.pDiffuse->pUserData);
-		}*/
+		}
 
 		// draw this object's faces
 		glBegin(GL_TRIANGLES);

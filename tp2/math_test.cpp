@@ -49,6 +49,15 @@ int math_test()
   cout << "M * 2 = " << M * 2.0f << endl;
   cout << "M / 2 = " << M / 2.0f << endl;
 
+  cout << endl << "MATRIX TO ARRAY" << endl;
+  cout << "M = (a, b, c, d) = " << M << endl;
+  float array[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+  M.exportArray(array);
+  cout << "array = " << endl;
+  for(size_t i = 0; i < 16; i++)
+    cout << array[i] << ' ';
+  cout << endl;
+
   cout << endl << "MATRIX-VECTOR MULTIPLICATION" << endl;
   cout << "M = " << M << endl;
   cout << "a = " << a << endl;

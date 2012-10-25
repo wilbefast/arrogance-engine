@@ -278,8 +278,6 @@
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />
 		<Unit filename="utils/IntrusiveLinked.hpp" />
-		<Unit filename="utils/Updated.hpp" />
-		<Unit filename="utils/Visitor.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

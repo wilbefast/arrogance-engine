@@ -344,8 +344,8 @@ void Mesh3D::draw()
 				  // vertex position
 				  glVertex3fv(vertices[face.vertex_i[v_i]].front());
           // vertex texture coordinate (optional)
-          //if(face.uv_i[v_i] >= 0)
-            //glTexCoord2fv(texture_coordinates[face.uv_i[v_i]].front());
+          if(face.uv_i[v_i] >= 0)
+            glTexCoord2fv(texture_coordinates[face.uv_i[v_i]].front());
 				  // vertex normal (optional)
           if(face.normal_i[v_i] >= 0) // negative indices mean no normal!
             glNormal3fv(normals[face.normal_i[v_i]].front());
@@ -424,6 +424,9 @@ void Mesh3D::print(ostream& out) const
   do
   {
     // start group
+    //! FIXME -- such groups should never have been created!
+    if(group_i->last_face-group_i->first_face < 0)
+      continue;
     out << TAG_GROUP << endl;
     out << "# group of " << group_i->last_face-group_i->first_face+1
         << " faces\n";
@@ -438,11 +441,16 @@ void Mesh3D::print(ostream& out) const
         int v = faces[face_i].vertex_i[v_i]+1,
             uv = faces[face_i].uv_i[v_i]+1,
             n = faces[face_i].normal_i[v_i]+1;
-        out << v;
+        out << v << '/';
         if(uv > 0)  // negative means that no uv coordinate was defined
-          out << '/' << uv;
+          out << uv;
+        else
+          out << v; //! FIXME -- just trying to ressemble Moulis here
+        out << '/';
         if(n > 0) // negative means that no normal was defined
-          out << '/' << n;
+          out << n;
+        else
+          out << v; //! FIXME -- just trying to ressemble Moulis here
         out << ' ';
       }
       out << endl;

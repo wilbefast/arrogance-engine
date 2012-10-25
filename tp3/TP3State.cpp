@@ -10,7 +10,7 @@
 #include "OBJLoader.hpp"
 #include "../debug/log.h"
 
-#define USE_MOULIS false
+//#define USE_MOULIS
 
 using namespace std;
 
@@ -32,6 +32,26 @@ ctrl(false)
 {
 }
 
+
+//! FIXME - EXPORT THIS TO A NEW COMPILATION UNIT
+//! ----------------------------------------------------------------------------
+static GLfloat a[16];
+static M44<GLfloat> m;
+
+void print_glmatrix(GLenum which_matrix)
+{
+  glGetFloatv(which_matrix, a);
+  m.importArray(a);
+  cout << m << endl;
+}
+
+void mult_glmatrix(M44<GLfloat>& transform)
+{
+  transform.exportArray(a);
+  glMultMatrixf(a);
+}
+//! ----------------------------------------------------------------------------
+
 int TP3State::startup()
 {
   // basic startup
@@ -40,10 +60,21 @@ int TP3State::startup()
 
   // load the 3D scene
   draw::use3D();
-  if(USE_MOULIS)
+  #ifdef USE_MOULIS
     engine.setup();
-  else
+  #else
     MeshManager::getInstance()->startup();
+  #endif // ifdef USE_MOULIS
+
+  // set up cube positions
+  for(size_t i = 0; i < N_CUBES; i++)
+  {
+    cube[i].toIdentity();
+    cube[i].col[3] = V4<GLfloat>(i*10, 0, 0, 1);
+
+    cout << "\t--------CUBE[" << i << "]--------" << endl;
+    cout << "matrix = " << cube[i] << endl;
+  }
 
   // all clear
   return EXIT_SUCCESS;
@@ -78,10 +109,11 @@ int TP3State::update(float delta)
       camera_move.x += 0.5f;
     else
     {
-      if(USE_MOULIS)
+      #ifdef USE_MOULIS
         engine.turnCamera(-1.0f);
-      else
+      #else
         camera_angle -= 1.0f;
+      #endif
     }
   }
   if(right)
@@ -90,16 +122,18 @@ int TP3State::update(float delta)
       camera_move.x -= 0.5f;
     else
     {
-      if(USE_MOULIS)
+      #ifdef USE_MOULIS
         engine.turnCamera(1.0f);
-      else
+      #else
         camera_angle += 1.0f;
+      #endif
     }
   }
-  if(USE_MOULIS)
+  #ifdef USE_MOULIS
     engine.moveCamera(camera_move);
-  else
+  #else
     camera_offset += camera_move;
+  #endif // ifdef USE_MOULIS
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -127,19 +161,44 @@ int TP3State::trigger(int which, bool pressed)
   return CONTINUE;
 }
 
+void TP3State::draw_rubik()
+{
+  static bool first = true;
+
+  for(size_t i = 0; i < N_CUBES; i++)
+  {
+    glPushMatrix();
+    if(first && i == 1)
+      print_glmatrix(GL_MODELVIEW_MATRIX);
+    mult_glmatrix(cube[i]);
+    //glTranslatef(10.0*i, 0.0f, 0.0f);
+    if(first && i == 1)
+      print_glmatrix(GL_MODELVIEW_MATRIX);
+
+      #ifdef USE_MOULIS
+        engine.render();
+      #else
+        MeshManager::getInstance()->mesh.draw();
+      #endif  // ifdef USE_MOULIS
+      glPopMatrix();
+  }
+
+  first =  false;
+
+}
+
 void TP3State::draw()
 {
-  if(USE_MOULIS)
-    engine.render();
-  else
-  {
+  #ifdef USE_MOULIS
+    draw_rubik();
+  #else
     // clear and reset
     glPushMatrix();
       glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
       glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
-      MeshManager::getInstance()->mesh.draw();
+      draw_rubik();
     glPopMatrix();
-  }
+  #endif // ifdef USE_MOULIS
 
   // Draw dynamic game objects
   GameState::draw();

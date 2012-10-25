@@ -288,8 +288,25 @@ template <typename T>
 inline M44<T>& M44<T>::orthogonalise()
 {
   // we want ensure 0 perpendicular to 1 and 2, and 1 to 2.
-  setRow(2, cross(row(1), row(2))); // 0 and 1 perpendicular to 2
-  setRow(1, cross(row(0), row(2))); // 1 perpendicular to 2
+  col[2] = cross(col[1], col[2]); // 0 and 1 perpendicular to 2
+  col[1] = cross(col[0], col[2]); // 1 perpendicular to 2
+  return (*this);
+}
+
+template <typename T>
+inline void M44<T>::exportArray(T array[]) const
+{
+  for(size_t r = 0; r < 4; r++)
+  for(size_t c = 0; c < 4; c++)
+    array[4*c + r] = col[c][r];
+}
+
+template <typename T>
+inline M44<T>& M44<T>::importArray(T array[])
+{
+  for(size_t r = 0; r < 4; r++)
+  for(size_t c = 0; c < 4; c++)
+    col[c][r] = array[4*c + r];
   return (*this);
 }
 

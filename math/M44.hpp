@@ -89,6 +89,8 @@ public:
   bool isScaleFree() const;
   M44& toIdentity();
   M44& orthogonalise();
+  void exportArray(T array[]) const;
+  M44& importArray(T array[]);
 
   // outstream
   void print(std::ostream& out) const;
