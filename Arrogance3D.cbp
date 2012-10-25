@@ -275,6 +275,11 @@
 		<Unit filename="tp3/TGALoader.hpp" />
 		<Unit filename="tp3/TP3State.cpp" />
 		<Unit filename="tp3/TP3State.hpp" />
+		<Unit filename="tp4/TP4State.cpp" />
+		<Unit filename="tp4/TP4State.hpp" />
+		<Unit filename="tp5/GLExt.h" />
+		<Unit filename="tp5/Shaders.cpp" />
+		<Unit filename="tp5/Shaders.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />
 		<Unit filename="utils/IntrusiveLinked.hpp" />

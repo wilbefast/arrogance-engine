@@ -1,4 +1,4 @@
-#include "TP3State.hpp"
+#include "TP4State.hpp"
 
 #include "../debug/assert.h"
 #include "../global.hpp"
@@ -7,17 +7,17 @@
 #include "../graphics/Mesh3D.hpp"
 #include "../graphics/draw.hpp"
 
-#include "OBJLoader.hpp"
+#include "../tp3/OBJLoader.hpp"
 #include "../debug/log.h"
 
-//define USE_MOULIS
+//#define USE_MOULIS
 
 using namespace std;
 
 
 /// CREATION, DESTRUCTION
 
-TP3State::TP3State() :
+TP4State::TP4State() :
 GameState(),
 camera_angle(0.0f),
 camera_offset(),
@@ -32,7 +32,27 @@ ctrl(false)
 {
 }
 
-int TP3State::startup()
+
+//! FIXME - EXPORT THIS TO A NEW COMPILATION UNIT
+//! ----------------------------------------------------------------------------
+static GLfloat a[16];
+static M44<GLfloat> m;
+
+void print_glmatrix(GLenum which_matrix)
+{
+  glGetFloatv(which_matrix, a);
+  m.importArray(a);
+  cout << m << endl;
+}
+
+void mult_glmatrix(M44<GLfloat>& transform)
+{
+  transform.exportArray(a);
+  glMultMatrixf(a);
+}
+//! ----------------------------------------------------------------------------
+
+int TP4State::startup()
 {
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
@@ -46,11 +66,21 @@ int TP3State::startup()
     MeshManager::getInstance()->startup();
   #endif // ifdef USE_MOULIS
 
+  // set up cube positions
+  for(size_t i = 0; i < N_CUBES; i++)
+  {
+    cube[i].toIdentity();
+    cube[i].col[3] = V4<GLfloat>(i*10, 0, 0, 1);
+
+    cout << "\t--------CUBE[" << i << "]--------" << endl;
+    cout << "matrix = " << cube[i] << endl;
+  }
+
   // all clear
   return EXIT_SUCCESS;
 }
 
-int TP3State::shutdown()
+int TP4State::shutdown()
 {
   // basic shutdown
   ASSERT(GameState::shutdown() == EXIT_SUCCESS,
@@ -62,36 +92,21 @@ int TP3State::shutdown()
 
 /// OVERRIDES GAMESTATE
 
-int TP3State::update(float delta)
+int TP4State::update(float delta)
 {
-  // cache trigonometry
-  float camera_cos_radians = cos(0.0174532925*camera_angle);
-  float camera_sin_radians = sin(0.0174532925*camera_angle);
-
   // move camera
   static fV3 camera_move;
   camera_move = fV3(0, 0, 0);
 
-  if(space) camera_move.y -= 1;
-  if(ctrl) camera_move.y += 1;
-  if(up)
-  {
-    camera_move.x -= camera_sin_radians;
-    camera_move.z += camera_cos_radians;
-  }
-  if(down)
-  {
-    camera_move.x += camera_sin_radians;
-    camera_move.z -= camera_cos_radians;
-  }
+  if(space) camera_move.y -= 0.5f;
+  if(ctrl) camera_move.y += 0.5f;
+  if(up) camera_move.z += 0.5f;
+  if(down) camera_move.z -= 0.5f;
 
   if(left)
   {
     if(alt)
-    {
-      camera_move.x += camera_cos_radians;
-      camera_move.z += camera_sin_radians;
-    }
+      camera_move.x += 0.5f;
     else
     {
       #ifdef USE_MOULIS
@@ -104,10 +119,7 @@ int TP3State::update(float delta)
   if(right)
   {
     if(alt)
-    {
-      camera_move.x -= camera_cos_radians;
-      camera_move.z -= camera_sin_radians;
-    }
+      camera_move.x -= 0.5f;
     else
     {
       #ifdef USE_MOULIS
@@ -132,7 +144,7 @@ int TP3State::update(float delta)
   return CONTINUE;
 }
 
-int TP3State::trigger(int which, bool pressed)
+int TP4State::trigger(int which, bool pressed)
 {
   switch(which)
   {
@@ -149,15 +161,42 @@ int TP3State::trigger(int which, bool pressed)
   return CONTINUE;
 }
 
-void TP3State::draw()
+void TP4State::draw_rubik()
+{
+  static bool first = true;
+
+  for(size_t i = 0; i < N_CUBES; i++)
+  {
+    glPushMatrix();
+    if(first && i == 1)
+      print_glmatrix(GL_MODELVIEW_MATRIX);
+    mult_glmatrix(cube[i]);
+    //glTranslatef(10.0*i, 0.0f, 0.0f);
+    if(first && i == 1)
+      print_glmatrix(GL_MODELVIEW_MATRIX);
+
+      #ifdef USE_MOULIS
+        engine.render();
+      #else
+        MeshManager::getInstance()->mesh.draw();
+      #endif  // ifdef USE_MOULIS
+      glPopMatrix();
+  }
+
+  first =  false;
+
+}
+
+void TP4State::draw()
 {
   #ifdef USE_MOULIS
-    engine.render();
+    draw_rubik();
   #else
+    // clear and reset
     glPushMatrix();
-      glRotatef(camera_angle, 0, 1, 0);
       glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-      MeshManager::getInstance()->mesh.draw();
+      glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
+      draw_rubik();
     glPopMatrix();
   #endif // ifdef USE_MOULIS
 
