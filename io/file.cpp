@@ -27,9 +27,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace io;
 
-std::string io::path_to_name(const char* file_path)
+std::string io::path_to_extension(const char* path)
 {
-  std::string name(file_path);
+  std::string extension(path);
+  extension = extension.substr(extension.find_last_of('.'));
+  return extension;
+}
+
+std::string io::path_to_name(const char* path)
+{
+  std::string name(path);
   name = name.substr(name.find_last_of('/'));
   return name;
 }
@@ -58,8 +65,8 @@ int io::read_text(const char* file_path, char** destination)
   ASSERT(file, "Opening text file using SDL_RWops");
 
   // Find the length of the file
-  int file_length = SDL_RWseek(file, 0, SEEK_END);
-  (*destination) = new char[file_length];
+  size_t file_length = SDL_RWseek(file, 0, SEEK_END);
+  (*destination) = new char[file_length+1]; // allow an extra character for '\0'
 
   // Reset seek to beginning of file and read text
   SDL_RWseek(file, 0, SEEK_SET);
@@ -67,6 +74,8 @@ int io::read_text(const char* file_path, char** destination)
   SDL_RWclose(file);
   // Make sure the operation was successful
   ASSERT(n_blocks >= 0, "Reading blocks of data from SDL_RWops");
+  // C strings should always be NULL terminated
+  (*destination)[file_length] = '\0';
 
   // Success!
   return EXIT_SUCCESS;

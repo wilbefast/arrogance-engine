@@ -216,7 +216,7 @@ int Application::startSDL()
   global::viewport = fV2(screen->w, screen->h);
   SDL_WM_SetCaption(APP_NAME, NULL);
 
-#endif // SDL2
+#endif // ifdef SDL2
 
   // Calculate the scale of the window relative the the default size
   global::scale = fV2(global::viewport.x / (float)WINDOW_DEFAULT_W,
@@ -228,6 +228,10 @@ int Application::startSDL()
 
 int Application::startGL()
 {
+  // Start the GL extension wrangler (GLEW)
+  GLenum result = glewInit();
+  ASSERT_AUX(result == GLEW_OK, "Starting GLEW", glewGetErrorString(result));
+
   // Define viewport
   glViewport(0, 0, global::viewport.x, global::viewport.y);
 

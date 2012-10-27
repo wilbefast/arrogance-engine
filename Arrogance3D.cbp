@@ -45,6 +45,7 @@
 					<Add option="-lSDL2_mixer" />
 					<Add option="-lSDL2_ttf" />
 					<Add option="-lGL" />
+					<Add option="-lGLEW" />
 					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
@@ -64,6 +65,7 @@
 					<Add option="-lSDL_mixer" />
 					<Add option="-lSDL_ttf" />
 					<Add option="-lGL" />
+					<Add option="-lGLEW" />
 					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
@@ -83,6 +85,7 @@
 					<Add option="-lSDL_mixer" />
 					<Add option="-lSDL_ttf" />
 					<Add option="-lGL" />
+					<Add option="-lGLEW" />
 					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
@@ -244,6 +247,7 @@
 		<Unit filename="math/numerise.inl" />
 		<Unit filename="math/wjd_math.cpp" />
 		<Unit filename="math/wjd_math.h" />
+		<Unit filename="opengl.h" />
 		<Unit filename="readme.txt" />
 		<Unit filename="scenes/Button.cpp" />
 		<Unit filename="scenes/Button.hpp" />
@@ -278,8 +282,8 @@
 		<Unit filename="tp4/TP4State.cpp" />
 		<Unit filename="tp4/TP4State.hpp" />
 		<Unit filename="tp5/GLExt.h" />
-		<Unit filename="tp5/Shaders.cpp" />
-		<Unit filename="tp5/Shaders.hpp" />
+		<Unit filename="tp5/Shader.cpp" />
+		<Unit filename="tp5/Shader.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />
 		<Unit filename="utils/IntrusiveLinked.hpp" />

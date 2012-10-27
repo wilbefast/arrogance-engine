@@ -23,7 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Application.hpp"
 #include "scenes/MainMenu.hpp"
 #include "scenes/Game.hpp"  /// FIXME
-#include "tp2/math_test.hpp"
+#include "tp2/math_test.hpp" /// FIXME
+#include "tp5/Shader.hpp" /// FIXME
+
+#include <iostream> /// FIXME
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
