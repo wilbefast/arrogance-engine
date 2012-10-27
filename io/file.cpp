@@ -30,7 +30,7 @@ using namespace io;
 std::string io::path_to_extension(const char* path)
 {
   std::string extension(path);
-  extension = extension.substr(extension.find_last_of('.'));
+  extension = extension.substr(extension.find_last_of('.')+1);
   return extension;
 }
 

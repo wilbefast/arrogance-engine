@@ -4,6 +4,7 @@
 #include "../math/V3.hpp"
 
 #include "../scenes/GameState.hpp"
+#include "../graphics/3D/Shader.hpp"
 
 
 class TP5State : public GameState
@@ -17,6 +18,9 @@ private:
   float camera_angle;
   fV3 camera_offset;
   bool left, right, up, down, alt, space, ctrl;
+
+  // shaders
+  Shader shader;
 
   /// METHODS
 public:

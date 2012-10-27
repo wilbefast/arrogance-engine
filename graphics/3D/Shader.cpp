@@ -6,34 +6,7 @@
 #include "../../opengl.h"
 
 
-
-#include <iostream>
-
 using namespace std;
-
-///------------------------------------------- FIXME
-void printLog(GLuint obj)
-{
-	int infologLength = 0;
-	int maxLength;
-
-	if(glIsShader(obj))
-		glGetShaderiv(obj,GL_INFO_LOG_LENGTH,&maxLength);
-	else
-		glGetProgramiv(obj,GL_INFO_LOG_LENGTH,&maxLength);
-
-	char infoLog[maxLength];
-
-	if (glIsShader(obj))
-		glGetShaderInfoLog(obj, maxLength, &infologLength, infoLog);
-	else
-		glGetProgramInfoLog(obj, maxLength, &infologLength, infoLog);
-
-	if (infologLength > 0)
-		printf("%s\n",infoLog);
-}
-///-------------------------------------------
-
 
 //! CONSTRUCTORS, DESTRUCTORS
 
@@ -60,9 +33,9 @@ static Shader::Type file_type(const char* file_path)
   // return the corresponding type token
   if(!extension.compare(STR_PIXEL))
     return Shader::PIXEL;
-  else if(!extension.compare(STR_PIXEL))
+  else if(!extension.compare(STR_VERTEX))
     return Shader::VERTEX;
-  else if(!extension.compare(STR_PIXEL))
+  else if(!extension.compare(STR_GEOMETRY))
     return Shader::GEOMETRY;
   else
     return Shader::INVALID;
@@ -80,20 +53,34 @@ static int compile(GLenum shader_type, unsigned long* handle, char** source)
 }
 
 // import function
-int Shader::load_from(const char* file, ...)
+int Shader::load(const char* file)
 {
-  // all clear!
-  return EXIT_SUCCESS;
+  return load_all(1, file);
+}
+
+int Shader::load_all(unsigned int n_files, ...)
+{
+  // load a shader from each file given in the arguments
+  va_list arguments;
+  va_start(arguments, n_files);
+  for(size_t i = 0; i < n_files; i++)
+    load_aux(va_arg(arguments, char*));
+  va_end(arguments);
 
   // get a handle for this program
   program_id = glCreateProgram();
   // attach shaders
-  if(vertex_id)    { glAttachShader(program_id, vertex_id); printLog(vertex_id); } /// FIXME
-  if(pixel_id)     { glAttachShader(program_id, pixel_id); printLog(pixel_id); } /// FIXME
-  if(geometry_id)  { glAttachShader(program_id, geometry_id); printLog(geometry_id); } /// FIXME
+  if(vertex_id)
+    glAttachShader(program_id, vertex_id);
+  if(pixel_id)
+    glAttachShader(program_id, pixel_id);
+  if(geometry_id)
+    glAttachShader(program_id, geometry_id);
   // link the program
 	glLinkProgram(program_id);
-	printLog(program_id); /// FIXME
+
+  // all clear!
+  return EXIT_SUCCESS;
 }
 
 //! USE
@@ -103,14 +90,16 @@ void Shader::activate()
   glUseProgram(program_id);
 }
 
-void deactivate()
+void Shader::deactivate()
 {
   glUseProgram(0);
 }
 
 //! SUBROUTINES
 
-int Shader::load_from(const char* file_path)
+#include <iostream> /// FIXME
+
+int Shader::load_aux(const char* file_path)
 {
   // get the type of shader based on the extension ('.vert', '.frag' or '.geom')
   Type type = file_type(file_path);

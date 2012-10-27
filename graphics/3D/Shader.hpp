@@ -21,14 +21,15 @@ public:
   Shader();
   ~Shader();
   // import
-  int load_from(const char* file, ...);
+  int load(const char* file);
+  int load_all(unsigned int n_files, ...);
   // use
   void activate();
   void deactivate();
 
   //! SUBROUTINES
 private:
-  int load_from(const char* file_path);
+  int load_aux(const char* file_path);
 };
 
 #endif // ifndef SHADER_HPP_INCLUDED

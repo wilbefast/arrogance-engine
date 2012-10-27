@@ -23,7 +23,8 @@ up(false),
 down(false),
 alt(false),
 space(false),
-ctrl(false)
+ctrl(false),
+shader()
 {
 }
 
@@ -37,6 +38,10 @@ int TP5State::startup()
   draw::use3D();
   ASSERT(MeshManager::getInstance()->mesh.
     load_obj("assets/BerkeleyDragon.obj") == EXIT_SUCCESS, "Loading mesh");
+
+  // load the shader
+  shader.load("assets/shaders/green.frag");
+  //shader.load_all(2, "assets/shaders/diffuse.frag", "assets/shaders/diffuse.vert");
 
   // all clear
   return EXIT_SUCCESS;
@@ -119,6 +124,8 @@ int TP5State::trigger(int which, bool pressed)
 		case SDLK_DOWN: down = pressed; break;
 		case SDLK_LEFT: left = pressed; break;
 		case SDLK_RIGHT: right = pressed; break;
+		case 's': shader.activate(); break;
+		case 'x': shader.deactivate(); break;
   }
 
   // All clear
@@ -128,6 +135,7 @@ int TP5State::trigger(int which, bool pressed)
 
 void TP5State::draw()
 {
+
   // clear and reset
   glPushMatrix();
     glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
