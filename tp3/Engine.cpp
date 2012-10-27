@@ -10,12 +10,12 @@
 
 using namespace std;
 
-void Engine::setup()
+void Engine::setup(const char* obj_file)
 {
   camera.target_x = camera.target_y  = camera.target_z = 0.0f;
 
 	// load the scene
-  scene = ReadOBJFile("assets/rubik.obj");
+  scene = ReadOBJFile(obj_file);
 
 	// load textures into video memory
 	glEnable(GL_TEXTURE_2D);

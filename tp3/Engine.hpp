@@ -24,7 +24,7 @@ private:
   //! METHODS
 public:
   void render();
-  void setup();
+  void setup(const char* obj_file);
 	void keydown(int key);
 	void print(std::ostream& out) const;
 

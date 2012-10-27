@@ -57,7 +57,10 @@ void Material::activate()
   // UV map
   if(use_texture)
   {
-    glBindTexture(GL_TEXTURE_2D, texture.getHandle());
+    static bool first = true;
+    if(first) std::cout << "WARN - Material textures not working: FIXME!\n";
+    first = false;
+    //glBindTexture(GL_TEXTURE_2D, texture.getHandle());
     //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     //glTexCoordPointer(2, GL_FLOAT, 0, &texture_coordinates.front());
   }

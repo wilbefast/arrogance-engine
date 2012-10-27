@@ -26,8 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debug/warn.h"
 #include "../math/V3.hpp"
 
-#include "../graphics/Mesh3D.hpp"
-
 #include "file.hpp"
 
 using namespace std;
@@ -62,7 +60,7 @@ int MeshManager::load()
   // load meshes and materials
 
   //! FIXME
-  ASSERT(mesh.load_obj(GET_ASSET("rubik.obj")) == EXIT_SUCCESS, "Loading mesh");
+  ASSERT(mesh.load_obj(GET_ASSET("BerkeleyDragon.obj")) == EXIT_SUCCESS, "Loading mesh");
 
   //! TODO
   //ASSERT(load_xml(GET_ASSET("3Dobjects.xml")) == EXIT_SUCCESS,

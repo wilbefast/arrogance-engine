@@ -1,5 +1,5 @@
 /*
-Arrogance Engine: a simple SDL/OpenGL game engine for Desktop and Android.
+Black Dog: a game for Android and Desktop platforms using SDL and OpenGLES.
 Copyright (C) 2012 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
@@ -15,29 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef MESH2D_HPP_INCLUDED
+#define MESH2D_HPP_INCLUDED
 
-#ifndef GRAPHIC_HPP_INCLUDED
-#define GRAPHIC_HPP_INCLUDED
+#include "../../opengl.h"      // for OpenGL/GLES types
+#include "../draw.hpp"
 
-#include "Texture.hpp"
-#include "../math/Rect.hpp"
-
-class Graphic
+class Mesh2D
 {
-    /// ATTRIBUTES
-    protected:
-    Texture* texture;
-    iRect frame; // the source area of
+protected:
+  unsigned int n_vertices;
+  GLfloat* vertices;
 
-    /// METHODS
-    public:
-    // constructors, destructor
-    Graphic();
-    // main methods
-    void init(Texture* init_texture, iRect init_frame);
-    // accessors
-    Texture* getTexture();
-    iRect getFrame() const;
+public:
+  // creation, destruction
+  Mesh2D(unsigned int n_triangles);
+  virtual ~Mesh2D();
+  // loop
+  void draw(float offset_x, Colour c = Colour());
 };
 
-#endif // GRAPHIC_HPP_INCLUDED
+#endif // MESH2D_HPP_INCLUDED

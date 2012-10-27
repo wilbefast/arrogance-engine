@@ -4,13 +4,9 @@
 #include "../global.hpp"
 #include "../io/MeshManager.hpp"
 
-#include "../graphics/Mesh3D.hpp"
 #include "../graphics/draw.hpp"
-
-#include "../tp3/OBJLoader.hpp"
 #include "../debug/log.h"
 
-//#define USE_MOULIS
 
 using namespace std;
 
@@ -21,7 +17,6 @@ TP4State::TP4State() :
 GameState(),
 camera_angle(0.0f),
 camera_offset(),
-engine(),
 left(false),
 right(false),
 up(false),
@@ -56,15 +51,11 @@ int TP4State::startup()
 {
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
-        "TP3State starting GameState");
+        "TP4State starting GameState");
 
   // load the 3D scene
   draw::use3D();
-  #ifdef USE_MOULIS
-    engine.setup();
-  #else
-    MeshManager::getInstance()->startup();
-  #endif // ifdef USE_MOULIS
+MeshManager::getInstance()->startup();
 
   // set up cube positions
   for(size_t i = 0; i < N_CUBES; i++)
@@ -84,7 +75,7 @@ int TP4State::shutdown()
 {
   // basic shutdown
   ASSERT(GameState::shutdown() == EXIT_SUCCESS,
-        "TP3State stopping GameState");
+        "TP4State stopping GameState");
 
   // all clear
   return EXIT_SUCCESS;
@@ -108,32 +99,16 @@ int TP4State::update(float delta)
     if(alt)
       camera_move.x += 0.5f;
     else
-    {
-      #ifdef USE_MOULIS
-        engine.turnCamera(-1.0f);
-      #else
-        camera_angle -= 1.0f;
-      #endif
-    }
+      camera_angle -= 1.0f;
   }
   if(right)
   {
     if(alt)
       camera_move.x -= 0.5f;
     else
-    {
-      #ifdef USE_MOULIS
-        engine.turnCamera(1.0f);
-      #else
-        camera_angle += 1.0f;
-      #endif
-    }
+      camera_angle += 1.0f;
   }
-  #ifdef USE_MOULIS
-    engine.moveCamera(camera_move);
-  #else
-    camera_offset += camera_move;
-  #endif // ifdef USE_MOULIS
+  camera_offset += camera_move;
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -175,12 +150,8 @@ void TP4State::draw_rubik()
     if(first && i == 1)
       print_glmatrix(GL_MODELVIEW_MATRIX);
 
-      #ifdef USE_MOULIS
-        engine.render();
-      #else
-        MeshManager::getInstance()->mesh.draw();
-      #endif  // ifdef USE_MOULIS
-      glPopMatrix();
+    MeshManager::getInstance()->mesh.draw();
+    glPopMatrix();
   }
 
   first =  false;
@@ -189,16 +160,12 @@ void TP4State::draw_rubik()
 
 void TP4State::draw()
 {
-  #ifdef USE_MOULIS
+  // clear and reset
+  glPushMatrix();
+    glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
+    glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
     draw_rubik();
-  #else
-    // clear and reset
-    glPushMatrix();
-      glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-      glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
-      draw_rubik();
-    glPopMatrix();
-  #endif // ifdef USE_MOULIS
+  glPopMatrix();
 
   // Draw dynamic game objects
   GameState::draw();

@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MESHMANAGER_HPP_INCLUDED
 
 #include "ResourceManager.hpp"
-#include "../graphics/Mesh3D.hpp"
+#include "../graphics/3D/Mesh3D.hpp"
 
 class MeshManager : public ResourceManager
 {

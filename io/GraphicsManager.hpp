@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ResourceManager.hpp"
 
 #include "../graphics/Texture.hpp"
-#include "../graphics/Animation.hpp"
+#include "../graphics/2D/Animation.hpp"
 
 #define TEXTURE_FILETYPE "tga"
 

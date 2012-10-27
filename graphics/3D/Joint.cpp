@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Joint.hpp"
 
-#include "draw.hpp"
-#include "../debug/warn.h"
+#include "../draw.hpp"
+#include "../../debug/warn.h"
 
 using namespace std;
 

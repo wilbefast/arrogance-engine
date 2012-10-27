@@ -19,11 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>  // for istringstream
 #include <fstream>  // for ifstream
 
-#include "../io/file.hpp" // for ASSET_PATH
+#include "../../io/file.hpp" // for ASSET_PATH
 
-#include "../debug/assert.h"
+#include "../../debug/assert.h"
 
-#include "Texture.hpp"
+#include "../Texture.hpp"
 
 #include "MaterialLibrary.hpp"
 
@@ -41,6 +41,7 @@ int MaterialLibrary::load_mtl(const char* filename)
 {
   // open the file
   ifstream in(filename, ios::in);
+  log(LOG_INFO, "load_mtl: %s", filename);
   ASSERT(in, "'MaterialLibrary::load_mtl' opening material file");
 
   // read each line

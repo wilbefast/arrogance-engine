@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Mesh3D.hpp"
 
-#include "../debug/assert.h"            // for ASSERT macro
-#include "../io/file.hpp"               // for ASSET_PATH
-#include "../math/V4.hpp"               // used to store quads temporarily
+#include "../../debug/assert.h"            // for ASSERT macro
+#include "../../io/file.hpp"               // for ASSET_PATH
+#include "../../math/V4.hpp"               // used to store quads temporarily
 
 #define TAG_VERTEX "v "
 #define TAG_FACE "f "
@@ -344,11 +344,14 @@ void Mesh3D::draw()
 				  // vertex position
 				  glVertex3fv(vertices[face.vertex_i[v_i]].front());
           // vertex texture coordinate (optional)
-          if(face.uv_i[v_i] >= 0)
+          if(face.uv_i[v_i] >= 0) // negative indices mean no uv!
             glTexCoord2fv(texture_coordinates[face.uv_i[v_i]].front());
 				  // vertex normal (optional)
           if(face.normal_i[v_i] >= 0) // negative indices mean no normal!
             glNormal3fv(normals[face.normal_i[v_i]].front());
+
+          else if(normals.size() <= vertices.size()) /// FIXME!
+            glNormal3fv(vertices[face.vertex_i[v_i]].front());
 				}
 			}
 			// finished drawing the triangles
@@ -362,7 +365,6 @@ void Mesh3D::draw()
     current_group = (Group*)current_group->getNext();
 	}
 	while(current_group != &first_group);
-
 }
 
 

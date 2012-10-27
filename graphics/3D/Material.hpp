@@ -19,11 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MATERIAL_HPP_INCLUDED
 #define MATERIAL_HPP_INCLUDED
 
-#include "../math/numerise.h"
-#include "../utils/IntrusiveLinked.hpp"
+#include "../../math/numerise.h"
+#include "../../utils/IntrusiveLinked.hpp"
 
-#include "Colour.hpp"
-#include "Texture.hpp"
+#include "../Colour.hpp"
+#include "../Texture.hpp"
 
 class Material : public IntrusiveLinked
 {

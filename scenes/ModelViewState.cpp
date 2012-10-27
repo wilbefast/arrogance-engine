@@ -25,12 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../graphics/draw.hpp"
 
-#include "../graphics/Joint.hpp"
-Joint joint1(NULL, vertex_t(0.0, 0.0, 0.0));
-Joint joint2(&joint1, vertex_t(0.5, 0.5, 0.0));
-Joint joint3(&joint1, vertex_t(0.3, 0.8, 0.0));
-Joint joint4(&joint3, vertex_t(0.9, 0.5, 0.0));
-
 
 /// CREATION, DESTRUCTION
 

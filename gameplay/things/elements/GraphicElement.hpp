@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GRAPHICELEMENT_HPP_INCLUDED
 
 #include "ThingElement.hpp"
-#include "../../../graphics/GraphicIncarnation.hpp"
+#include "../../../graphics/2D/GraphicIncarnation.hpp"
 
 class GraphicElement : public ThingElement, public GraphicIncarnation
 {

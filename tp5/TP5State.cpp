@@ -1,27 +1,22 @@
-#include "TP3State.hpp"
+#include "TP5State.hpp"
 
 #include "../debug/assert.h"
 #include "../global.hpp"
 #include "../io/MeshManager.hpp"
 
 #include "../graphics/draw.hpp"
-
-#include "OBJLoader.hpp"
 #include "../debug/log.h"
 
-//#define USE_MOULIS
-#define OBJ_FILE "assets/Island_001.obj"
 
 using namespace std;
 
 
 /// CREATION, DESTRUCTION
 
-TP3State::TP3State() :
+TP5State::TP5State() :
 GameState(),
 camera_angle(0.0f),
 camera_offset(),
-engine(),
 left(false),
 right(false),
 up(false),
@@ -32,29 +27,26 @@ ctrl(false)
 {
 }
 
-int TP3State::startup()
+int TP5State::startup()
 {
   // basic startup
   ASSERT(GameState::startup() == EXIT_SUCCESS,
-        "TP3State starting GameState");
+        "TP5State starting GameState");
 
   // load the 3D scene
   draw::use3D();
-  #ifdef USE_MOULIS
-    engine.setup(OBJ_FILE);
-  #else
-    MeshManager::getInstance()->mesh.load_obj(OBJ_FILE);
-  #endif // ifdef USE_MOULIS
+  ASSERT(MeshManager::getInstance()->mesh.
+    load_obj("assets/BerkeleyDragon.obj") == EXIT_SUCCESS, "Loading mesh");
 
   // all clear
   return EXIT_SUCCESS;
 }
 
-int TP3State::shutdown()
+int TP5State::shutdown()
 {
   // basic shutdown
   ASSERT(GameState::shutdown() == EXIT_SUCCESS,
-        "TP3State stopping GameState");
+        "TP5State stopping GameState");
 
   // all clear
   return EXIT_SUCCESS;
@@ -62,7 +54,7 @@ int TP3State::shutdown()
 
 /// OVERRIDES GAMESTATE
 
-int TP3State::update(float delta)
+int TP5State::update(float delta)
 {
   // cache trigonometry
   float camera_cos_radians = cos(0.0174532925*camera_angle);
@@ -93,13 +85,7 @@ int TP3State::update(float delta)
       camera_move.z += camera_sin_radians;
     }
     else
-    {
-      #ifdef USE_MOULIS
-        engine.turnCamera(-1.0f);
-      #else
-        camera_angle -= 1.0f;
-      #endif
-    }
+      camera_angle -= 1.0f;
   }
   if(right)
   {
@@ -109,19 +95,9 @@ int TP3State::update(float delta)
       camera_move.z -= camera_sin_radians;
     }
     else
-    {
-      #ifdef USE_MOULIS
-        engine.turnCamera(1.0f);
-      #else
-        camera_angle += 1.0f;
-      #endif
-    }
+      camera_angle += 1.0f;
   }
-  #ifdef USE_MOULIS
-    engine.moveCamera(camera_move);
-  #else
     camera_offset += camera_move;
-  #endif // ifdef USE_MOULIS
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -132,7 +108,7 @@ int TP3State::update(float delta)
   return CONTINUE;
 }
 
-int TP3State::trigger(int which, bool pressed)
+int TP5State::trigger(int which, bool pressed)
 {
   switch(which)
   {
@@ -149,17 +125,15 @@ int TP3State::trigger(int which, bool pressed)
   return CONTINUE;
 }
 
-void TP3State::draw()
+
+void TP5State::draw()
 {
-  #ifdef USE_MOULIS
-    engine.render();
-  #else
-    glPushMatrix();
-      glRotatef(camera_angle, 0, 1, 0);
-      glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-      MeshManager::getInstance()->mesh.draw();
-    glPopMatrix();
-  #endif // ifdef USE_MOULIS
+  // clear and reset
+  glPushMatrix();
+    glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
+    glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
+    MeshManager::getInstance()->mesh.draw();
+  glPopMatrix();
 
   // Draw dynamic game objects
   GameState::draw();

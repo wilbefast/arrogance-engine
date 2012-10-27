@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Mesh2D.hpp"
-#include "../global.hpp"
+#include "../../global.hpp"
 
 /// CREATION, DESTRUCTION
 Mesh2D::Mesh2D(unsigned int n_triangles) :

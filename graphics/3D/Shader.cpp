@@ -1,11 +1,9 @@
 #include "Shader.hpp"
 
-#include "../io/file.hpp"
-#include "../debug/assert.h"
+#include "../../io/file.hpp"
+#include "../../debug/assert.h"
 
-#include <GL/glew.h>  /// FIXME
-
-#include "../opengl.h"
+#include "../../opengl.h"
 
 
 

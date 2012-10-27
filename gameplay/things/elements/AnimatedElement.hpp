@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ANIMATEDELEMENT_HPP_INCLUDED
 
 #include "ThingElement.hpp"
-#include "../../../graphics/AnimationIncarnation.hpp"
+#include "../../../graphics/2D/AnimationIncarnation.hpp"
 
 class AnimatedElement : public ThingElement, public AnimationIncarnation
 {
