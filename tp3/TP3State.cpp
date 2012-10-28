@@ -155,8 +155,8 @@ void TP3State::draw()
     engine.render();
   #else
     glPushMatrix();
-      glRotatef(camera_angle, 0, 1, 0);
       glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
+      glRotatef(camera_angle, 0, 1, 0);
       MeshManager::getInstance()->mesh.draw();
     glPopMatrix();
   #endif // ifdef USE_MOULIS

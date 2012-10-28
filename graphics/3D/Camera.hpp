@@ -27,7 +27,7 @@ class Camera
   //! ATTRIBUTES
 private:
   Angle yaw;
-  fV3 offset;
+  fV3 position;
 
   //! METHODS
 public:
@@ -35,8 +35,8 @@ public:
   Camera();
   // accessors
   void reset();
-  void turn(int degrees);
-  void pan(fV3 translation);
+  void turn(int amount);
+  void pan(fV3 amount);
   void lookThrough() const;
 };
 

@@ -20,7 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../opengl.h"
 
-Camera::Camera()
+Camera::Camera() :
+yaw(0),
+position(0.0f, 0.0f, 0.0f)
 {
 
 }
@@ -32,13 +34,18 @@ void Camera::turn(int amount)
 
 void Camera::pan(fV3 amount)
 {
-  offset += amount;
+  double c = cos(yaw.getRad()),
+          s = sin(yaw.getRad());
+
+  position.x += c*amount.x - s*amount.z;
+  position.y += amount.y;
+  position.z += c*amount.z + s*amount.x;
 }
 
 void Camera::lookThrough() const
 {
   glRotatef(yaw.getDeg(), 0.0f, 1.0f, 0.0f);
-  glTranslatef(offset.x, offset.y, offset.z);
+  glTranslatef(position.x, position.y, position.z);
 }
 
 

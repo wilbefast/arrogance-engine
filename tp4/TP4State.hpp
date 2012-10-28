@@ -4,8 +4,10 @@
 #include "../scenes/GameState.hpp"
 #include "../math/V3.hpp"
 #include "../math/M44.hpp"
+#include "../graphics/3D/Camera.hpp"
 
-#define N_CUBES 26
+#define CUBES_PER_SIDE 3
+#define CUBE_SPACING 20
 
 class TP4State : public GameState
 {
@@ -15,11 +17,13 @@ private:
 
   /// ATTRIBUTES
 private:
-  float camera_angle;
-  fV3 camera_offset;
+  Camera camera;
   bool left, right, up, down, alt, space, ctrl;
   // rubik's cube
-  M44<GLfloat> cube[N_CUBES];
+  M44<GLfloat> cube[CUBES_PER_SIDE][CUBES_PER_SIDE][CUBES_PER_SIDE];
+  Angle cube_turn;
+  iV3 cube_axis;  // along which axis are we turning
+  size_t cube_rank;  // which rank of cubes is being turned
 
   /// METHODS
 public:

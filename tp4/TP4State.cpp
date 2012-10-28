@@ -15,15 +15,17 @@ using namespace std;
 
 TP4State::TP4State() :
 GameState(),
-camera_angle(0.0f),
-camera_offset(),
+camera(),
 left(false),
 right(false),
 up(false),
 down(false),
 alt(false),
 space(false),
-ctrl(false)
+ctrl(false),
+cube_turn(0),
+cube_axis(1,0,0),
+cube_rank(0)
 {
 }
 
@@ -58,13 +60,14 @@ int TP4State::startup()
   MeshManager::getInstance()->mesh.load_obj("assets/rubik.obj");
 
   // set up cube positions
-  for(size_t i = 0; i < N_CUBES; i++)
+  for(int x = 0; x < CUBES_PER_SIDE; x++)
+  for(int y = 0; y < CUBES_PER_SIDE; y++)
+  for(int z = 0; z < CUBES_PER_SIDE; z++)
   {
-    cube[i].toIdentity();
-    cube[i].col[3] = V4<GLfloat>(i*10, 0, 0, 1);
-
-    cout << "\t--------CUBE[" << i << "]--------" << endl;
-    cout << "matrix = " << cube[i] << endl;
+    cube[x][y][z].toIdentity();
+    cube[x][y][z].col[3] = V4<GLfloat>((x-1)*CUBE_SPACING,
+                                       (y-1)*CUBE_SPACING,
+                                       (z-1)*CUBE_SPACING, 1);
   }
 
   // all clear
@@ -85,9 +88,24 @@ int TP4State::shutdown()
 
 int TP4State::update(float delta)
 {
+  // turn the appropriate side
+  cube_turn += 1;
+  if(cube_turn.getDeg()%90 == 0)
+  {
+    // choose new axis upon which to turn
+    size_t axis_i = rand()%3;
+    cube_axis = iV3(0,0,0);
+    cube_axis[axis_i] = 1;
+
+    // choose which rank of cubes upon this axis will turn
+    cube_rank = rand()%3;
+  }
+
   // move camera
   static fV3 camera_move;
-  camera_move = fV3(0, 0, 0);
+    camera_move = fV3(0, 0, 0);
+  static float camera_angle;
+    camera_angle = 0.0f;
 
   if(space) camera_move.y -= 0.5f;
   if(ctrl) camera_move.y += 0.5f;
@@ -108,7 +126,10 @@ int TP4State::update(float delta)
     else
       camera_angle += 1.0f;
   }
-  camera_offset += camera_move;
+
+  // Apply the camera movement
+  camera.turn(camera_angle);
+  camera.pan(camera_move);
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -138,32 +159,26 @@ int TP4State::trigger(int which, bool pressed)
 
 void TP4State::draw_rubik()
 {
-  static bool first = true;
-
-  for(size_t i = 0; i < N_CUBES; i++)
+  for(size_t x = 0; x < CUBES_PER_SIDE; x++)
+  for(size_t y = 0; y < CUBES_PER_SIDE; y++)
+  for(size_t z = 0; z < CUBES_PER_SIDE; z++)
   {
     glPushMatrix();
-    if(first && i == 1)
-      print_glmatrix(GL_MODELVIEW_MATRIX);
-    mult_glmatrix(cube[i]);
-    //glTranslatef(10.0*i, 0.0f, 0.0f);
-    if(first && i == 1)
-      print_glmatrix(GL_MODELVIEW_MATRIX);
-
-    MeshManager::getInstance()->mesh.draw();
+      if((cube_axis.x && x == cube_rank)
+      || (cube_axis.y && y == cube_rank)
+      || (cube_axis.z && z == cube_rank))
+        glRotatef(cube_turn.getDeg(), cube_axis.x, cube_axis.y, cube_axis.z);
+      mult_glmatrix(cube[x][y][z]);
+      MeshManager::getInstance()->mesh.draw();
     glPopMatrix();
   }
-
-  first =  false;
-
 }
 
 void TP4State::draw()
 {
   // clear and reset
   glPushMatrix();
-    glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-    glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
+    camera.lookThrough();
     draw_rubik();
   glPopMatrix();
 
