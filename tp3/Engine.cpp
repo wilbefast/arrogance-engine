@@ -39,6 +39,9 @@ void Engine::setup(const char* obj_file)
 				ext_format = GL_RGBA;
 				int_format = 4;
 			break;
+			default:
+        printf("WARN - unknown pixel format\n");
+      break;
 		}
 
 		// Request an OpenGL unassigned GLuint to identify this texture

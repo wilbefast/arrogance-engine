@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define PI 3.14159265
 #define RAD2DEG(r) (r*180/PI)
+#define DEG2RAD(d) (d*PI/180)
 #define MAX(x,y) (x>y?x:y)
 #define MIN(x,y) (x<y?x:y)
 #define SIGN(x) (x>0?1:(x<0?-1:0))

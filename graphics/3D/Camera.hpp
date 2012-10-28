@@ -16,36 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef CAMERA_HPP_INCLUDED
+#define CAMERA_HPP_INCLUDED
 
-#include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#include "../../math/V3.hpp"
+#include "../../math/Angle.hpp"
 
-#include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
-#include "../tp4/TP4State.hpp" //! FIXME
-#include "../tp5/TP5State.hpp" //! FIXME
-
-/// CREATION & DESTRUCTION
-
-Game::Game(bool tutorial) :
-Scene(new TP4State())
+class Camera
 {
-}
+  //! ATTRIBUTES
+private:
+  Angle yaw;
+  fV3 offset;
 
-int Game::startup()
-{
-  ASSERT(Scene::startup() == EXIT_SUCCESS, "Game generic startup");
-  // all clear !
-  return EXIT_SUCCESS;
-}
+  //! METHODS
+public:
+  // constructors, destructors
+  Camera();
+  // accessors
+  void reset();
+  void turn(int degrees);
+  void pan(fV3 translation);
+  void lookThrough() const;
+};
 
-Game::~Game()
-{
-}
-
-Scene* Game::previous()
-{
-  return new MainMenu();
-}
+#endif // CAMERA_HPP_INCLUDED

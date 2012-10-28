@@ -195,6 +195,8 @@
 		<Unit filename="graphics/2D/HeightMesh.hpp" />
 		<Unit filename="graphics/2D/Mesh2D.cpp" />
 		<Unit filename="graphics/2D/Mesh2D.hpp" />
+		<Unit filename="graphics/3D/Camera.cpp" />
+		<Unit filename="graphics/3D/Camera.hpp" />
 		<Unit filename="graphics/3D/Joint.cpp" />
 		<Unit filename="graphics/3D/Joint.hpp" />
 		<Unit filename="graphics/3D/Material.cpp" />
@@ -236,6 +238,8 @@
 		<Unit filename="jni_glue.cpp" />
 		<Unit filename="licence-gpl-3.0.txt" />
 		<Unit filename="main.cpp" />
+		<Unit filename="math/Angle.cpp" />
+		<Unit filename="math/Angle.hpp" />
 		<Unit filename="math/M44.hpp" />
 		<Unit filename="math/M44.inl" />
 		<Unit filename="math/Rect.hpp" />
@@ -287,6 +291,7 @@
 		<Unit filename="tp5/TP5State.cpp" />
 		<Unit filename="tp5/TP5State.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
+		<Unit filename="utils/Bounded.inl" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />
 		<Unit filename="utils/IntrusiveLinked.hpp" />
 		<Extensions>

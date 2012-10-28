@@ -55,7 +55,7 @@ int TP4State::startup()
 
   // load the 3D scene
   draw::use3D();
-MeshManager::getInstance()->startup();
+  MeshManager::getInstance()->mesh.load_obj("assets/rubik.obj");
 
   // set up cube positions
   for(size_t i = 0; i < N_CUBES; i++)

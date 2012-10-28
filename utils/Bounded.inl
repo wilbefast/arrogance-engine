@@ -103,24 +103,24 @@ inline Bounded<T>& Bounded<T>::operator= (const Bounded<U> &source)
 //! ARITHMETIC OPERATORS
 
 // Additions and subtractions
-template<typename T> inline Bounded<T>& Bounded<T>::operator+=(T v)
+template<typename T> inline Bounded<T>& Bounded<T>::operator+=(const T& v)
 {
   value = BOUND(value + v, min, max);
   return (*this);
 }
 
-template<typename T> inline T Bounded<T>::operator+(T v) const
+template<typename T> inline T Bounded<T>::operator+(const T& v) const
 {
   return value + v;
 }
 
-template<typename T> inline Bounded<T>& Bounded<T>::operator-=(T v)
+template<typename T> inline Bounded<T>& Bounded<T>::operator-=(const T& v)
 {
   value = BOUND(value - v, min, max);
   return (*this);
 }
 
-template<typename T> inline T Bounded<T>::operator-(T v) const
+template<typename T> inline T Bounded<T>::operator-(const T& v) const
 {
   return value - v;
 }
@@ -131,24 +131,24 @@ template<typename T> inline T Bounded<T>::operator-() const
 }
 
 // Multiplications and divisions
-template<typename T> inline Bounded<T>& Bounded<T>::operator*=(T k)
+template<typename T> inline Bounded<T>& Bounded<T>::operator*=(const T& k)
 {
   value = BOUND(value*k, min, max);
   return (*this);
 }
 
-template<typename T> inline T Bounded<T>::operator*(T k) const
+template<typename T> inline T Bounded<T>::operator*(const T& k) const
 {
   return value*k;
 }
 
-template<typename T> inline Bounded<T>& Bounded<T>::operator/=(T k)
+template<typename T> inline Bounded<T>& Bounded<T>::operator/=(const T& k)
 {
   value = BOUND(value/k, min, max);
   return (*this);
 }
 
-template<typename T> inline T Bounded<T>::operator/(T k) const
+template<typename T> inline T Bounded<T>::operator/(const T& k) const
 {
   return value/k;
 }

@@ -43,16 +43,16 @@ public:
 
   // Arithmetic operators
   // Additions and subtractions
-  Bounded& operator+=(T v);
-  T operator+(T v) const;
-  Bounded& operator-=(T v);
-  T operator-(T v) const;
+  Bounded& operator+=(const T& v);
+  T operator+(const T& v) const;
+  Bounded& operator-=(const T& v);
+  T operator-(const T& v) const;
   T operator-() const;   // unary minus or "additive inverse"
   // Multiplications and divisions
-  Bounded& operator*=(T k);
-  T operator*(T k) const;
-  Bounded& operator/=(T k);
-  T operator/(T k) const;
+  Bounded& operator*=(const T& k);
+  T operator*(const T& k) const;
+  Bounded& operator/=(const T& k);
+  T operator/(const T& k) const;
 
   // incrementation and decrementation
   Bounded& operator++(); // prefix -- preincrement
