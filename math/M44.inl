@@ -93,6 +93,14 @@ inline M44<T>& M44<T>::operator= (const M44<U> &source)
   return (*this);
 }
 
+template <typename T>
+inline M44<T>& M44<T>::operator= (const M44<T> &source)
+{
+  for(unsigned int i = 0; i < 4; i++)
+    col[i] = source.col[i];
+  return (*this);
+}
+
 // Matrix addition and subtraction
 template <typename T>
 inline M44<T>& M44<T>::operator+=(M44 const& other)

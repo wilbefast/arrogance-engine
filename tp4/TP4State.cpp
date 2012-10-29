@@ -7,9 +7,12 @@
 #include "../graphics/draw.hpp"
 #include "../debug/log.h"
 
+#define TURN_SPEED 1
+
 
 using namespace std;
 
+static M44<GLfloat> BASECUBE[CUBES_PER_SIDE][CUBES_PER_SIDE][CUBES_PER_SIDE];
 
 /// CREATION, DESTRUCTION
 
@@ -64,10 +67,11 @@ int TP4State::startup()
   for(int y = 0; y < CUBES_PER_SIDE; y++)
   for(int z = 0; z < CUBES_PER_SIDE; z++)
   {
-    cube[x][y][z].toIdentity();
-    cube[x][y][z].col[3] = V4<GLfloat>((x-1)*CUBE_SPACING,
+    BASECUBE[x][y][z].toIdentity();
+    BASECUBE[x][y][z].col[3] = V4<GLfloat>((x-1)*CUBE_SPACING,
                                        (y-1)*CUBE_SPACING,
                                        (z-1)*CUBE_SPACING, 1);
+    cube[x][y][z] = BASECUBE[x][y][z];
   }
 
   // all clear
@@ -89,7 +93,18 @@ int TP4State::shutdown()
 int TP4State::update(float delta)
 {
   // turn the appropriate side
-  cube_turn += 1;
+  static fM44 turn_mat[3] = { fM44::xRotMatrix(DEG2RAD(TURN_SPEED)),
+                            fM44::yRotMatrix(DEG2RAD(TURN_SPEED)),
+                            fM44::zRotMatrix(DEG2RAD(TURN_SPEED)) };
+
+  static bool first = true;
+  if(first)
+    cout << turn_mat[0] << turn_mat[1] << turn_mat[2] << endl;
+  first = false;
+
+
+  cube_turn += TURN_SPEED;
+
   if(cube_turn.getDeg()%90 == 0)
   {
     // choose new axis upon which to turn
@@ -101,6 +116,18 @@ int TP4State::update(float delta)
     cube_rank = rand()%3;
   }
 
+  /*for(size_t i = 0; i < CUBES_PER_SIDE; i++)
+  for(size_t j = 0; j < CUBES_PER_SIDE; j++)
+  {
+    if(cube_axis.x)
+      cube[cube_rank][i][j] = turn_mat[0]*cube[cube_rank][i][j];
+
+    else if(cube_axis.y)
+      cube[i][cube_rank][j] = turn_mat[1]*cube[i][cube_rank][j];
+
+    else if(cube_axis.z)
+      cube[i][j][cube_rank] = turn_mat[2]*cube[i][j][cube_rank];
+  }*/
   // move camera
   static fV3 camera_move;
     camera_move = fV3(0, 0, 0);

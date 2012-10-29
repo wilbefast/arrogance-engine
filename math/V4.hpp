@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OY4(type) V4<type>(0,1,0)
 #define OZ4(type) V4<type>(0,0,1)
 
+#include "V3.hpp"
+
 // Simple vector classes
 template <typename T>
 class V4
@@ -42,6 +44,7 @@ public:
   V4();
   V4(T x, T y, T z, T w = 0);
   V4(std::istream& in);
+  V4(const V3<T>& source);
 
   template <typename U>
   explicit V4(const V4<U>& source);

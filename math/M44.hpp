@@ -59,6 +59,7 @@ public:
   // Arithmetic operators
   template <typename U>
   M44& operator= (const M44<U>& source);
+  M44& operator= (const M44& source);
   // vector addition
   M44& operator+=(M44 const& other);
   M44 operator+(M44 const& other) const;

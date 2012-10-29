@@ -44,6 +44,16 @@ inline V4<T>::V4(std::istream& in)
   read(in);
 }
 
+// Create by adding an extra 0 to the end of a 3-element vector
+template <typename T>
+inline V4<T>::V4(V3<T> const& source)
+{
+  x = source.x;
+  y = source.y;
+  z = source.z;
+  w = 0;
+}
+
 // Copy constructor. Ex: iV4 b(a);
 template<typename T>
 template<typename U>
