@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../graphics/Texture.hpp"
 #include "../graphics/2D/Animation.hpp"
 
-#define TEXTURE_FILETYPE "tga"
+#define TEXTURE_FILETYPE "png"
 
 typedef std::map<str_id, Texture*> TextureMap;
 typedef TextureMap::iterator TextureI;

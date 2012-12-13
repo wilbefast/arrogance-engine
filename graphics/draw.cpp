@@ -33,7 +33,7 @@ void glPerspective(GLdouble fov, GLdouble aspect, GLdouble near, GLdouble far)
 {
   GLdouble height = tan(fov / 360 * PI) * near,
          width = height * aspect;
-  glFrustum(-width, width, -height, height, near, far);
+  glFrustum(-width, width, height, -height, near, far);
 }
 
 // The public line-drawing functions are just adaptors for this one
@@ -93,14 +93,14 @@ void draw::use3D()
   glClear(GL_DEPTH_BUFFER_BIT);
 
 	// Set up lighting
-	glEnable(GL_LIGHTING);
+	/*glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT1);*/
 
   // Set up camera frustrum
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glPerspective(VIEW_FIELD, global::viewport.x/global::viewport.y, NEAR, FAR);
+  glPerspective(VIEW_FIELD, (float)global::viewport.x/global::viewport.y, NEAR, FAR);
 
   // Clean the slate
   glMatrixMode(GL_MODELVIEW);

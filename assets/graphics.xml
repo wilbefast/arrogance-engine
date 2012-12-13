@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <graphics>
 	<texture_list>
-		<texture name="menus" />
+		<texture name="sprite" />
 	</texture_list>
 </graphics>
