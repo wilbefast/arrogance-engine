@@ -27,11 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ResourceManager.hpp"
 
-// custom assertion
-#include "../debug/assert.h"
-#define ASSERT_MIX(assertion, what)                     \
-    ASSERT_AUX(assertion, what, Mix_GetError())
-
 #define SOUND_FILETYPE "wav"
 #define MUSIC_FILETYPE "ogg"
 #define VOLUME_STEP MIX_MAX_VOLUME/14

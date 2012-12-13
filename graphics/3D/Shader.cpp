@@ -95,9 +95,14 @@ void Shader::deactivate()
   glUseProgram(0);
 }
 
-//! SUBROUTINES
+//! UNIFORMS
 
-#include <iostream> /// FIXME
+void Shader::parameter(const char* name, float value)
+{
+  glUniform1f(glGetUniformLocation(program_id, name), (GLfloat)value);
+}
+
+//! SUBROUTINES
 
 int Shader::load_aux(const char* file_path)
 {

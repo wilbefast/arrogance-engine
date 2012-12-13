@@ -50,7 +50,7 @@ public:
           Colour e = Colour(0.0f, 0.0f, 0.0f, 1.0f),
           float shine = 0.0f);
   // drawing
-  void activate();
+  bool activate();
   void deactivate();
 };
 

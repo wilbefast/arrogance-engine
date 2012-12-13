@@ -66,6 +66,7 @@
 					<Add option="-lSDL_ttf" />
 					<Add option="-lGL" />
 					<Add option="-lGLEW" />
+					<Add library="/usr/local/lib/libfmodexL64-4.42.07.so" />
 					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
@@ -86,6 +87,7 @@
 					<Add option="-lSDL_ttf" />
 					<Add option="-lGL" />
 					<Add option="-lGLEW" />
+					<Add library="/usr/local/lib/libfmodex64-4.42.07.so" />
 					<Add directory="/usr/local/lib" />
 				</Linker>
 			</Target>
@@ -155,6 +157,8 @@
 		<Unit filename="debug/log.cpp" />
 		<Unit filename="debug/log.h" />
 		<Unit filename="debug/warn.h" />
+		<Unit filename="fmod_1/Fmod1State.cpp" />
+		<Unit filename="fmod_1/Fmod1State.hpp" />
 		<Unit filename="gameplay/things/Thing.cpp" />
 		<Unit filename="gameplay/things/Thing.hpp" />
 		<Unit filename="gameplay/things/elements/AnimatedElement.cpp" />
@@ -217,6 +221,8 @@
 		<Unit filename="graphics/draw.hpp" />
 		<Unit filename="io/AudioManager.cpp" />
 		<Unit filename="io/AudioManager.hpp" />
+		<Unit filename="io/FMODAudioManager.cpp" />
+		<Unit filename="io/FMODAudioManager.hpp" />
 		<Unit filename="io/FontManager.cpp" />
 		<Unit filename="io/FontManager.hpp" />
 		<Unit filename="io/GraphicsManager.cpp" />
@@ -255,6 +261,8 @@
 		<Unit filename="math/wjd_math.cpp" />
 		<Unit filename="math/wjd_math.h" />
 		<Unit filename="opengl.h" />
+		<Unit filename="particles/ParticleTest.cpp" />
+		<Unit filename="particles/ParticleTest.hpp" />
 		<Unit filename="readme.txt" />
 		<Unit filename="scenes/Button.cpp" />
 		<Unit filename="scenes/Button.hpp" />

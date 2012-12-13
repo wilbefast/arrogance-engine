@@ -96,8 +96,9 @@ void Engine::render()
 	// move camera
 	glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
-  glRotatef(camera.rotation, 0.0f, 1.0f, 0.0f);
+  //glRotatef(camera.rotation, 0.0f, 1.0f, 0.0f);
 	glTranslatef(camera.target_x, camera.target_y, camera.target_z);
+	glRotatef(camera.rotation, 0.0f, 1.0f, 0.0f);
 
 	// move to object positions...
 

@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /// CREATION & DESTRUCTION
 
 Game::Game(bool tutorial) :
-Scene(new TP4State())
+Scene(new TP3State())
 {
 }
 

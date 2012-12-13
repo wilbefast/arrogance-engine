@@ -26,6 +26,8 @@ public:
   // use
   void activate();
   void deactivate();
+  // send uniform values
+  void parameter(const char* name, float value);
 
   //! SUBROUTINES
 private:

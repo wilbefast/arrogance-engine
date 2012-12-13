@@ -304,10 +304,10 @@ static void ParseMaterialLibrary(SCENE *pS, const char *sSceneFile, const char *
 	if (!pMat)
 	  return;
 
-
 	//--- Parse scene file, first pass
 	while (fgets(pcLine, sizeof(pcLine), pMat))
 	{
+
 		//--- Parse file line
 
 		pcArgs = TokenizeFileLine(pcLine, &Tag);

@@ -88,7 +88,7 @@ template<typename T> inline Bounded<T>::operator T() const
   return value;
 }
 
-// Cast by affection from Bpunded<U> to Bpunded<T>. Ex: bt = bu;
+// Cast by affection from Bounded<U> to Bounded<T>. Ex: bt = bu;
 template<typename T>
 template <typename U>
 inline Bounded<T>& Bounded<T>::operator= (const Bounded<U> &source)

@@ -40,8 +40,10 @@ int TP5State::startup()
     load_obj("assets/BerkeleyDragon.obj") == EXIT_SUCCESS, "Loading mesh");
 
   // load the shader
-  shader.load("assets/shaders/green.frag");
-  //shader.load_all(2, "assets/shaders/diffuse.frag", "assets/shaders/diffuse.vert");
+  //shader.load("assets/shaders/green.frag");
+  //shader.load_all(2, "assets/shaders/normals.vert", "assets/shaders/normals.frag");
+  shader.load_all(2, "assets/shaders/wobble.vert", "assets/shaders/wobble.frag");
+
 
   // all clear
   return EXIT_SUCCESS;
@@ -61,6 +63,10 @@ int TP5State::shutdown()
 
 int TP5State::update(float delta)
 {
+  static float time = 0;
+  time ++;
+  shader.parameter("time", time);
+
   // cache trigonometry
   float camera_cos_radians = cos(0.0174532925*camera_angle);
   float camera_sin_radians = sin(0.0174532925*camera_angle);

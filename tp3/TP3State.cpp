@@ -10,7 +10,7 @@
 #include "../debug/log.h"
 
 //#define USE_MOULIS
-#define OBJ_FILE "assets/Island_001.obj"
+#define OBJ_FILE "assets/Island_001.obj"//"assets/cube.obj"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ using namespace std;
 
 TP3State::TP3State() :
 GameState(),
-camera_angle(0.0f),
+camera_angle(180.0f),
 camera_offset(),
 engine(),
 left(false),
@@ -120,7 +120,7 @@ int TP3State::update(float delta)
   #ifdef USE_MOULIS
     engine.moveCamera(camera_move);
   #else
-    camera_offset += camera_move;
+    camera_offset += camera_move * 0.3f;
   #endif // ifdef USE_MOULIS
 
   // Update dynamic game objects
@@ -155,8 +155,8 @@ void TP3State::draw()
     engine.render();
   #else
     glPushMatrix();
-      glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
       glRotatef(camera_angle, 0, 1, 0);
+      glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
       MeshManager::getInstance()->mesh.draw();
     glPopMatrix();
   #endif // ifdef USE_MOULIS

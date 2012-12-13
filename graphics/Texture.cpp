@@ -27,6 +27,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debug/warn.h"
 #include "../math/wjd_math.h"      // Needed for ISPWR2
 
+#define FLIP_HORIZONTAL 0b00000001
+#define FLIP_VERTICAL 0b00000010
+
+
+/// PRIVATE FUNCTION DECLARATIONS
+
+// functions from "lazyfoot.net/SDL_tutorials/lesson32/"
+Uint32 get_pixel32(SDL_Surface *surface, size_t x, size_t y);
+void set_pixel32(SDL_Surface *surface, size_t x, size_t y, Uint32 pixel);
+SDL_Surface *flip_surface(SDL_Surface *surface, int flags);
+
 /// CONSTRUCTORS, DESTRUCTORS
 
 Texture::Texture() :
@@ -43,6 +54,7 @@ int Texture::load(const char* filepath)
 
   // Load the image using SDL_image
   SDL_Surface* surface = IMG_Load(filepath);
+
   ASSERT_SDL(surface, "Opening image file");
 
   // continue working from this surface
@@ -50,6 +62,7 @@ int Texture::load(const char* filepath)
 
   // Be sure to delete the bitmap from CPU memory before returning the result!
   SDL_FreeSurface(surface);
+
   return result;
 }
 
@@ -105,7 +118,7 @@ int Texture::from_surface(SDL_Surface* surface)
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   // Finally: convert the image to a texture
-  glTexImage2D(GL_TEXTURE_2D, 0, format, area.w, area.h, 0,
+  glTexImage2D(GL_TEXTURE_2D, 0, n_colours, area.w, area.h, 0,
                   format, GL_UNSIGNED_BYTE, surface->pixels);
 
   // Unbind the texture
@@ -208,4 +221,58 @@ void Texture::draw(const fRect* src_ptr, const fRect* dst_ptr, float angle)
   // Reset back to normal
   glPopMatrix();
   glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+/// PRIVATE FUNCTION IMPLEMENTATIONS
+
+Uint32 get_pixel32(SDL_Surface *surface, size_t x, size_t y)
+{
+  Uint32 *pixels = (Uint32*)surface->pixels;
+  return pixels[y * surface->w + x];
+}
+
+void set_pixel32(SDL_Surface *surface, size_t x, size_t y, Uint32 pixel)
+{
+  Uint32 *pixels = (Uint32*)surface->pixels;
+  pixels[y * surface->w + x] = pixel;
+}
+
+SDL_Surface *flip_surface(SDL_Surface *surface, int flags)
+{
+  SDL_Surface *flipped = NULL;
+
+  // Alpha? Colour-keyed?
+  Uint32 amask = (surface->flags & SDL_SRCCOLORKEY) ? 0 : surface->format->Amask;
+  flipped = SDL_CreateRGBSurface(SDL_SWSURFACE, surface->w, surface->h,
+                                  surface->format->BitsPerPixel,
+                                   surface->format->Rmask,
+                                   surface->format->Gmask,
+                                   surface->format->Bmask,
+                                   amask);
+
+
+  printf("w=%d, h=%d\n", flipped->w, flipped->h);
+
+  // Lock surface if need be
+  if(SDL_MUSTLOCK(surface))
+    SDL_LockSurface(surface);
+
+  for(size_t x = 0, rx = flipped->w-1; x < (size_t)flipped->w; x++, rx--)
+  for(size_t y = 0, ry = flipped->h-1; y < (size_t)flipped->h; y++, ry--)
+  {
+    size_t dest_x = (flags & FLIP_HORIZONTAL) ? rx : x,
+            dest_y = (flags & FLIP_VERTICAL) ? ry : y;
+    set_pixel32(flipped, dest_x, dest_y, get_pixel32(surface, x, y));
+  }
+
+  // Unlock surface if need be
+  if(SDL_MUSTLOCK(surface))
+    SDL_UnlockSurface(surface);
+
+  // Copy colour-key
+  if(surface->flags & SDL_SRCCOLORKEY)
+    SDL_SetColorKey(flipped, SDL_RLEACCEL|SDL_SRCCOLORKEY, surface->format->colorkey);
+
+  // finished :)
+  return flipped;
 }

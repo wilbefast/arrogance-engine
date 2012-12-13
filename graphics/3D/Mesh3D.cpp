@@ -322,8 +322,9 @@ void Mesh3D::draw()
   do
 	{
 		// activate the current group's material
+		bool bink;
 		if(current_group->material)
-      current_group->material->activate();
+       bink=  current_group->material->activate();
 
     if(current_group->smooth)
       glShadeModel(GL_SMOOTH);
@@ -339,19 +340,28 @@ void Mesh3D::draw()
 				// cache the current triangle
 				face_t const& face = faces[face_i];
 
+        static bool first = true;
+        if(first && bink)
+        {
+          cout << face.uv_i << endl;
+
+          for(size_t v_i = 0; v_i < 3; v_i++)
+            cout << texture_coordinates[face.uv_i[v_i]] << endl;
+
+          first = false;
+        }
+
+
 				for(size_t v_i = 0; v_i < 3; v_i++)
 				{
-				  // vertex position
-				  glVertex3fv(vertices[face.vertex_i[v_i]].front());
           // vertex texture coordinate (optional)
           if(face.uv_i[v_i] >= 0) // negative indices mean no uv!
             glTexCoord2fv(texture_coordinates[face.uv_i[v_i]].front());
 				  // vertex normal (optional)
           if(face.normal_i[v_i] >= 0) // negative indices mean no normal!
             glNormal3fv(normals[face.normal_i[v_i]].front());
-
-          else if(normals.size() <= vertices.size()) /// FIXME!
-            glNormal3fv(vertices[face.vertex_i[v_i]].front());
+          // vertex position
+				  glVertex3fv(vertices[face.vertex_i[v_i]].front());
 				}
 			}
 			// finished drawing the triangles
@@ -366,33 +376,6 @@ void Mesh3D::draw()
 	}
 	while(current_group != &first_group);
 }
-
-
-/*
-{
-  // Material
-  material.activate();
-  // Vertices
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, &vertices.front());
-  // Triangles
-  glEnableClientState(GL_INDEX_ARRAY);
-  glIndexPointer(GL_UNSIGNED_BYTE, 0, &faces.front());
-  // Normals
-  glEnableClientState(GL_NORMAL_ARRAY);
-  glNormalPointer(GL_FLOAT, 0, &normals.front());
-
-  // Draw the triangles using the specified normals
-  glDrawElements(GL_TRIANGLES, 3*faces.size(), GL_UNSIGNED_BYTE, &faces.front());
-
-  // Shut down
-  glDisableClientState(GL_VERTEX_ARRAY);
-  glDisableClientState(GL_INDEX_ARRAY);
-  glDisableClientState(GL_NORMAL_ARRAY);
-  //material.deactivate();
-  glLoadIdentity();
-}*/
-
 
 //! FOR DEBUGGING
 

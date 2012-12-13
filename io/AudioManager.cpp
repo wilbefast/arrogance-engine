@@ -26,6 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "file.hpp"                       // for io::MAX_BLOCKS
 #include "tinyxml/tinyxml.h"
 
+// custom assertion
+#include "../debug/assert.h"
+#define ASSERT_MIX(assertion, what)                     \
+    ASSERT_AUX(assertion, what, Mix_GetError())
+
 using namespace std;
 
 /// SINGLETON

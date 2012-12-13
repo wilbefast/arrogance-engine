@@ -27,18 +27,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <vector>
 
-// faces, for debugging
 class face_t
 {
 public:
-  // attributes
-  V3<int> vertex_i, uv_i, normal_i; // -1 if not used
-  // constructor
+  //! ATTRIBUTES
+  // a face is a triangle, so needs 3 vertice, UV and normal indices (or -1)
+  V3<int> vertex_i, uv_i, normal_i;
+
+  //! METHODS
   face_t(V3<int> _vertex_i, V3<int> _uv_i, V3<int> _normal_i) :
                     vertex_i(_vertex_i), uv_i(_uv_i), normal_i(_normal_i) { }
   // decrementation operator: C++ indices start at 0, OBJ indices at 1
   face_t& operator--(){ vertex_i--; uv_i--; normal_i--; return (*this); }
 };
+
 typedef std::vector<face_t> face_list_t;
 typedef face_list_t::iterator face_list_it;
 
