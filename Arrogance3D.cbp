@@ -144,6 +144,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-D#USE_GLS" />
 		</Compiler>
 		<Unit filename="Android.mk" />
 		<Unit filename="Application.cpp" />
@@ -157,7 +158,6 @@
 		<Unit filename="debug/log.cpp" />
 		<Unit filename="debug/log.h" />
 		<Unit filename="debug/warn.h" />
-		<Unit filename="fmod_1/Fmod1State.cpp" />
 		<Unit filename="fmod_1/Fmod1State.hpp" />
 		<Unit filename="gameplay/things/Thing.cpp" />
 		<Unit filename="gameplay/things/Thing.hpp" />
@@ -282,23 +282,14 @@
 		<Unit filename="scenes/Scene.hpp" />
 		<Unit filename="scenes/SceneState.cpp" />
 		<Unit filename="scenes/SceneState.hpp" />
-		<Unit filename="tp1/Puppet.cpp" />
 		<Unit filename="tp1/Puppet.hpp" />
-		<Unit filename="tp1/TP1State.cpp" />
 		<Unit filename="tp1/TP1State.hpp" />
-		<Unit filename="tp2/math_test.cpp" />
 		<Unit filename="tp2/math_test.hpp" />
-		<Unit filename="tp3/Engine.cpp" />
 		<Unit filename="tp3/Engine.hpp" />
-		<Unit filename="tp3/OBJLoader.cpp" />
 		<Unit filename="tp3/OBJLoader.hpp" />
-		<Unit filename="tp3/TGALoader.cpp" />
 		<Unit filename="tp3/TGALoader.hpp" />
-		<Unit filename="tp3/TP3State.cpp" />
 		<Unit filename="tp3/TP3State.hpp" />
-		<Unit filename="tp4/TP4State.cpp" />
 		<Unit filename="tp4/TP4State.hpp" />
-		<Unit filename="tp5/TP5State.cpp" />
 		<Unit filename="tp5/TP5State.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/Bounded.inl" />
