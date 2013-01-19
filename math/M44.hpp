@@ -74,7 +74,7 @@ public:
   // matrix-vector multiplication
   V4<T> operator*(V4<T> const& v) const;
   // matrix-matrix multiplication
-  M44& operator*=(M44 const& m) const;
+  M44& operator*=(M44 const& m);
   M44 operator*(M44 const& m) const;
 
   // Array-style access

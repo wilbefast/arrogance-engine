@@ -97,7 +97,7 @@ int Mesh3D::load_obj(const char* filename)
   while (getline(in, line))
   {
     // group
-    if(line[0] == 'g')
+    if(line[0] == 'g' || line[0] == 'o')
     {
       add_group();
       continue;

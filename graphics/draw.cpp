@@ -93,9 +93,9 @@ void draw::use3D()
   glClear(GL_DEPTH_BUFFER_BIT);
 
 	// Set up lighting
-	/*glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);*/
+	glEnable(GL_LIGHT1);
 
   // Set up camera frustrum
   glMatrixMode(GL_PROJECTION);

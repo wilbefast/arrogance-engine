@@ -9,8 +9,8 @@
 #include "OBJLoader.hpp"
 #include "../debug/log.h"
 
-//#define USE_MOULIS
-#define OBJ_FILE "assets/Island_001.obj"//"assets/cube.obj"
+#define USE_MOULIS
+#define OBJ_FILE "assets/triangles.obj"//"assets/cube.obj"
 
 using namespace std;
 

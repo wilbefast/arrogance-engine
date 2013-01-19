@@ -16,37 +16,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef OPENGL_MATRIX_HPP_INCLUDED
+#define OPENGL_MATRIX_HPP_INCLUDED
 
-#include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#include "../opengl.h"
+#include "V3.hpp"
+#include "M44.hpp"
 
-#include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
-#include "../tp4/TP4State.hpp" //! FIXME
-#include "../tp5/TP5State.hpp" //! FIXME
-#include "../particles/ParticleTest.hpp" //! FIXME
+typedef M44<GLfloat> glM44;
 
-/// CREATION & DESTRUCTION
+void printGLMatrix(GLenum which_matrix);
+void applyTransform(glM44 const& transform);
+glM44 const* getGLMatrix(GLenum which_matrix);
 
-Game::Game(bool tutorial) :
-Scene(new TP3State())
-{
-}
+void addTranslation(glM44& transform, fV3 trans);
+void addRotationX(glM44& transform, float angle);
+void addRotationY(glM44& transform, float angle);
+void addRotationZ(glM44& transform, float angle);
+void addScale(glM44& transform, fV3 scale);
 
-int Game::startup()
-{
-  ASSERT(Scene::startup() == EXIT_SUCCESS, "Game generic startup");
-  // all clear !
-  return EXIT_SUCCESS;
-}
-
-Game::~Game()
-{
-}
-
-Scene* Game::previous()
-{
-  return new MainMenu();
-}
+#endif // OPENGL_MATRIX_HPP_INCLUDED
