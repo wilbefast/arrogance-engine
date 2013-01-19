@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX(x,y) (x>y?x:y)
 #define MIN(x,y) (x<y?x:y)
 #define SIGN(x) (x>0?1:(x<0?-1:0))
-#define ABS(x) ((x)*SIGN(x))
+#define ABS(x) ((x>0)?x:-x)
 #define SQR(x) ((x)*(x))
 #define RAND() (((double)rand())/RAND_MAX)
 #define RAND_BETWEEN(x,y) (RAND()*ABS(x-y)+MIN(x,y))
@@ -36,5 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ISPWR2(n) !(n & (n-1))
 
 int nextpwr2(int n);
+
+int isqrt(double x);
 
 #endif // WJD_MATH_HPP_INCLUDED

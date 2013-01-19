@@ -91,7 +91,7 @@ bool ColliderElement::doesContain(fV2 point) const
 // accessors
 fRect ColliderElement::getOffsetBox() const
 {
-  return hitbox + owner->getPosition();
+  return (hitbox + owner->getPosition());
 }
 
 iV2 ColliderElement::boundarySide(fRect* bounds) const

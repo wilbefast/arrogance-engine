@@ -21,18 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../math/V3.hpp"
 
+#include "../graphics/3D/Camera.hpp"
+
 #include "GameState.hpp"
 
 class ModelViewState : public GameState
 {
-  /// CONSTANTS
-private:
-  static const float CAMERA_MAX_ANGLE = 90.0f;
-
   /// ATTRIBUTES
 private:
-  iV3 camera_angle;
-  iV3 camera_offset;
+  Camera camera;
+  bool left, right, up, down, alt, space, ctrl;
 
   /// METHODS
 public:
@@ -42,6 +40,7 @@ public:
   int shutdown();
   // Overrides GameState
   int update(float delta);
+  int trigger(int which, bool pressed);
   void draw();
 };
 

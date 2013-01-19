@@ -22,6 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ResourceManager.hpp"
 #include "../graphics/3D/Mesh3D.hpp"
 
+#include "../math/numerise.h"
+#include <map>
+
+#define MESH_FILETYPE "obj"
+
+typedef std::map<str_id, Mesh3D*> MeshMap;
+typedef MeshMap::iterator MeshI;
+
 class MeshManager : public ResourceManager
 {
   /// CONSTANTS
@@ -34,8 +42,8 @@ public:
   static MeshManager* getInstance();
 
   /// ATTRIBUTES
-public: /// FIXME
-  Mesh3D mesh;
+public:
+  MeshMap meshes;
 
   /// METHODS
 private:
@@ -48,6 +56,9 @@ public:
   int unload();
   int parse_root(void* root_handle);
   int parse_element(void* element);
+  // meshes
+  int load_mesh(const char* source_file, const char* name);
+  Mesh3D* get_mesh(const char* name);
 };
 
 #endif // MESHMANAGER_HPP_INCLUDED

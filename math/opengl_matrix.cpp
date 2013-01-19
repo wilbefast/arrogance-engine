@@ -24,10 +24,10 @@ using namespace std;
 //! WORKSPACE VARIABLES
 //! ----------------------------------------------------------------------------
 static GLfloat a[16];
-static M44<GLfloat> m;
+static glM44 m;
 
 //! ----------------------------------------------------------------------------
-//! FUNCTIONS
+//! DEBUG
 //! ----------------------------------------------------------------------------
 void printGLMatrix(GLenum which_matrix)
 {
@@ -38,42 +38,61 @@ void printGLMatrix(GLenum which_matrix)
   cout << m << endl;
 }
 
-M44<GLfloat> const* getGLMatrix(GLenum which_matrix)
+glM44 const* getGLMatrix(GLenum which_matrix)
 {
   glGetFloatv(which_matrix, a);
   m.importArray(a);
   return &m;
 }
 
-void applyTransform(M44<GLfloat> const& transform)
+//! ----------------------------------------------------------------------------
+//! RENDER
+//! ----------------------------------------------------------------------------
+
+void applyTransform(glM44 const& transform)
 {
   transform.exportArray(a);
   glMultMatrixf(a);
 }
 
-void addTranslation(M44<GLfloat>& transform, fV3 trans)
+//! ----------------------------------------------------------------------------
+//! RESET
+//! ----------------------------------------------------------------------------
+
+void setTranslation(glM44& transform, fV3 trans)
+{
+  transform[3].x = trans.x;
+  transform[3].y = trans.y;
+  transform[3].z = trans.z;
+}
+
+//! ----------------------------------------------------------------------------
+//! COMPOSE
+//! ----------------------------------------------------------------------------
+
+void addTranslation(glM44& transform, fV3 trans)
 {
   transform[3].x += trans.x;
   transform[3].y += trans.y;
   transform[3].z += trans.z;
 }
 
-void addRotationX(M44<GLfloat>& transform, float rotation)
+void addRotationX(glM44& transform, float rotation)
 {
-  transform *= M44<GLfloat>::xRotMatrix(rotation);
+  transform *= glM44::xRotMatrix(rotation);
 }
 
-void addRotationY(M44<GLfloat>& transform, float rotation)
+void addRotationY(glM44& transform, float rotation)
 {
-  transform *= M44<GLfloat>::yRotMatrix(rotation);
+  transform *= glM44::yRotMatrix(rotation);
 }
 
-void addRotationZ(M44<GLfloat>& transform, float rotation)
+void addRotationZ(glM44& transform, float rotation)
 {
-  transform *= M44<GLfloat>::zRotMatrix(rotation);
+  transform *= glM44::zRotMatrix(rotation);
 }
 
-void addScale(M44<GLfloat>& transform, fV3 scale)
+void addScale(glM44& transform, fV3 scale)
 {
   transform[0][0] *= scale.x;
   transform[1][1] *= scale.y;

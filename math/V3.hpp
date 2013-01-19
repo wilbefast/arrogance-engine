@@ -84,8 +84,8 @@ public:
   V3<int> sign() const;
   float getNorm() const;
   float getNorm2() const;
-  V3<T>& setMagnitude(float new_magnitude);
-  V3<T>& normalise();
+  float setMagnitude(float new_magnitude);  // returns previous norm
+  float normalise();                        // returns previous norm
 
   // outstream
   void print(std::ostream& out) const;

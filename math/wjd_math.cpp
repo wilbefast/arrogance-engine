@@ -30,3 +30,13 @@ int nextpwr2(int n)
   // we should now have the a block of binary '1's the size of the original n
   return (n+1);
 }
+
+int isqrt(double x)
+{
+  if(x < 1)
+    return 0;
+
+  int i = 0;
+  while(i*i <= x) i++;
+  return (i-1);
+}

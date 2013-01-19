@@ -61,7 +61,7 @@ IntrusiveLinked* IntrusiveLinked::newPrev(IntrusiveLinked* newbie)
   newbie->next = this;
   prev->next = newbie;
   newbie->prev = prev;
-  return prev = newbie; // return the new elements
+  return (prev = newbie); // return the new elements
 }
 
 IntrusiveLinked* IntrusiveLinked::newNext(IntrusiveLinked* newbie)
@@ -69,5 +69,5 @@ IntrusiveLinked* IntrusiveLinked::newNext(IntrusiveLinked* newbie)
   newbie->prev = this;
   next->prev = newbie;
   newbie->next = next;
-  return next = newbie; // return the new elements
+  return (next = newbie); // return the new elements
 }

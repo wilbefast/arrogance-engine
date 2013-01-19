@@ -25,10 +25,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef M44<GLfloat> glM44;
 
+
+// debug
 void printGLMatrix(GLenum which_matrix);
-void applyTransform(glM44 const& transform);
 glM44 const* getGLMatrix(GLenum which_matrix);
 
+// render
+void applyTransform(glM44 const& transform);
+
+// reset
+void setTranslation(glM44& transform, fV3 trans);
+
+// compose
 void addTranslation(glM44& transform, fV3 trans);
 void addRotationX(glM44& transform, float angle);
 void addRotationY(glM44& transform, float angle);

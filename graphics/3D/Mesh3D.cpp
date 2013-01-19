@@ -86,7 +86,7 @@ n_groups(1)
 {
 }
 
-int Mesh3D::load_obj(const char* filename)
+int Mesh3D::load(const char* filename)
 {
   // open the file
   ifstream in(filename, ios::in);
@@ -96,7 +96,7 @@ int Mesh3D::load_obj(const char* filename)
   string line;
   while (getline(in, line))
   {
-    // group
+    // group / object
     if(line[0] == 'g' || line[0] == 'o')
     {
       add_group();
@@ -144,7 +144,7 @@ int Mesh3D::load_obj(const char* filename)
     else if (key == TAG_SMOOTH_SHADING)
       s >> current_group->smooth;
     else
-      cout << line << ": unrecognised\n";
+      cout << line << ": unrecognised OBJ line.\n";
   }
   current_group->last_face = faces.size()-1;
 
@@ -290,9 +290,9 @@ void Mesh3D::finalise()
   normal_list_t(normals).swap(normals);
   tex_coord_list_t(texture_coordinates).swap(texture_coordinates);
 
-  ofstream f;
-  f.open ("arrogance_mesh.obj");
-  f << (*this);
+  //ofstream f;
+  //f.open ("arrogance_mesh.obj");
+  //f << (*this);
 }
 
 void Mesh3D::unitise()
@@ -322,9 +322,8 @@ void Mesh3D::draw()
   do
 	{
 		// activate the current group's material
-		bool bink;
 		if(current_group->material)
-       bink=  current_group->material->activate();
+      current_group->material->activate();
 
     if(current_group->smooth)
       glShadeModel(GL_SMOOTH);
@@ -339,19 +338,6 @@ void Mesh3D::draw()
 			{
 				// cache the current triangle
 				face_t const& face = faces[face_i];
-
-        static bool first = true;
-        if(first && bink)
-        {
-          cout << face.uv_i << endl;
-
-          for(size_t v_i = 0; v_i < 3; v_i++)
-            cout << texture_coordinates[face.uv_i[v_i]] << endl;
-
-          first = false;
-        }
-
-
 				for(size_t v_i = 0; v_i < 3; v_i++)
 				{
           // vertex texture coordinate (optional)

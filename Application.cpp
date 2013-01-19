@@ -29,7 +29,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "io/FontManager.hpp"          // font subsystem (singleton)
 #include "io/MeshManager.hpp"          // 3D mesh subsystem (singleton)
 
-#define WINDOW_DEFAULT_FLAGS SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN
+#ifdef SDL2
+  #define WINDOW_DEFAULT_FLAGS SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN
+#else //SDL1.2
+  #define WINDOW_DEFAULT_FLAGS SDL_OPENGL
+#endif
 
 #ifdef __ANDROID__
 	#define WINDOW_FLAGS WINDOW_DEFAULT_FLAGS|SDL_WINDOW_BORDERLESS
@@ -163,7 +167,7 @@ int Application::shutdown()
   SDL_GL_MakeCurrent(NULL, NULL);
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
-#else // SDL1.6
+#else // SDL1.2
   SDL_FreeSurface(screen);
 #endif // SDL2
 
@@ -208,11 +212,11 @@ int Application::startSDL()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, GL_V_MINOR);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-#else // SDL1.6
+#else // SDL1.2
 
   screen = SDL_SetVideoMode(WINDOW_DEFAULT_W, WINDOW_DEFAULT_H,
                             WINDOW_C_DEPTH, SDL_OPENGL);
-  ASSERT_SDL(screen, "Creating SDL1.6 application screen-surface");
+  ASSERT_SDL(screen, "Creating SDL1.2 application screen-surface");
   global::viewport = fV2(screen->w, screen->h);
   SDL_WM_SetCaption(APP_NAME, NULL);
 
@@ -228,9 +232,11 @@ int Application::startSDL()
 
 int Application::startGL()
 {
+#ifdef USE_GLEW
   // Start the GL extension wrangler (GLEW)
   GLenum result = glewInit();
   ASSERT_AUX(result == GLEW_OK, "Starting GLEW", glewGetErrorString(result));
+#endif // USE_GLEW
 
   // Define viewport
   glViewport(0, 0, global::viewport.x, global::viewport.y);
@@ -265,7 +271,7 @@ void Application::draw()
   // Flip the buffers to update the screen
 #ifdef SDL2
   SDL_GL_SwapWindow(window);
-#else // SDL1.6
+#else // SDL1.2
   glFlush();
   SDL_GL_SwapBuffers();
 #endif // SDL2
@@ -354,14 +360,16 @@ int Application::treatEvents()
       #if USE_MOUSE
       // mouse events
       case SDL_MOUSEBUTTONDOWN:
-        if(event.button.button == SDL_BUTTON_RIGHT)
-          return Application::BACK;
-        clicking = true;
+        if(event.button.button == SDL_BUTTON_LEFT)
+          clicking = true;
+        scene->getState()->trigger(event.button.button, true);
+
       break;
 
       case SDL_MOUSEBUTTONUP:
         if(event.button.button == SDL_BUTTON_LEFT)
           clicking = false;
+        scene->getState()->trigger(event.button.button, false);
       break;
 
       case SDL_MOUSEMOTION:

@@ -20,18 +20,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../global.hpp"                          // for viewport
 #include "../debug/assert.h"
-
 #include "../io/MeshManager.hpp"
 
 #include "../graphics/draw.hpp"
+#include "../debug/log.h"
 
+#define TURN_SPEED 1
+
+#define GRID_N_ROWS 64
+#define GRID_N_COLS 64
+#define GRID_H 32.0f
+#define GRID_ORIGIN fV3(0, 0, 0)
+#define GRID_CELL_SIZE 2.0f
+
+using namespace std;
 
 /// CREATION, DESTRUCTION
 
 ModelViewState::ModelViewState() :
 GameState(),
-camera_angle(),
-camera_offset()
+camera(),
+left(false),
+right(false),
+up(false),
+down(false),
+alt(false),
+space(false),
+ctrl(false)
 {
 }
 
@@ -41,9 +56,6 @@ int ModelViewState::startup()
   ASSERT(GameState::startup() == EXIT_SUCCESS,
         "ModelViewState starting GameState");
   draw::use3D();
-
-  ASSERT(MeshManager::getInstance()->startup()
-    == EXIT_SUCCESS, "Starting Mesh Manager");
 
   // all clear
   return EXIT_SUCCESS;
@@ -63,10 +75,35 @@ int ModelViewState::shutdown()
 
 int ModelViewState::update(float delta)
 {
-  // Update camera angle and position
-  uV2 const& p = input.last_hover;
-  camera_angle.x = CAMERA_MAX_ANGLE*p.x/global::viewport.x*2 - CAMERA_MAX_ANGLE;
-	camera_angle.y = CAMERA_MAX_ANGLE*p.y/global::viewport.y*2 - CAMERA_MAX_ANGLE;
+  // move camera
+  static fV3 camera_move;
+    camera_move = fV3(0, 0, 0);
+  static float camera_angle;
+    camera_angle = 0.0f;
+
+  if(space) camera_move.y -= 0.5f;
+  if(ctrl) camera_move.y += 0.5f;
+  if(up) camera_move.z += 0.5f;
+  if(down) camera_move.z -= 0.5f;
+
+  if(left)
+  {
+    if(alt)
+      camera_move.x += 0.5f;
+    else
+      camera_angle -= 1.0f;
+  }
+  if(right)
+  {
+    if(alt)
+      camera_move.x -= 0.5f;
+    else
+      camera_angle += 1.0f;
+  }
+
+  // Apply the camera movement
+  camera.turn(camera_angle);
+  camera.pan(camera_move);
 
   // Update dynamic game objects
   int result = GameState::update(delta);
@@ -77,18 +114,33 @@ int ModelViewState::update(float delta)
   return CONTINUE;
 }
 
+int ModelViewState::trigger(int which, bool pressed)
+{
+  switch(which)
+  {
+		case SDLK_SPACE: space = pressed; break;
+		case SDLK_LCTRL: ctrl = pressed; break;
+		case SDLK_LALT: alt = pressed; break;
+		case SDLK_UP: up = pressed; break;
+		case SDLK_DOWN: down = pressed; break;
+		case SDLK_LEFT: left = pressed; break;
+		case SDLK_RIGHT: right = pressed; break;
+  }
+
+  // All clear
+  return CONTINUE;
+}
+
+
 void ModelViewState::draw()
 {
-  glTranslatef(global::viewport.x/2, global::viewport.y/2, 0.0f);
-  glScalef(global::viewport.x/2, global::viewport.y/2, 1.0f);
+  // clear and reset
+  glPushMatrix();
+    camera.lookThrough();
 
-  glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
-  glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
-	glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-	glRotatef(camera_angle.x, 0.0f, 1.0f, 0.0f);
-	glRotatef(-camera_angle.y, 0.0f, 0.0f, 1.0f);
+    //! DRAW MESH HERE
 
-  MeshManager::getInstance()->mesh.draw();
+  glPopMatrix();
 
   // Draw dynamic game objects
   GameState::draw();

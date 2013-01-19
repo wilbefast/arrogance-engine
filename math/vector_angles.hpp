@@ -1,9 +1,8 @@
 /*
-Arrogance Engine: a simple SDL/OpenGL game engine for Desktop and Android.
 Copyright (C) 2012 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under he terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -16,21 +15,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GLOBAL_HPP_INCLUDED
-#define GLOBAL_HPP_INCLUDED
+#ifndef VECTOR_ANGLES_HPP_INCLUDED
+#define VECTOR_ANGLES_HPP_INCLUDED
 
-#include "math/Rect.hpp"
+#include "V2.hpp"
 
-#define WINDOW_DEFAULT_W 640    // size used by Desktop version
-#define WINDOW_DEFAULT_H 480
-#define MAX_FPS 30
-#define APP_NAME "Arrogance"
+void addAngle(fV2& current_direction, double turn);
 
-namespace global
-{
-  extern iV2 viewport;
-  extern fV2 scale;
-};
+double angleBetween(fV2 const& a, fV2 const& b);
 
+bool turn(fV2& curent_direction, fV2 desired_direction, double max_turn);
 
-#endif // GLOBAL_HPP_INCLUDED
+#endif // VECTOR_ANGLES_HPP_INCLUDED

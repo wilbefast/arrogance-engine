@@ -1,3 +1,6 @@
+#ifdef USE_GLS
+//!-----------------------------------------------------------------------------
+
 #include "Shader.hpp"
 
 #include "../../io/file.hpp"
@@ -129,4 +132,7 @@ int Shader::load_aux(const char* file_path)
   // free the memory allocated by io::read_text
   delete[] source;
 }
+
+//!-----------------------------------------------------------------------------
+#endif //USE_GLS
 

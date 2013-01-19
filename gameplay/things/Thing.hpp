@@ -70,6 +70,8 @@ public:
   bool isColliding(Thing* other, iV2* side = NULL);
   bool isOutside(fRect* bounds, iV2* side = NULL);
   bool isLeaving(fRect* bounds, iV2* side = NULL);
+
+
   // overridden
   virtual void die();
   virtual void draw();

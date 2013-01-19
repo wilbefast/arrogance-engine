@@ -60,7 +60,6 @@ int TP4State::startup()
 
   // load the 3D scene
   draw::use3D();
-  MeshManager::getInstance()->mesh.load_obj("assets/rubik.obj");
 
   // set up cube positions
   for(int x = 0; x < CUBES_PER_SIDE; x++)
@@ -196,7 +195,7 @@ void TP4State::draw_rubik()
       || (cube_axis.z && z == cube_rank))
         glRotatef(cube_turn.getDeg(), cube_axis.x, cube_axis.y, cube_axis.z);
       mult_glmatrix(cube[x][y][z]);
-      MeshManager::getInstance()->mesh.draw();
+      //! DRAW MESH HERE
     glPopMatrix();
   }
 }

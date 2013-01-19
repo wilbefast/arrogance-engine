@@ -86,7 +86,7 @@ bool Particle::isOld() const
 ParticleTest::ParticleTest() :
 GameState(),
 camera_angle(180.0f),
-camera_offset(),
+camera_offset(0, 0, 10),
 left(false),
 right(false),
 up(false),

@@ -19,19 +19,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Game.hpp"
 
 #include "../debug/assert.h"      // ASSERT
-#include "MainMenu.hpp"             // previous scene
+#include "MainMenu.hpp"           // previous scene
 
 #include "ModelViewState.hpp"
-#include "../tp1/TP1State.hpp" //! FIXME
-#include "../tp3/TP3State.hpp" //! FIXME
-#include "../tp4/TP4State.hpp" //! FIXME
-#include "../tp5/TP5State.hpp" //! FIXME
 #include "../particles/ParticleTest.hpp" //! FIXME
 
 /// CREATION & DESTRUCTION
 
 Game::Game(bool tutorial) :
-Scene(new TP3State())
+Scene(new ParticleTest())
 {
 }
 

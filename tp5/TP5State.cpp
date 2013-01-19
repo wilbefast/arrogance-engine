@@ -36,8 +36,6 @@ int TP5State::startup()
 
   // load the 3D scene
   draw::use3D();
-  ASSERT(MeshManager::getInstance()->mesh.
-    load_obj("assets/BerkeleyDragon.obj") == EXIT_SUCCESS, "Loading mesh");
 
   // load the shader
   //shader.load("assets/shaders/green.frag");
@@ -146,7 +144,7 @@ void TP5State::draw()
   glPushMatrix();
     glRotatef(camera_angle, 0.0f, 1.0f, 0.0f);
     glTranslatef(camera_offset.x, camera_offset.y, camera_offset.z);
-    MeshManager::getInstance()->mesh.draw();
+    //! DRAW MESH HERE
   glPopMatrix();
 
   // Draw dynamic game objects

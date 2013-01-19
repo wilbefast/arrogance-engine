@@ -94,7 +94,7 @@ private:
 public:
   // creation, destruction
   Mesh3D();
-  int load_obj(const char* filename);
+  int load(const char* filename);
   ~Mesh3D();
   // draw
   void draw();

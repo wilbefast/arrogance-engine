@@ -26,8 +26,8 @@ class GraphicIncarnation
 {
   /// FLAGS
 public:
-  static const char CENTER_X = 0b00000001;
-  static const char CENTER_Y = 0b00000010;
+  static const char CENTER_X = 1; // 0b00000001;
+  static const char CENTER_Y = 2; // 0b00000010;
 
   /// ATTRIBUTES
 protected:

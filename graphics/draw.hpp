@@ -26,9 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define CIRCLE_BASE_SEGMENTS 6
 
-#define NEAR 0.5
-#define FAR 10000
-#define VIEW_FIELD 60
+#define GL_Z_NEAR 0.5
+#define GL_Z_FAR 10000
+#define GL_VIEW_FIELD 60
 
 namespace draw
 {
